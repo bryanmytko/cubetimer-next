@@ -1,0 +1,33 @@
+.main-container .solve-times {
+  background: none;
+  font-size: 1.0em;
+  color: #fff;
+  padding-left: 40px;
+}
+
+.main-container .solve-times ul {
+  height: 58vh;
+  overflow: scroll;
+}
+
+.main-container .solve-times h5 {
+  margin-top: 24px;
+  font-weight: 600;
+  font-size: 1.1em;
+  border-bottom: 1px solid #e8a71a;
+  padding: 0 0 8px 0;
+}
+
+.solve-times ul li {
+  padding: 0.2em;
+  text-align: left;
+}
+
+.solve-times ul li button {
+  cursor: pointer;
+  border: 0;
+  background: none;
+  color: #00bcd4;
+}
+
+.solve-times ul li button:hover {}

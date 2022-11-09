@@ -1,0 +1,32 @@
+.timer-stats {
+  background: #e1e1e1;
+  position: relative;
+  border-radius: 2px;
+}
+
+.timer-stats:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.select-wrapper {
+  float: right;
+  width: 60px;
+  margin-top: -10px;
+}
+
+.select-wrapper input.select-dropdown,
+.select-wrapper input.select-dropdown:focus {
+  font-size: 1em !important;
+  border-bottom: 1px solid #000 !important;
+}
+
+.select-wrapper .dropdown-content li > span{
+  color: #000;
+  font-size: 1.3em;
+}
+
+.select-dropdown {
+  font-size: 10px;
+}
