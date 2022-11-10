@@ -1,10 +1,8 @@
 import React, { useEffect, useReducer } from "react";
 
+import { humanReadableTime } from "../lib/format";
 import Scrambler from "../lib/scrambler";
 import { TimerReducer, TimerActionKind } from "../reducers";
-/* import { FormatService, ScrambleService } from '../../services'; */
-
-//const { humanReadableTime } = FormatService;
 
 interface TimerState {
   running: boolean;
@@ -60,12 +58,15 @@ const Timer = () => {
   return (
     <div>
       <div className="card rounded bg-gray-50 dark:bg-slate-700 py-4 mx-auto mt-6 text-center w-4/5">
-        <span className="text-6xl text-white">{state.time}</span>
+        <span className="text-6xl text-white font-mono">
+          {humanReadableTime(state.time, "0:00")}
+        </span>
       </div>
       <button
         id="timer-btn"
-        className={`timer-btn-start block mx-auto mt-6 px-20 py-5 rounded-md ${state.ready ? "dark:bg-red-500" : "dark:bg-green-500"
-          }`}
+        className={`timer-btn-start block mx-auto mt-6 px-20 py-5 rounded-md ${
+          state.ready ? "dark:bg-red-500" : "dark:bg-green-500"
+        }`}
         onClick={() => dispatch({ type: TimerActionKind.TOGGLE })}
       >
         Press spacebar or click to begin!

@@ -61,7 +61,7 @@ class Scrambler {
     const moves = [];
     let currMove, currFace, prevFace;
 
-    for(let i=0; i<this.scrambleLength; i++){
+    for (let i = 0; i < this.scrambleLength; i++) {
       currFace = this.getRandomFace(prevFace);
       currMove = this.getRandomMove(currFace);
 
@@ -69,10 +69,10 @@ class Scrambler {
       prevFace = currFace;
     }
 
-    if(this.puzzle.final) {
+    if (this.puzzle.final) {
       moves.push(
         this.puzzle.final[
-          this.randInt(0, this.puzzle.final.length - 1)
+        this.randInt(0, this.puzzle.final.length - 1)
         ]
       );
     }
@@ -89,14 +89,14 @@ class Scrambler {
   }
 
   getRandomFace = (prevFace?: MovesType): MovesType => {
-    if(prevFace) {
+    if (prevFace) {
       let randomFace;
 
       do {
         randomFace = this.puzzle.moves[
           this.randInt(0, this.puzzle.moves.length - 1)
         ];
-      } while(!this.isValidFace(randomFace, prevFace));
+      } while (!this.isValidFace(randomFace, prevFace));
 
       return randomFace;
     }
