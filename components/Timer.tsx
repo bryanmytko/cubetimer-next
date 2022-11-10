@@ -59,12 +59,12 @@ const Timer = () => {
 
   return (
     <div>
-      <div className="card rounded bg-gray-50 dark:bg-slate-700 py-4 mx-auto text-center w-4/5">
+      <div className="card rounded bg-gray-50 dark:bg-slate-700 py-4 mx-auto mt-6 text-center w-4/5">
         <span className="text-6xl text-white">{state.time}</span>
       </div>
       <button
         id="timer-btn"
-        className={`timer-btn-start dark:bg-green-500 block mx-auto px-20 py-5 rounded-md ${state.ready ? "timer-btn-ready" : ""
+        className={`timer-btn-start block mx-auto mt-6 px-20 py-5 rounded-md ${state.ready ? "dark:bg-red-500" : "dark:bg-green-500"
           }`}
         onClick={() => dispatch({ type: TimerActionKind.TOGGLE })}
       >
