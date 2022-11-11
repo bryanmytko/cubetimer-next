@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 
-import Scramble from "../components/Scramble";
-import Timer from "../components/Timer";
+import { Scramble, Timer } from "../components";
 import Scrambler from "../lib/scrambler";
 
 const scrambler = new Scrambler("3x3");
