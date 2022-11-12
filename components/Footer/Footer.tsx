@@ -1,6 +1,5 @@
 import Link from 'next/link';
-// <nav className="px-2 sm:px-4">
-//<//div className="container flex flex-wrap justify-between items-center mx-auto">
+
 const Footer = () => {
   return (
     <footer className="h-10 dark:bg-gray-900 sticky top-[100vh] px-2 sm:px-4">
