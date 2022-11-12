@@ -1,8 +1,9 @@
-import React, { useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 
 import { humanReadableTime } from "../../lib/format";
 import Scrambler from "../../lib/scrambler";
 import { TimerReducer, TimerActionKind } from "../../reducers";
+import Panel from "./Panel";
 
 interface TimerState {
   running: boolean;
@@ -70,6 +71,7 @@ const Timer = () => {
       >
         Press spacebar or click to begin!
       </button>
+      <Panel dispatch={dispatch} solveTimes={state.solveTimes} />
     </div>
   );
 };
