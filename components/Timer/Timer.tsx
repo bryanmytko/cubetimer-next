@@ -1,4 +1,5 @@
 import { useEffect, useReducer } from "react";
+import { useTranslation } from "react-i18next";
 
 import { humanReadableTime } from "../../lib/format";
 import Scrambler from "../../lib/scrambler";
@@ -23,6 +24,7 @@ const initialState: TimerState = {
 
 const Timer = () => {
   const [state, dispatch] = useReducer(TimerReducer, initialState);
+  const { t } = useTranslation();
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -69,7 +71,7 @@ const Timer = () => {
           }`}
         onClick={() => dispatch({ type: TimerActionKind.TOGGLE })}
       >
-        Press spacebar or click to begin!
+        {t("startButton")}
       </button>
       <Panel dispatch={dispatch} solveTimes={state.solveTimes} />
     </div>
