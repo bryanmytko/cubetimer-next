@@ -1,10 +1,10 @@
 import { useEffect, useReducer } from "react";
 import { useTranslation } from "next-i18next";
 
-import { humanReadableTime } from "../../lib/format";
-import Scrambler from "../../lib/scrambler";
-import { TimerReducer, TimerActionKind } from "../../reducers";
+import { Scramble } from "../";
 import Panel from "./Panel";
+import { humanReadableTime } from "../../lib/format";
+import { TimerReducer, TimerActionKind } from "../../reducers";
 
 interface TimerState {
   running: boolean;
@@ -14,17 +14,25 @@ interface TimerState {
   scramble: string;
 }
 
-const initialState: TimerState = {
-  running: false,
-  ready: false,
-  time: 0,
-  solveTimes: [],
-  scramble: new Scrambler("3x3").generate(),
-};
-
 const Timer = () => {
+  const initialState: TimerState = {
+    running: false,
+    ready: false,
+    time: 0,
+    solveTimes: [],
+    scramble: "",
+  };
+
   const [state, dispatch] = useReducer(TimerReducer, initialState);
   const { t } = useTranslation();
+
+  /* This is necessary due to the random nature of the initial scramble.
+   * Just trying to set an initial state with a random scramble will
+   * cause hydration errors on rerender due to mismatched text
+   */
+  useEffect(() => {
+    dispatch({ type: TimerActionKind.INITIALIZE });
+  }, []);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -59,22 +67,47 @@ const Timer = () => {
   }, [state.running]);
 
   return (
-    <div>
-      <div className="card rounded bg-gray-50 dark:bg-slate-700 py-4 mx-auto mt-6 text-center w-4/5">
-        <span className="text-6xl text-white font-mono">
-          {humanReadableTime(state.time, "0:00")}
-        </span>
+    <>
+      <div className="col-span-4">
+        <div>
+          <Scramble scramble={state.scramble} />
+          <div className="card rounded bg-gray-50 dark:bg-slate-700 py-4 mx-auto mt-6 text-center w-4/5">
+            <span className="text-6xl text-white font-mono">
+              {humanReadableTime(state.time, "0:00")}
+            </span>
+          </div>
+          <button
+            id="timer-btn"
+            className={`timer-btn-start block mx-auto mt-6 px-20 py-5 rounded-md ${
+              state.ready ? "dark:bg-red-500" : "dark:bg-green-500"
+            }`}
+            onClick={() => dispatch({ type: TimerActionKind.TOGGLE })}
+          >
+            {t("startButton")}
+          </button>
+          <Panel dispatch={dispatch} solveTimes={state.solveTimes} />
+        </div>
       </div>
-      <button
-        id="timer-btn"
-        className={`timer-btn-start block mx-auto mt-6 px-20 py-5 rounded-md ${state.ready ? "dark:bg-red-500" : "dark:bg-green-500"
-          }`}
-        onClick={() => dispatch({ type: TimerActionKind.TOGGLE })}
-      >
-        {t("startButton")}
-      </button>
-      <Panel dispatch={dispatch} solveTimes={state.solveTimes} />
-    </div>
+      {/* TODO: move to a component */}
+      <div className="my-6 p-4 bg-orange-200 text-sm">
+        <ol>
+          {state.solveTimes.map((time: number, index: number) => {
+            return (
+              <li key={index}>
+                {humanReadableTime(time)}
+                <button
+                  onClick={() =>
+                    dispatch({ type: TimerActionKind.REMOVE_TIME, index })
+                  }
+                >
+                  [x]
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </>
   );
 };
 
