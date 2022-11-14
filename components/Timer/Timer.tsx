@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 
 import { humanReadableTime } from "../../lib/format";
 import Scrambler from "../../lib/scrambler";

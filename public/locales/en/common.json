@@ -1,0 +1,13 @@
+{
+  "startButton": "Press spacebar or click to begin!",
+  "nav": {
+    "timer": "Timer",
+    "statistics": "Statistics",
+    "profile": "Profile",
+    "tutorials": "Tutorials",
+    "login": "Login",
+    "sr": {
+      "description": "Open navigation"
+    }
+  }
+}
