@@ -1,10 +1,14 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { appWithI18Next } from "ni18n";
-import { ni18nConfig } from "../ni18n.config";
+import { appWithTranslation } from "next-i18next";
+import { Layout } from "../components";
 
 const App = ({ Component, pageProps }: AppProps) => {
-  return <Component {...pageProps} />;
+  return (
+    <Layout>
+      <Component {...pageProps} />
+    </Layout>
+  );
 };
 
-export default appWithI18Next(App, ni18nConfig);
+export default appWithTranslation(App);
