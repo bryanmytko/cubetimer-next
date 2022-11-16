@@ -72,7 +72,7 @@ const Timer = () => {
         <div>
           <Scramble scramble={state.scramble} />
           <div className="card rounded bg-gray-50 dark:bg-slate-700 py-4 mx-auto mt-6 text-center w-4/5">
-            <span className="text-6xl text-white font-sans">
+            <span className="timer text-8xl text-white font-mono font-black">
               {humanReadableTime(state.time, "0:00")}
             </span>
           </div>

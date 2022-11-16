@@ -8,10 +8,8 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {
-      fontFamily: {
-        sans: ["var(--font-inter)", ...fontFamily.sans],
-      },
+    fontFamily: {
+      mono: ["Droid Sans", "Monaco", "SFMono-Regular", "ui-monospace"],
     },
   },
   plugins: [],
