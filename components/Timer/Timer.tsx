@@ -78,8 +78,8 @@ const Timer = () => {
           </div>
           <button
             id="timer-btn"
-            className={`timer-btn-start block mx-auto mt-6 px-20 py-5 rounded-md ${
-              state.ready ? "dark:bg-red-500" : "dark:bg-green-500"
+            className={`timer-btn-start block mx-auto mt-6 px-10 py-5 text-3xl rounded-md w-4/5 ${
+              state.ready ? "dark:bg-red-500" : "dark:bg-yellow-300"
             }`}
             onClick={() => dispatch({ type: TimerActionKind.TOGGLE })}
           >
