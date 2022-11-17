@@ -1,24 +1,35 @@
 import { Dispatch } from "react";
-import { average, averageOfSize, fastestTime, slowestTime } from "../../lib/calculate";
+import {
+  average,
+  averageOfSize,
+  fastestTime,
+  slowestTime,
+} from "../../lib/calculate";
 import { humanReadableTime } from "../../lib/format";
+import CubeDropdown from "./CubeDropdown";
 
 enum TimerActionKind {
-  TOGGLE = 'TOGGLE',
-  READY = 'READY',
-  REMOVE_TIME = 'REMOVE_TIME',
-  TICK = 'TICK',
-  PUZZLE_TYPE = 'PUZZLE_TYPE',
+  TOGGLE = "TOGGLE",
+  READY = "READY",
+  REMOVE_TIME = "REMOVE_TIME",
+  TICK = "TICK",
+  PUZZLE_TYPE = "PUZZLE_TYPE",
 }
 
 type TimerAction =
-  | { type: TimerActionKind.TOGGLE | TimerActionKind.READY | TimerActionKind.TICK }
-  | { type: TimerActionKind.REMOVE_TIME, index: number }
-  | { type: TimerActionKind.PUZZLE_TYPE, puzzle: string };
+  | {
+      type:
+        | TimerActionKind.TOGGLE
+        | TimerActionKind.READY
+        | TimerActionKind.TICK;
+    }
+  | { type: TimerActionKind.REMOVE_TIME; index: number }
+  | { type: TimerActionKind.PUZZLE_TYPE; puzzle: string };
 
 interface PanelProps {
-  dispatch: Dispatch<TimerAction>,
+  dispatch: Dispatch<TimerAction>;
   solveTimes: number[];
-};
+}
 
 const Panel = (props: PanelProps) => {
   const { solveTimes } = props;
@@ -33,7 +44,7 @@ const Panel = (props: PanelProps) => {
       <div className="flex-1 text-right">
         <p>Fastest: {humanReadableTime(fastestTime(solveTimes))}</p>
         <p>Slowest: {humanReadableTime(slowestTime(solveTimes))}</p>
-        <p>3x3</p>
+        <CubeDropdown />
       </div>
     </div>
   );
