@@ -1,4 +1,4 @@
-import { Dispatch } from "react";
+import { Dispatch, SyntheticEvent } from "react";
 
 enum TimerActionKind {
   TOGGLE = "TOGGLE",
@@ -22,11 +22,12 @@ interface CubeDropdownProps {
   dispatch: Dispatch<TimerAction>;
 }
 
-const onChange = (e: Event) => {
-  dispatch({ type: "PUZZLE_TYPE", puzzle: e.target.value });
-};
-
 const CubeDropdown = (props: CubeDropdownProps) => {
+  const { dispatch } = props;
+  const onChange = (e: SyntheticEvent & { target: HTMLSelectElement }) => {
+    dispatch({ type: TimerActionKind.PUZZLE_TYPE, puzzle: e.target?.value });
+  };
+
   return (
     <div className="relative w-full lg:max-w-sm">
       <select

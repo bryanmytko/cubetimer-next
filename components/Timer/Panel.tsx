@@ -33,6 +33,7 @@ interface PanelProps {
 
 const Panel = (props: PanelProps) => {
   const { dispatch, solveTimes } = props;
+
   return (
     <div className="flex card rounded bg-gray-300 px-4 py-6 mt-6 mx-auto w-4/5">
       <div className="flex-1">
