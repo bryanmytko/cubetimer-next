@@ -1,22 +1,11 @@
 import { Dispatch, SyntheticEvent } from "react";
 
+/* TODO Move this out */
 enum TimerActionKind {
-  TOGGLE = "TOGGLE",
-  READY = "READY",
-  REMOVE_TIME = "REMOVE_TIME",
-  TICK = "TICK",
   PUZZLE_TYPE = "PUZZLE_TYPE",
 }
 
-type TimerAction =
-  | {
-      type:
-        | TimerActionKind.TOGGLE
-        | TimerActionKind.READY
-        | TimerActionKind.TICK;
-    }
-  | { type: TimerActionKind.REMOVE_TIME; index: number }
-  | { type: TimerActionKind.PUZZLE_TYPE; puzzle: string };
+type TimerAction = { type: TimerActionKind.PUZZLE_TYPE; puzzle: string };
 
 interface CubeDropdownProps {
   dispatch: Dispatch<TimerAction>;
@@ -29,18 +18,19 @@ const CubeDropdown = (props: CubeDropdownProps) => {
   };
 
   return (
-    <div className="relative w-full lg:max-w-sm">
+    <>
+      <label className="mr-2">Cube Size:</label>
       <select
         defaultValue={"3x3"}
         onChange={onChange}
-        className="w-full p-2.5 text-gray-500 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600"
+        className="mt-1 p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300"
       >
         <option value="2x2">2x2</option>
         <option value="3x3">3x3</option>
         <option value="4x4">4x4</option>
         <option value="5x5">5x5</option>
       </select>
-    </div>
+    </>
   );
 };
 
