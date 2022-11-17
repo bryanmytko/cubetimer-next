@@ -32,7 +32,7 @@ interface PanelProps {
 }
 
 const Panel = (props: PanelProps) => {
-  const { solveTimes } = props;
+  const { dispatch, solveTimes } = props;
   return (
     <div className="flex card rounded bg-gray-300 px-4 py-6 mt-6 mx-auto w-4/5">
       <div className="flex-1">
@@ -44,7 +44,7 @@ const Panel = (props: PanelProps) => {
       <div className="flex-1 text-right">
         <p>Fastest: {humanReadableTime(fastestTime(solveTimes))}</p>
         <p>Slowest: {humanReadableTime(slowestTime(solveTimes))}</p>
-        <CubeDropdown />
+        <CubeDropdown dispatch={dispatch} />
       </div>
     </div>
   );
