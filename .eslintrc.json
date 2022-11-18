@@ -1,3 +1,16 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "max-statements-per-line": [
+    "error",
+    {
+      "max": 1
+    }
+  ],
+  "max-len": [
+    "errors",
+    {
+      "code": 80,
+      "ignoreStrings": true
+    }
+  ]
 }
