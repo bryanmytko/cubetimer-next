@@ -3,6 +3,7 @@ import { useTranslation } from "next-i18next";
 
 import { Scramble } from "../";
 import Panel from "./Panel";
+import Times from "./Times";
 import { humanReadableTime } from "../../lib/format";
 import { TimerReducer, TimerActionKind } from "../../reducers";
 
@@ -68,7 +69,7 @@ const Timer = () => {
 
   return (
     <>
-      <div className="col-span-4">
+      <div className="col-span-5">
         <div>
           <Scramble scramble={state.scramble} />
           <div className="card rounded bg-gray-50 dark:bg-slate-700 py-4 mx-auto mt-6 text-center w-4/5">
@@ -88,25 +89,7 @@ const Timer = () => {
           <Panel dispatch={dispatch} solveTimes={state.solveTimes} />
         </div>
       </div>
-      {/* TODO: move to a component */}
-      <div className="my-6 p-4 bg-orange-200 text-sm">
-        <ol>
-          {state.solveTimes.map((time: number, index: number) => {
-            return (
-              <li key={index}>
-                {humanReadableTime(time)}
-                <button
-                  onClick={() =>
-                    dispatch({ type: TimerActionKind.REMOVE_TIME, index })
-                  }
-                >
-                  [x]
-                </button>
-              </li>
-            );
-          })}
-        </ol>
-      </div>
+      <Times dispatch={dispatch} solveTimes={state.solveTimes} />
     </>
   );
 };
