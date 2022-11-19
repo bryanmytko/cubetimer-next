@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`allows the user to change the cube size 1`] = `
+exports[`renders the component 1`] = `
 <div>
   <label
     class="mr-2"
@@ -9,6 +9,7 @@ exports[`allows the user to change the cube size 1`] = `
   </label>
   <select
     class="mt-1 p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300"
+    data-testid="select"
   >
     <option
       value="2x2"
