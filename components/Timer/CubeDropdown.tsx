@@ -24,6 +24,7 @@ const CubeDropdown = (props: CubeDropdownProps) => {
         defaultValue={"3x3"}
         onChange={onChange}
         className="mt-1 p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300"
+        data-testid="select"
       >
         <option value="2x2">2x2</option>
         <option value="3x3">3x3</option>
