@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Header> renders the component 1`] = `
+<div>
+  <header
+    class="bg-amber-500 dark:bg-gray-900 text-gray-100"
+  >
+    <nav
+      class="px-2 sm:px-4"
+    >
+      <div
+        class="container flex flex-wrap items-center justify-between mx-auto"
+      >
+        <a
+          class="flex items-center"
+          href="/"
+        >
+          <img
+            class="h-10 p-1"
+            src="/assets/logo.png"
+          />
+          <div
+            class="text-xl"
+          >
+            cubetimer.io
+          </div>
+        </a>
+        <button
+          aria-controls="navbar-default"
+          aria-expanded="false"
+          class="inline-flex items-center p-2 ml-3 text-sm bg-gray-700 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:focus:ring-gray-600"
+          data-collapse-toggle="navbar-default"
+          type="button"
+        >
+          <span
+            class="sr-only"
+          >
+            Open Navigation
+          </span>
+          <svg
+            aria-hidden="true"
+            class="w-6 h-6"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <div
+          class="hidden w-full md:block md:w-auto"
+          id="navbar-default"
+        >
+          <ul
+            class="flex flex-col p-4 mt-4 border md:flex-row md:space-x-6 md:mt-0 md:text-sm md:font-medium md:border-0"
+          >
+            <li>
+              <a
+                class="block py-2"
+                href="/"
+              >
+                Timer
+              </a>
+            </li>
+            <li>
+              <a
+                class="block py-2"
+                href="statistics"
+              >
+                Statistics
+              </a>
+            </li>
+            <li>
+              <a
+                class="block py-2"
+                href="profile"
+              >
+                Profile
+              </a>
+            </li>
+            <li>
+              <a
+                class="block py-2"
+                href="tutorials"
+              >
+                Tutorials
+              </a>
+            </li>
+            <li
+              class="block py-2"
+            >
+              |
+            </li>
+            <li>
+              <a
+                class="block py-2"
+                href="login"
+              >
+                Login
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+</div>
+`;

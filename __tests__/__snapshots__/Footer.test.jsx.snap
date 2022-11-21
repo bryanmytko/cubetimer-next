@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Footer> renders the component 1`] = `
+<div>
+  <footer
+    class="h-10 dark:bg-gray-900 sticky top-[100vh] px-2 sm:px-4"
+  >
+    <p
+      class="text-gray-500 text-xs text-center pt-3"
+    >
+      © 2014-
+      2022
+       ♥
+      <a
+        href="http://github.com/bryanmytko"
+      >
+        Bryan Mytko
+      </a>
+    </p>
+  </footer>
+</div>
+`;
+
+exports[`renders the component 1`] = `
+<div>
+  <footer
+    class="h-10 dark:bg-gray-900 sticky top-[100vh] px-2 sm:px-4"
+  >
+    <p
+      class="text-gray-500 text-xs text-center pt-3"
+    >
+      © 2014-
+      2022
+       ♥
+      <a
+        href="http://github.com/bryanmytko"
+      >
+        Bryan Mytko
+      </a>
+    </p>
+  </footer>
+</div>
+`;

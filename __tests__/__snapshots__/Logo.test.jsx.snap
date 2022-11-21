@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Logo> renders the component 1`] = `
+<div>
+  <a
+    class="flex items-center"
+    href="/"
+  >
+    <img
+      class="h-10 p-1"
+      src="/assets/logo.png"
+    />
+    <div
+      class="text-xl"
+    >
+      cubetimer.io
+    </div>
+  </a>
+</div>
+`;
+
+exports[`renders the component 1`] = `
+<div>
+  <a
+    class="flex items-center"
+    href="/"
+  >
+    <img
+      class="h-10 p-1"
+      src="/assets/logo.png"
+    />
+    <div
+      class="text-xl"
+    >
+      cubetimer.io
+    </div>
+  </a>
+</div>
+`;
