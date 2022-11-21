@@ -1,11 +1,8 @@
 import Link from "next/link";
-import { useTranslation } from "next-i18next";
 
 import Logo from "./Logo";
 
 const Nav = () => {
-  const { t } = useTranslation();
-
   return (
     <nav className="px-2 sm:px-4">
       <div className="container flex flex-wrap items-center justify-between mx-auto">
@@ -17,7 +14,7 @@ const Nav = () => {
           aria-controls="navbar-default"
           aria-expanded="false"
         >
-          <span className="sr-only">{t("nav.sr.description")}</span>
+          <span className="sr-only">Open Navigation</span>
           <svg
             className="w-6 h-6"
             aria-hidden="true"
@@ -38,28 +35,28 @@ const Nav = () => {
           <ul className="flex flex-col p-4 mt-4 border md:flex-row md:space-x-6 md:mt-0 md:text-sm md:font-medium md:border-0">
             <li>
               <Link className="block py-2" href="/">
-                {t("nav.timer")}
+                Timer
               </Link>
             </li>
             <li>
               <Link className="block py-2" href="statistics">
-                {t("nav.statistics")}
+                Statistics
               </Link>
             </li>
             <li>
               <Link className="block py-2" href="profile">
-                {t("nav.profile")}
+                Profile
               </Link>
             </li>
             <li>
               <Link className="block py-2" href="tutorials">
-                {t("nav.tutorials")}
+                Tutorials
               </Link>
             </li>
             <li className="block py-2">|</li>
             <li>
               <Link className="block py-2" href="login">
-                {t("nav.login")}
+                Login
               </Link>
             </li>
           </ul>

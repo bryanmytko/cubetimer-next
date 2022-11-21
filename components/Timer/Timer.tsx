@@ -1,5 +1,4 @@
 import { useEffect, useReducer } from "react";
-import { useTranslation } from "next-i18next";
 
 import { Scramble } from "../";
 import Panel from "./Panel";
@@ -25,7 +24,6 @@ const Timer = () => {
   };
 
   const [state, dispatch] = useReducer(TimerReducer, initialState);
-  const { t } = useTranslation();
 
   /* This is necessary due to the random nature of the initial scramble.
    * Just trying to set an initial state with a random scramble will
@@ -84,7 +82,7 @@ const Timer = () => {
             }`}
             onClick={() => dispatch({ type: TimerActionKind.TOGGLE })}
           >
-            {t("startButton")}
+            Press spacebar or click to start!
           </button>
           <Panel dispatch={dispatch} solveTimes={state.solveTimes} />
         </div>
