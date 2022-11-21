@@ -1,6 +1,3 @@
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import type { GetStaticProps } from "next";
-
 import { Timer } from "../components";
 
 const Home = () => {
@@ -12,11 +9,4 @@ const Home = () => {
     </div>
   );
 };
-
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale ?? "en", ["common"])),
-  },
-});
-
 export default Home;
