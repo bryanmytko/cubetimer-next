@@ -48,9 +48,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
     case TimerActionKind.REMOVE_TIME:
       return {
         ...state,
-        solveTimes: state.solveTimes.filter(
-          (el, _, arr) => el !== arr[action.index]
-        ),
+        solveTimes: state.solveTimes.filter((_, i) => i !== action.index),
       };
     case TimerActionKind.TICK:
       return { ...state, time: state.time + 10 };

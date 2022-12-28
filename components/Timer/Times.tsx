@@ -18,21 +18,21 @@ const Times = (props: TimesProps) => {
   return (
     <div className="mt-6 md:mt-20">
       <ul className="h-96 overflow-scroll text-gray-400 mx-auto w-11/12">
-        {solveTimes.map((time: number, index: number) => {
-          return (
-            <li
-              key={index}
-              className={`bg-white border-b px-2 cursor-pointer ${
-                index % 2 == 0 ? "dark:bg-gray-900" : "dark:bg-gray-800"
-              } dark:border-gray-800`}
-              onClick={() =>
-                dispatch({ type: TimerActionKind.REMOVE_TIME, index })
-              }
-            >
-              {humanReadableTime(time)}
-            </li>
-          );
-        })}
+        {solveTimes.map((time: number, index: number) => (
+          <li
+            key={index}
+            id={String(index)}
+            className={`bg-white border-b px-2 cursor-pointer ${
+              index % 2 == 0 ? "dark:bg-gray-900" : "dark:bg-gray-800"
+            } dark:border-gray-800`}
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch({ type: TimerActionKind.REMOVE_TIME, index });
+            }}
+          >
+            {humanReadableTime(time)}
+          </li>
+        ))}
       </ul>
     </div>
   );
