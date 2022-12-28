@@ -35,39 +35,3 @@ exports[`<CubeDropdown> renders the component 1`] = `
   </select>
 </div>
 `;
-
-exports[`renders the component 1`] = `
-<div>
-  <label
-    class="mr-2"
-  >
-    Cube Size:
-  </label>
-  <select
-    class="mt-1 p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300"
-    data-testid="select"
-  >
-    <option
-      value="2x2"
-    >
-      2x2
-    </option>
-    <option
-      selected=""
-      value="3x3"
-    >
-      3x3
-    </option>
-    <option
-      value="4x4"
-    >
-      4x4
-    </option>
-    <option
-      value="5x5"
-    >
-      5x5
-    </option>
-  </select>
-</div>
-`;
