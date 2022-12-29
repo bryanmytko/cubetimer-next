@@ -16,8 +16,16 @@ exports[`<Header> renders the component 1`] = `
           href="/"
         >
           <img
+            alt="logo"
             class="h-10 p-1"
-            src="/assets/logo.png"
+            data-nimg="1"
+            decoding="async"
+            height="47"
+            loading="lazy"
+            src="/_next/image?url=%2Fassets%2Flogo.png&w=96&q=75"
+            srcset="/_next/image?url=%2Fassets%2Flogo.png&w=48&q=75 1x, /_next/image?url=%2Fassets%2Flogo.png&w=96&q=75 2x"
+            style="color: transparent;"
+            width="45"
           />
           <div
             class="text-xl"
@@ -25,32 +33,6 @@ exports[`<Header> renders the component 1`] = `
             cubetimer.io
           </div>
         </a>
-        <button
-          aria-controls="navbar-default"
-          aria-expanded="false"
-          class="inline-flex items-center p-2 ml-3 text-sm bg-gray-700 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:focus:ring-gray-600"
-          data-collapse-toggle="navbar-default"
-          type="button"
-        >
-          <span
-            class="sr-only"
-          >
-            Open Navigation
-          </span>
-          <svg
-            aria-hidden="true"
-            class="w-6 h-6"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              clip-rule="evenodd"
-              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-              fill-rule="evenodd"
-            />
-          </svg>
-        </button>
         <div
           class="hidden w-full md:block md:w-auto"
           id="navbar-default"
