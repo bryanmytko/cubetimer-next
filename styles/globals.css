@@ -7,3 +7,8 @@
   src: url("../public/fonts/DroidSans.ttf");
   src: url("../public/fonts/DroidSans-Bold.ttf");
 }
+
+html,
+body {
+  background: #212121;
+}
