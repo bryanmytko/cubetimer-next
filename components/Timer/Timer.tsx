@@ -70,7 +70,7 @@ const Timer = () => {
       <div className="col-span-5">
         <div>
           <Scramble scramble={state.scramble} />
-          <div className="card rounded bg-gray-50 dark:bg-slate-700 py-4 mx-auto mt-6 text-center w-11/12">
+          <div className="card rounded bg-slate-700 py-4 mx-auto mt-6 text-center w-11/12">
             <span className="timer text-8xl text-white font-mono font-black">
               {humanReadableTime(state.time, "0:00")}
             </span>
@@ -78,7 +78,7 @@ const Timer = () => {
           <button
             id="timer-btn"
             className={`timer-btn-start block mx-auto mt-6 px-10 py-5 text-3xl rounded-md w-11/12 ${
-              state.ready ? "dark:bg-red-500" : "dark:bg-yellow-300"
+              state.ready ? "bg-red-500" : "bg-yellow-300"
             }`}
             onClick={() => dispatch({ type: TimerActionKind.TOGGLE })}
           >

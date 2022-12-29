@@ -34,28 +34,40 @@ const Nav = () => {
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="flex flex-col p-4 mt-4 border md:flex-row md:space-x-6 md:mt-0 md:text-sm md:font-medium md:border-0">
             <li>
-              <Link className="block py-2" href="/">
+              <Link className="block py-2 text-black dark:text-white" href="/">
                 Timer
               </Link>
             </li>
             <li>
-              <Link className="block py-2" href="statistics">
+              <Link
+                className="block py-2 text-black dark:text-white"
+                href="statistics"
+              >
                 Statistics
               </Link>
             </li>
             <li>
-              <Link className="block py-2" href="profile">
+              <Link
+                className="block py-2 text-black dark:text-white"
+                href="profile"
+              >
                 Profile
               </Link>
             </li>
             <li>
-              <Link className="block py-2" href="tutorials">
+              <Link
+                className="block py-2 text-black dark:text-white"
+                href="tutorials"
+              >
                 Tutorials
               </Link>
             </li>
-            <li className="block py-2">|</li>
+            <li className="block py-2 text-black dark:text-white">|</li>
             <li>
-              <Link className="block py-2" href="login">
+              <Link
+                className="block py-2 text-black dark:text-white"
+                href="login"
+              >
                 Login
               </Link>
             </li>
