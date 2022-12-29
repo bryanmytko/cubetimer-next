@@ -38,15 +38,15 @@ interface PuzzleArray {
 }
 
 class Scrambler {
-  puzzle: PuzzleType;
-  scrambleLength: number;
+  private puzzle: PuzzleType;
+  private scrambleLength: number;
 
   constructor(puzzleName: string = "3x3") {
     this.puzzle = puzzles[puzzleName];
     this.scrambleLength = 21;
   }
 
-  generate = (): string => {
+  public generate = (): string => {
     const moves = [];
     let currMove, currFace, prevFace;
 
@@ -67,7 +67,7 @@ class Scrambler {
     return moves.join(" ");
   };
 
-  randInt = (a: number, b: number): number => {
+  private randInt = (a: number, b: number): number => {
     const lower = Math.min(a, b);
     const upper = Math.max(a, b);
     const diff = upper - lower;
@@ -75,7 +75,7 @@ class Scrambler {
     return Math.floor(Math.random() * (diff + 1) + lower);
   };
 
-  getRandomFace = (prevFace?: MovesType): MovesType => {
+  private getRandomFace = (prevFace?: MovesType): MovesType => {
     if (prevFace) {
       let randomFace;
 
@@ -90,11 +90,11 @@ class Scrambler {
     return this.puzzle.moves[this.randInt(0, this.puzzle.moves.length - 1)];
   };
 
-  getRandomMove = (face: MovesType): string => {
+  private getRandomMove = (face: MovesType): string => {
     return face.turns[this.randInt(0, face.turns.length - 1)];
   };
 
-  isValidFace = (curr: MovesType, prev: MovesType): boolean =>
+  private isValidFace = (curr: MovesType, prev: MovesType): boolean =>
     curr.name !== prev.name && curr.restricted.indexOf(prev.name) === -1;
 }
 
