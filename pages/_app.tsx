@@ -5,16 +5,21 @@ import Head from "next/head";
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
-    <Layout>
+    <>
       <Head>
-        <meta name="description" content="An online timer for
+        <meta
+          name="description"
+          content="An online timer for
   speedsolving Rubik's cubes and other mechanical puzzles.
   Sign up and save your past sessions and scrambles!
-  Supports: 2x2, 3x3, 4x4, 5x5, 6x6, 7x7, Pyraminx, Megaminx." />
+  Supports: 2x2, 3x3, 4x4, 5x5, 6x6, 7x7, Pyraminx, Megaminx."
+        />
         <meta name="theme-color" content="#212121" />
       </Head>
-      <Component {...pageProps} />
-    </Layout>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </>
   );
 };
 
