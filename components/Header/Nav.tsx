@@ -7,7 +7,7 @@ const Nav = () => {
     <nav className="px-2 sm:px-4">
       <div className="container flex flex-wrap items-center justify-between mx-auto">
         <Logo />
-        <button
+        {/* <button
           data-collapse-toggle="navbar-default"
           type="button"
           className="inline-flex items-center p-2 ml-3 text-sm bg-gray-700 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:focus:ring-gray-600"
@@ -30,7 +30,7 @@ const Nav = () => {
               clipRule="evenodd"
             ></path>
           </svg>
-        </button>
+        </button> */}
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="flex flex-col p-4 mt-4 border md:flex-row md:space-x-6 md:mt-0 md:text-sm md:font-medium md:border-0">
             <li>
