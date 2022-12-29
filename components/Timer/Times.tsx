@@ -16,24 +16,26 @@ type TimerAction = { type: TimerActionKind.REMOVE_TIME; index: number };
 const Times = (props: TimesProps) => {
   const { dispatch, solveTimes } = props;
   return (
-    <div className="mt-6 md:mt-20">
-      <ul className="h-96 overflow-scroll text-gray-400 mx-auto w-11/12">
-        {solveTimes.map((time: number, index: number) => (
-          <li
-            key={index}
-            id={String(index)}
-            className={`bg-white border-b px-2 cursor-pointer ${
-              index % 2 == 0 ? "dark:bg-gray-900" : "dark:bg-gray-800"
-            } dark:border-gray-800`}
-            onClick={(e) => {
-              e.preventDefault();
-              dispatch({ type: TimerActionKind.REMOVE_TIME, index });
-            }}
-          >
-            {humanReadableTime(time)}
-          </li>
-        ))}
-      </ul>
+    <div className="mt-6 md:mt-12 w-11/12 mx-auto">
+      <h3 className="text-md text-gray-100 mx-auto text-center mb-2">Times</h3>
+      <div className="bg-slate-700 rounded pt-2 pb-4 overflow-auto snap-y snap-mandatory">
+        <ul className="h-96 text-gray-300 mx-auto w-11/12 pr-4">
+          {solveTimes.map((time: number, index: number) => (
+            <li
+              key={index}
+              id={String(index)}
+              className={`px-2 py-1 cursor-pointer last:snap-end ${
+                index % 2 == 0 ? "bg-slate-700" : "bg-slate-600"
+              }`}
+              onClick={() =>
+                dispatch({ type: TimerActionKind.REMOVE_TIME, index })
+              }
+            >
+              {humanReadableTime(time)}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
