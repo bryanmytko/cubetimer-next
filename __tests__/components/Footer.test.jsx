@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 
 import "@testing-library/jest-dom";
 
-import { Footer } from "../components/Footer";
+import { Footer } from "../../components/Footer";
 
 describe("<Footer>", () => {
   it("renders the component", () => {

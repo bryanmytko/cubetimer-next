@@ -3,7 +3,7 @@
 exports[`<Footer> renders the component 1`] = `
 <div>
   <footer
-    class="h-10 dark:bg-gray-900 sticky top-[100vh] px-2 sm:px-4"
+    class="h-10 bg-gray-900 sticky top-[100vh] px-2 sm:px-4"
   >
     <p
       class="text-gray-500 text-xs text-center pt-3"

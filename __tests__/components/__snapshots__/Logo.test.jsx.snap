@@ -19,7 +19,7 @@ exports[`<Logo> renders the component 1`] = `
       width="45"
     />
     <div
-      class="text-xl"
+      class="text-xl text-black dark:text-white"
     >
       cubetimer.io
     </div>
