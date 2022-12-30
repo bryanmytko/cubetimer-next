@@ -39,7 +39,7 @@ const Timer = () => {
     if (state.running) {
       interval = setInterval(
         () => dispatch({ type: TimerActionKind.TICK }),
-        10
+        60
       );
     }
 
