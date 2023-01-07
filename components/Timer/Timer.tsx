@@ -19,6 +19,32 @@ const Timer = () => {
 
   const [state, dispatch] = useReducer(TimerReducer, initialState);
 
+  const toggleTimer = () => {
+    if (state.inspectionTime) {
+      let interval: NodeJS.Timeout;
+
+      /* What do */
+      interval = setInterval(
+        () => dispatch({ type: TimerActionKind.TICK }),
+        60
+      );
+    }
+
+    dispatch({ type: TimerActionKind.TOGGLE });
+  };
+
+  const handleKeyup = (e: KeyboardEvent) => {
+    if (e.key !== " ") return;
+    e.preventDefault();
+    toggleTimer();
+  };
+
+  const handleKeydown = (e: KeyboardEvent) => {
+    if (e.key !== " ") return;
+    e.preventDefault();
+    dispatch({ type: TimerActionKind.READY });
+  };
+
   /* This is necessary due to the random nature of the initial scramble.
    * Just trying to set an initial state with a random scramble will
    * cause hydration errors on rerender due to mismatched text
@@ -36,18 +62,6 @@ const Timer = () => {
         60
       );
     }
-
-    const handleKeydown = (e: KeyboardEvent) => {
-      if (e.key !== " ") return;
-      e.preventDefault();
-      dispatch({ type: TimerActionKind.READY });
-    };
-
-    const handleKeyup = (e: KeyboardEvent) => {
-      if (e.key !== " ") return;
-      e.preventDefault();
-      dispatch({ type: TimerActionKind.TOGGLE });
-    };
 
     window.addEventListener("keydown", handleKeydown);
     window.addEventListener("keyup", handleKeyup);
@@ -77,7 +91,7 @@ const Timer = () => {
             className={`timer-btn-start block mx-auto mt-6 px-10 py-5 text-3xl rounded-md w-11/12 ${
               state.ready ? "bg-red-500" : "bg-yellow-300"
             }`}
-            onClick={() => dispatch({ type: TimerActionKind.TOGGLE })}
+            onClick={toggleTimer}
           >
             Press spacebar or click to start!
           </button>
