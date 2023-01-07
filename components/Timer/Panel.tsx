@@ -6,25 +6,9 @@ import {
   slowestTime,
 } from "../../lib/calculate";
 import { humanReadableTime } from "../../lib/format";
+import { TimerAction } from "../../types/timer";
 import CubeDropdown from "./CubeDropdown";
-
-enum TimerActionKind {
-  TOGGLE = "TOGGLE",
-  READY = "READY",
-  REMOVE_TIME = "REMOVE_TIME",
-  TICK = "TICK",
-  PUZZLE_TYPE = "PUZZLE_TYPE",
-}
-
-type TimerAction =
-  | {
-      type:
-        | TimerActionKind.TOGGLE
-        | TimerActionKind.READY
-        | TimerActionKind.TICK;
-    }
-  | { type: TimerActionKind.REMOVE_TIME; index: number }
-  | { type: TimerActionKind.PUZZLE_TYPE; puzzle: string };
+import InspectionDropdown from "./InspectionDropdown";
 
 interface PanelProps {
   dispatch: Dispatch<TimerAction>;
@@ -46,6 +30,7 @@ const Panel = (props: PanelProps) => {
         <p>Fastest: {humanReadableTime(fastestTime(solveTimes))}</p>
         <p>Slowest: {humanReadableTime(slowestTime(solveTimes))}</p>
         <CubeDropdown dispatch={dispatch} />
+        <InspectionDropdown dispatch={dispatch} />
       </div>
     </div>
   );

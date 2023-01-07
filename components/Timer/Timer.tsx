@@ -5,14 +5,7 @@ import Panel from "./Panel";
 import Times from "./Times";
 import { humanReadableTime } from "../../lib/format";
 import { TimerReducer, TimerActionKind } from "../../reducers";
-
-interface TimerState {
-  running: boolean;
-  ready: boolean;
-  time: number;
-  solveTimes: Array<number>;
-  scramble: string;
-}
+import { TimerState } from "../../types/timer";
 
 const Timer = () => {
   const initialState: TimerState = {
@@ -21,6 +14,7 @@ const Timer = () => {
     time: 0,
     solveTimes: [],
     scramble: "",
+    inspectionTime: 0,
   };
 
   const [state, dispatch] = useReducer(TimerReducer, initialState);
