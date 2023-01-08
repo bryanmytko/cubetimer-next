@@ -19,21 +19,10 @@ const Timer = () => {
 
   const [state, dispatch] = useReducer(TimerReducer, initialState);
 
-  const countdown = () => {};
-
-  const toggleTimer = () => {
-    if (state.inspectionTime) {
-      dispatch({ type: TimerActionKind.TICK_DOWN });
-      setTimeout(countdown, 60);
-    } else {
-      dispatch({ type: TimerActionKind.TOGGLE });
-    }
-  };
-
   const handleKeyup = (e: KeyboardEvent) => {
     if (e.key !== " ") return;
     e.preventDefault();
-    toggleTimer();
+    dispatch({ type: TimerActionKind.TOGGLE });
   };
 
   const handleKeydown = (e: KeyboardEvent) => {
@@ -52,12 +41,24 @@ const Timer = () => {
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
+    let inspectionTime = state.inspectionTime;
 
     if (state.running) {
-      interval = setInterval(
-        () => dispatch({ type: TimerActionKind.TICK_UP }),
-        60
-      );
+      if (inspectionTime) {
+        const toggleTimer = () => {
+          console.log("ticking...", inspectionTime);
+          // Once inspectionTime ticks to zero we stop but need to reset it for the next solve
+          dispatch({ type: TimerActionKind.TICK_DOWN });
+          inspectionTime--;
+          if (inspectionTime > 0) setTimeout(toggleTimer, 1000);
+        };
+        toggleTimer();
+      } else {
+        interval = setInterval(
+          () => dispatch({ type: TimerActionKind.TICK_UP }),
+          60
+        );
+      }
     }
 
     window.addEventListener("keydown", handleKeydown);
@@ -80,7 +81,8 @@ const Timer = () => {
               id="timer-screen"
               className="timer text-8xl text-white font-mono font-black"
             >
-              {state.inspectionTime || humanReadableTime(state.time, "0:00")}
+              {(state.running && state.inspectionTime) ||
+                humanReadableTime(state.time, "0:00")}
             </span>
           </div>
           <button
@@ -88,7 +90,7 @@ const Timer = () => {
             className={`timer-btn-start block mx-auto mt-6 px-10 py-5 text-3xl rounded-md w-11/12 ${
               state.ready ? "bg-red-500" : "bg-yellow-300"
             }`}
-            onClick={toggleTimer}
+            onClick={() => dispatch({ type: TimerActionKind.TOGGLE })}
           >
             Press spacebar or click to start!
           </button>

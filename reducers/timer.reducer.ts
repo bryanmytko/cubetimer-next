@@ -26,7 +26,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
     case TimerActionKind.TICK_UP:
       return { ...state, time: state.time + 60 };
     case TimerActionKind.TICK_DOWN:
-      return { ...state, time: state.time - 60 };
+      return { ...state, inspectionTime: state.inspectionTime - 1 };
     case TimerActionKind.PUZZLE_TYPE:
       return {
         ...state,
