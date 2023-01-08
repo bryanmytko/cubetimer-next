@@ -4,7 +4,8 @@ export enum TimerActionKind {
   PUZZLE_TYPE = "PUZZLE_TYPE",
   READY = "READY",
   REMOVE_TIME = "REMOVE_TIME",
-  TICK = "TICK",
+  TICK_UP = "TICK_UP",
+  TICK_DOWN = "TICK_DOWN",
   TOGGLE = "TOGGLE",
 }
 
@@ -23,7 +24,8 @@ export type TimerAction =
         | TimerActionKind.INITIALIZE
         | TimerActionKind.TOGGLE
         | TimerActionKind.READY
-        | TimerActionKind.TICK;
+        | TimerActionKind.TICK_UP
+        | TimerActionKind.TICK_DOWN;
     }
   | { type: TimerActionKind.REMOVE_TIME; index: number }
   | { type: TimerActionKind.PUZZLE_TYPE; puzzle: string }
