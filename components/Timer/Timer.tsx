@@ -19,18 +19,15 @@ const Timer = () => {
 
   const [state, dispatch] = useReducer(TimerReducer, initialState);
 
+  const countdown = () => {};
+
   const toggleTimer = () => {
     if (state.inspectionTime) {
-      let interval: NodeJS.Timeout;
-
-      /* What do */
-      interval = setInterval(
-        () => dispatch({ type: TimerActionKind.TICK }),
-        60
-      );
+      dispatch({ type: TimerActionKind.TICK_DOWN });
+      setTimeout(countdown, 60);
+    } else {
+      dispatch({ type: TimerActionKind.TOGGLE });
     }
-
-    dispatch({ type: TimerActionKind.TOGGLE });
   };
 
   const handleKeyup = (e: KeyboardEvent) => {
@@ -58,7 +55,7 @@ const Timer = () => {
 
     if (state.running) {
       interval = setInterval(
-        () => dispatch({ type: TimerActionKind.TICK }),
+        () => dispatch({ type: TimerActionKind.TICK_UP }),
         60
       );
     }
@@ -83,7 +80,7 @@ const Timer = () => {
               id="timer-screen"
               className="timer text-8xl text-white font-mono font-black"
             >
-              {humanReadableTime(state.time, "0:00")}
+              {state.inspectionTime || humanReadableTime(state.time, "0:00")}
             </span>
           </div>
           <button
