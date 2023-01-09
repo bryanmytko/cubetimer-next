@@ -9,12 +9,14 @@ import { TimerState } from "../../types/timer";
 
 const Timer = () => {
   const initialState: TimerState = {
+    countdown: 5,
+    inspectionRunning: false,
     running: false,
     ready: false,
     time: 0,
     solveTimes: [],
     scramble: "",
-    inspectionTime: 0,
+    inspectionTime: 5,
   };
 
   const [state, dispatch] = useReducer(TimerReducer, initialState);
@@ -22,7 +24,7 @@ const Timer = () => {
   const handleKeyup = (e: KeyboardEvent) => {
     if (e.key !== " ") return;
     e.preventDefault();
-    dispatch({ type: TimerActionKind.TOGGLE });
+    dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
   };
 
   const handleKeydown = (e: KeyboardEvent) => {
@@ -41,24 +43,43 @@ const Timer = () => {
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    let inspectionTime = state.inspectionTime;
+
+    const start = () => {
+      // dispatch({
+      //   type: TimerActionKind.COUNTDOWN,
+      //   value: state.inspectionTime,
+      // });
+      console.log("RUNNING...");
+      console.log(state.running);
+      console.log(state.countdown);
+      interval = setInterval(
+        () => dispatch({ type: TimerActionKind.TICK_UP }),
+        60
+      );
+    };
 
     if (state.running) {
-      if (inspectionTime) {
-        const toggleTimer = () => {
-          console.log("ticking...", inspectionTime);
-          // Once inspectionTime ticks to zero we stop but need to reset it for the next solve
-          dispatch({ type: TimerActionKind.TICK_DOWN });
-          inspectionTime--;
-          if (inspectionTime > 0) setTimeout(toggleTimer, 1000);
-        };
-        toggleTimer();
-      } else {
-        interval = setInterval(
-          () => dispatch({ type: TimerActionKind.TICK_UP }),
-          60
-        );
+      // Rewrite this logic in three conditions:
+      // 1. running and no inspection -> just start the timer
+      // 2. running and inspection has not started -> start inspection
+      // 3. running and inspection is over -> start timer
+      if (state.countdown > 0) {
+        dispatch({ type: TimerActionKind.TOGGLE_INSPECTION });
       }
+      const toggleTimer = () => {
+        dispatch({
+          type: TimerActionKind.COUNTDOWN,
+          value: state.countdown--,
+        });
+
+        if (state.countdown > 0) setTimeout(toggleTimer, 1000);
+        else {
+          dispatch({ type: TimerActionKind.TOGGLE_INSPECTION });
+        }
+      };
+      toggleTimer();
+    } else {
+      start();
     }
 
     window.addEventListener("keydown", handleKeydown);
@@ -69,19 +90,19 @@ const Timer = () => {
       window.removeEventListener("keydown", handleKeydown);
       window.removeEventListener("keyup", handleKeyup);
     };
-  }, [state.running]);
+  }, [state.running, state.inspectionRunning]);
 
   return (
     <>
       <div className="col-span-5">
         <div>
           <Scramble scramble={state.scramble} />
-          <div className="card rounded bg-slate-700 py-4 mx-auto mt-6 text-center w-11/12">
+          <div className="w-11/12 py-4 mx-auto mt-6 text-center rounded card bg-slate-700">
             <span
               id="timer-screen"
-              className="timer text-8xl text-white font-mono font-black"
+              className="font-mono font-black text-white timer text-8xl"
             >
-              {(state.running && state.inspectionTime) ||
+              {(state.running && state.countdown) ||
                 humanReadableTime(state.time, "0:00")}
             </span>
           </div>
@@ -90,7 +111,7 @@ const Timer = () => {
             className={`timer-btn-start block mx-auto mt-6 px-10 py-5 text-3xl rounded-md w-11/12 ${
               state.ready ? "bg-red-500" : "bg-yellow-300"
             }`}
-            onClick={() => dispatch({ type: TimerActionKind.TOGGLE })}
+            onClick={() => dispatch({ type: TimerActionKind.TOGGLE_RUNNING })}
           >
             Press spacebar or click to start!
           </button>
