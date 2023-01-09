@@ -5,7 +5,11 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
   switch (action.type) {
     case TimerActionKind.INITIALIZE:
       return { ...state, scramble: new Scrambler("3x3").generate() };
-    case TimerActionKind.TOGGLE:
+    case TimerActionKind.TOGGLE_INSPECTION:
+      if (state.inspectionRunning) {
+        return { ...state, inspectionRunning: !!state.inspectionRunning };
+      }
+    case TimerActionKind.TOGGLE_RUNNING:
       if (state.running) {
         return {
           ...state,
@@ -25,8 +29,8 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
       };
     case TimerActionKind.TICK_UP:
       return { ...state, time: state.time + 60 };
-    case TimerActionKind.TICK_DOWN:
-      return { ...state, inspectionTime: state.inspectionTime - 1 };
+    case TimerActionKind.COUNTDOWN:
+      return { ...state, countdown: action.value };
     case TimerActionKind.PUZZLE_TYPE:
       return {
         ...state,
@@ -37,6 +41,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
     case TimerActionKind.INSPECTION_TIME:
       return {
         ...state,
+        countdown: action.inspectionTime,
         inspectionTime: action.inspectionTime,
       };
   }
