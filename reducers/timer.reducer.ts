@@ -6,9 +6,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
     case TimerActionKind.INITIALIZE:
       return { ...state, scramble: new Scrambler("3x3").generate() };
     case TimerActionKind.TOGGLE_INSPECTION:
-      if (state.inspectionRunning) {
-        return { ...state, inspectionRunning: !!state.inspectionRunning };
-      }
+      return { ...state, inspectionRunning: !state.inspectionRunning };
     case TimerActionKind.TOGGLE_RUNNING:
       if (state.running) {
         return {
