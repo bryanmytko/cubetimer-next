@@ -1,38 +1,13 @@
 import Scrambler from "../lib/scrambler";
-
-interface TimerState {
-  running: boolean;
-  ready: boolean;
-  time: number;
-  solveTimes: Array<number>;
-  scramble: string;
-}
-
-enum TimerActionKind {
-  INITIALIZE = "INITIALIZE",
-  TOGGLE = "TOGGLE",
-  READY = "READY",
-  REMOVE_TIME = "REMOVE_TIME",
-  TICK = "TICK",
-  PUZZLE_TYPE = "PUZZLE_TYPE",
-}
-
-type TimerAction =
-  | {
-      type:
-        | TimerActionKind.INITIALIZE
-        | TimerActionKind.TOGGLE
-        | TimerActionKind.READY
-        | TimerActionKind.TICK;
-    }
-  | { type: TimerActionKind.REMOVE_TIME; index: number }
-  | { type: TimerActionKind.PUZZLE_TYPE; puzzle: string };
+import { TimerAction, TimerActionKind, TimerState } from "../types/timer";
 
 const TimerReducer = (state: TimerState, action: TimerAction) => {
   switch (action.type) {
     case TimerActionKind.INITIALIZE:
       return { ...state, scramble: new Scrambler("3x3").generate() };
-    case TimerActionKind.TOGGLE:
+    case TimerActionKind.TOGGLE_INSPECTION:
+      return { ...state, inspectionRunning: !state.inspectionRunning };
+    case TimerActionKind.TOGGLE_RUNNING:
       if (state.running) {
         return {
           ...state,
@@ -50,14 +25,22 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
         ...state,
         solveTimes: state.solveTimes.filter((_, i) => i !== action.index),
       };
-    case TimerActionKind.TICK:
+    case TimerActionKind.TICK_UP:
       return { ...state, time: state.time + 60 };
+    case TimerActionKind.COUNTDOWN:
+      return { ...state, countdown: action.value };
     case TimerActionKind.PUZZLE_TYPE:
       return {
         ...state,
         running: false,
         solveTimes: [],
         scramble: new Scrambler(action.puzzle).generate(),
+      };
+    case TimerActionKind.INSPECTION_TIME:
+      return {
+        ...state,
+        countdown: action.inspectionTime,
+        inspectionTime: action.inspectionTime,
       };
   }
 };
