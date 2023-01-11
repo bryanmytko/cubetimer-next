@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 
 import { Scramble } from "../";
 import Panel from "./Panel";
@@ -7,7 +7,15 @@ import { humanReadableTime } from "../../lib/format";
 import { TimerReducer, TimerActionKind } from "../../reducers";
 import { TimerState } from "../../types/timer";
 
+const START_AUDIO_URL = "/assets/audio/start.mp3";
+
 const Timer = () => {
+  const [startAudio, setStartAudio] = useState<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    setStartAudio(new Audio(START_AUDIO_URL));
+  }, []);
+
   const initialState: TimerState = {
     countdown: 0,
     inspectionRunning: false,
@@ -49,6 +57,8 @@ const Timer = () => {
         type: TimerActionKind.COUNTDOWN,
         value: state.countdown--,
       });
+
+      if (state.countdown < 0 && startAudio) startAudio.play();
 
       state.countdown >= 0
         ? setTimeout(inspectionTimer, 1000)
@@ -94,7 +104,9 @@ const Timer = () => {
           <Scramble scramble={state.scramble} />
           <div
             className={`w-11/12 py-4 mx-auto mt-6 text-center rounded card ${
-              state.inspectionRunning ? "bg-red-500" : "bg-slate-700"
+              state.inspectionRunning
+                ? "bg-transparent animate-pulse"
+                : "bg-slate-700"
             }`}
           >
             <span
