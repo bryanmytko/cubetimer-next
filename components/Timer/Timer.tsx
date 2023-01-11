@@ -7,15 +7,9 @@ import { humanReadableTime } from "../../lib/format";
 import { TimerReducer, TimerActionKind } from "../../reducers";
 import { TimerState } from "../../types/timer";
 
-const START_AUDIO_URL = "/assets/audio/start.mp3";
+const START_AUDIO_URL = "/assets/audio/ding.mp3";
 
 const Timer = () => {
-  const [startAudio, setStartAudio] = useState<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    setStartAudio(new Audio(START_AUDIO_URL));
-  }, []);
-
   const initialState: TimerState = {
     countdown: 0,
     inspectionRunning: false,
@@ -28,6 +22,19 @@ const Timer = () => {
   };
 
   const [state, dispatch] = useReducer(TimerReducer, initialState);
+  const [startAudio, setStartAudio] = useState<HTMLAudioElement | null>(null);
+
+  /* This loads the audio via a user interaction to avoid Safari's
+   * permission issues that can conflict with async code. Since there are
+   * multiple handlers (click and keypresses) we preload the audio with a few
+   * redundancies
+   */
+  const preloadAudio = () => {
+    const audio = new Audio(START_AUDIO_URL);
+    audio.load();
+    console.log("preload audio");
+    audio.addEventListener("canplaythrough", () => setStartAudio(audio));
+  };
 
   const handleKeyup = (e: KeyboardEvent) => {
     if (e.key !== " ") return;
@@ -38,6 +45,7 @@ const Timer = () => {
   const handleKeydown = (e: KeyboardEvent) => {
     if (e.key !== " ") return;
     e.preventDefault();
+    preloadAudio();
     dispatch({ type: TimerActionKind.READY });
   };
 
@@ -58,11 +66,13 @@ const Timer = () => {
         value: state.countdown--,
       });
 
-      if (state.countdown < 0 && startAudio) startAudio.play();
-
       state.countdown >= 0
         ? setTimeout(inspectionTimer, 1000)
         : dispatch({ type: TimerActionKind.TOGGLE_INSPECTION });
+
+      /* This is kind of hacky but it works for the time being */
+      if (state.countdown === 0 && startAudio)
+        setTimeout(() => startAudio.play(), 650);
     };
 
     const timer = () => {
@@ -105,7 +115,7 @@ const Timer = () => {
           <div
             className={`w-11/12 py-4 mx-auto mt-6 text-center rounded card ${
               state.inspectionRunning
-                ? "bg-transparent animate-pulse"
+                ? "bg-transparent animate-ping-slow"
                 : "bg-slate-700"
             }`}
           >
@@ -123,11 +133,18 @@ const Timer = () => {
             className={`timer-btn-start block mx-auto mt-6 px-10 py-5 text-3xl rounded-md w-11/12 ${
               state.ready ? "bg-red-500" : "bg-yellow-300"
             }`}
-            onClick={() => dispatch({ type: TimerActionKind.TOGGLE_RUNNING })}
+            onClick={() => {
+              preloadAudio();
+              dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
+            }}
           >
             Press spacebar or click to start!
           </button>
-          <Panel dispatch={dispatch} solveTimes={state.solveTimes} />
+          <Panel
+            dispatch={dispatch}
+            solveTimes={state.solveTimes}
+            preloadAudio={preloadAudio}
+          />
         </div>
       </div>
       <Times dispatch={dispatch} solveTimes={state.solveTimes} />
