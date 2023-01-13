@@ -6,7 +6,6 @@ import { TimerReducer, TimerActionKind } from "../../reducers";
 import { initialState } from "./initialState";
 
 const START_AUDIO_URL = "/assets/audio/ding.mp3";
-const { TIMER_TICK, INSPECTION_TICK } = [60, 1000];
 
 const Timer = () => {
   const [state, dispatch] = useReducer(TimerReducer, initialState);
@@ -26,7 +25,7 @@ const Timer = () => {
   const handleKeyup = (e: KeyboardEvent) => {
     if (e.key !== " ") return;
     e.preventDefault();
-    state.inspectionTime
+    state.inspectionTime && !state.running
       ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
       : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
   };
@@ -47,10 +46,9 @@ const Timer = () => {
   }, []);
 
   useEffect(() => {
-    // Something is causing this to flip-flop after it should just finish when toggled off
-    console.log("inspection status:", state.inspectionRunning);
     let interval: NodeJS.Timeout;
 
+    /* TODO fix bug with the first inspection countdown showing 2x length */
     if (state.inspectionRunning) {
       const countDown = () => {
         if (state.countdown > 0) {
@@ -59,22 +57,21 @@ const Timer = () => {
             value: state.countdown--,
           });
         } else {
-          // if (startAudio) setTimeout(() => startAudio.play(), 650);
-          // clearInterval(interval);
+          clearInterval(interval);
           if (startAudio) startAudio.play();
           dispatch({ type: TimerActionKind.TOGGLE_INSPECTION });
+          dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
         }
       };
 
       interval = setInterval(() => countDown(), 1000);
-      return void 0;
+      return;
     }
-    // reset timer
+
     dispatch({
       type: TimerActionKind.COUNTDOWN,
       value: state.inspectionTime,
     });
-    return () => clearInterval(interval);
   }, [state.inspectionRunning]);
 
   useEffect(() => {
@@ -83,7 +80,7 @@ const Timer = () => {
     if (state.running) {
       interval = setInterval(
         () => dispatch({ type: TimerActionKind.TICK_UP }),
-        TIMER_TICK
+        60
       );
     }
 
@@ -112,6 +109,7 @@ const Timer = () => {
             inspectionTime={state.inspectionTime}
             preloadAudio={preloadAudio}
             ready={state.ready}
+            running={state.running}
           />
           <Panel
             dispatch={dispatch}
