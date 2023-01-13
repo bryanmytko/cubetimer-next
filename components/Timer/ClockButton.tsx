@@ -7,10 +7,11 @@ interface ClockButtonProps {
   inspectionTime: number;
   preloadAudio: () => void;
   ready: boolean;
+  running: boolean;
 }
 
 const ClockButton = (props: ClockButtonProps) => {
-  const { dispatch, inspectionTime, preloadAudio, ready } = props;
+  const { dispatch, inspectionTime, preloadAudio, ready, running } = props;
 
   return (
     <button
@@ -19,7 +20,7 @@ const ClockButton = (props: ClockButtonProps) => {
         rounded-md w-11/12 ${ready ? "bg-red-500" : "bg-yellow-300"}`}
       onClick={() => {
         preloadAudio();
-        inspectionTime
+        inspectionTime && !running
           ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
           : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
       }}
