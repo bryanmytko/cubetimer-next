@@ -1,26 +1,16 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
+import useSound from "use-sound";
 
 import { Clock, Panel, Times, ClockButton } from "./";
 import { Scramble } from "../";
 import { TimerReducer, TimerActionKind } from "../../reducers";
 import { initialState } from "./initialState";
 
-const START_AUDIO_URL = "/assets/audio/ding.mp3";
+const AUDIO_DING = "/assets/audio/ding.mp3";
 
 const Timer = () => {
   const [state, dispatch] = useReducer(TimerReducer, initialState);
-  const [startAudio, setStartAudio] = useState<HTMLAudioElement | null>(null);
-
-  /* This loads the audio via a user interaction to avoid Safari's
-   * permission issues that can conflict with async code. Since there are
-   * multiple handlers (click and keypresses) we preload the audio with a few
-   * redundancies
-   */
-  const preloadAudio = () => {
-    const audio = new Audio(START_AUDIO_URL);
-    audio.load();
-    audio.addEventListener("canplaythrough", () => setStartAudio(audio));
-  };
+  const [playDing] = useSound(AUDIO_DING);
 
   const handleKeyup = (e: KeyboardEvent) => {
     if (e.key !== " ") return;
@@ -33,7 +23,6 @@ const Timer = () => {
   const handleKeydown = (e: KeyboardEvent) => {
     if (e.key !== " ") return;
     e.preventDefault();
-    preloadAudio();
     dispatch({ type: TimerActionKind.READY });
   };
 
@@ -51,14 +40,14 @@ const Timer = () => {
     /* TODO fix bug with the first inspection countdown showing 2x length */
     if (state.inspectionRunning) {
       const countDown = () => {
-        if (state.countdown > 0) {
+        if (state.countdown > 1) {
           dispatch({
             type: TimerActionKind.COUNTDOWN,
             value: --state.countdown,
           });
         } else {
           clearInterval(interval);
-          // if (startAudio) startAudio.play();
+          playDing();
           dispatch({ type: TimerActionKind.TOGGLE_INSPECTION });
           dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
         }
@@ -107,15 +96,10 @@ const Timer = () => {
           <ClockButton
             dispatch={dispatch}
             inspectionTime={state.inspectionTime}
-            preloadAudio={preloadAudio}
             ready={state.ready}
             running={state.running}
           />
-          <Panel
-            dispatch={dispatch}
-            solveTimes={state.solveTimes}
-            preloadAudio={preloadAudio}
-          />
+          <Panel dispatch={dispatch} solveTimes={state.solveTimes} />
         </div>
       </div>
       <Times dispatch={dispatch} solveTimes={state.solveTimes} />
