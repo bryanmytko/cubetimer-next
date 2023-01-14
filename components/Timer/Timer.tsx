@@ -54,11 +54,11 @@ const Timer = () => {
         if (state.countdown > 0) {
           dispatch({
             type: TimerActionKind.COUNTDOWN,
-            value: state.countdown--,
+            value: --state.countdown,
           });
         } else {
           clearInterval(interval);
-          if (startAudio) startAudio.play();
+          // if (startAudio) startAudio.play();
           dispatch({ type: TimerActionKind.TOGGLE_INSPECTION });
           dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
         }
