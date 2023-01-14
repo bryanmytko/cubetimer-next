@@ -3,13 +3,11 @@ import { TimerAction, TimerActionKind } from "../../types/timer";
 
 interface InspectionDropdownProps {
   dispatch: Dispatch<TimerAction>;
-  preloadAudio: () => void;
 }
 
 const CubeDropdown = (props: InspectionDropdownProps) => {
-  const { dispatch, preloadAudio } = props;
+  const { dispatch } = props;
   const onChange = (e: SyntheticEvent & { target: HTMLSelectElement }) => {
-    preloadAudio();
     dispatch({
       type: TimerActionKind.INSPECTION_TIME,
       inspectionTime: parseInt(e.target?.value),
