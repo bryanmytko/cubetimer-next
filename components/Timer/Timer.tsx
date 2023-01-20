@@ -13,7 +13,9 @@ const Timer = () => {
   const [playDing] = useSound(AUDIO_DING);
 
   const handleKeyup = (e: KeyboardEvent) => {
+    console.log(state);
     if (e.key !== " ") return;
+    if (state.inspectionRunning) return;
     e.preventDefault();
     state.inspectionTime && !state.running
       ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
@@ -36,8 +38,8 @@ const Timer = () => {
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
+    console.log("inspection running:", state.inspectionRunning);
 
-    /* TODO fix bug with the first inspection countdown showing 2x length */
     if (state.inspectionRunning) {
       const countDown = () => {
         if (state.countdown > 1) {
@@ -61,6 +63,15 @@ const Timer = () => {
       type: TimerActionKind.COUNTDOWN,
       value: state.inspectionTime,
     });
+
+    window.addEventListener("keydown", handleKeydown);
+    window.addEventListener("keyup", handleKeyup);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("keydown", handleKeydown);
+      window.removeEventListener("keyup", handleKeyup);
+    };
   }, [state.inspectionRunning]);
 
   useEffect(() => {
@@ -95,6 +106,7 @@ const Timer = () => {
           />
           <ClockButton
             dispatch={dispatch}
+            inspectionRunning={state.inspectionRunning}
             inspectionTime={state.inspectionTime}
             ready={state.ready}
             running={state.running}
