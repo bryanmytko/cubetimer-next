@@ -13,9 +13,7 @@ const Timer = () => {
   const [playDing] = useSound(AUDIO_DING);
 
   const handleKeyup = (e: KeyboardEvent) => {
-    console.log(state);
-    if (e.key !== " ") return;
-    if (state.inspectionRunning) return;
+    if (e.key !== " " || state.inspectionRunning) return;
     e.preventDefault();
     state.inspectionTime && !state.running
       ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
@@ -37,8 +35,17 @@ const Timer = () => {
   }, []);
 
   useEffect(() => {
+    window.addEventListener("keydown", handleKeydown);
+    window.addEventListener("keyup", handleKeyup);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+      window.removeEventListener("keyup", handleKeyup);
+    };
+  }, [state.inspectionRunning, state.inspectionTime, state.running]);
+
+  useEffect(() => {
     let interval: NodeJS.Timeout;
-    console.log("inspection running:", state.inspectionRunning);
 
     if (state.inspectionRunning) {
       const countDown = () => {
@@ -64,14 +71,7 @@ const Timer = () => {
       value: state.inspectionTime,
     });
 
-    window.addEventListener("keydown", handleKeydown);
-    window.addEventListener("keyup", handleKeyup);
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("keydown", handleKeydown);
-      window.removeEventListener("keyup", handleKeyup);
-    };
+    return () => clearInterval(interval);
   }, [state.inspectionRunning]);
 
   useEffect(() => {
@@ -84,14 +84,7 @@ const Timer = () => {
       );
     }
 
-    window.addEventListener("keydown", handleKeydown);
-    window.addEventListener("keyup", handleKeyup);
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("keydown", handleKeydown);
-      window.removeEventListener("keyup", handleKeyup);
-    };
+    return () => clearInterval(interval);
   }, [state.running]);
 
   return (
