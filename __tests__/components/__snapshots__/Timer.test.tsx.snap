@@ -1,120 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[` 1`] = `
-<div>
-  <div
-    class="col-span-5"
-  >
-    <div>
-      <p
-        class="text-white text-2xl text-center mt-6"
-      >
-        B2 D' R2 U B' R' B2 R' U B' R F' U' F2 D2 F D2 L2 D' B' U
-      </p>
-      <div
-        class="card rounded bg-slate-700 py-4 mx-auto mt-6 text-center w-11/12"
-      >
-        <span
-          class="timer text-8xl text-white font-mono font-black"
-          id="timer-screen"
-        >
-          0:00
-        </span>
-      </div>
-      <button
-        class="timer-btn-start block mx-auto mt-6 px-10 py-5 text-3xl rounded-md w-11/12 bg-yellow-300"
-        id="timer-btn"
-      >
-        Press spacebar or click to start!
-      </button>
-      <div
-        class="flex card rounded bg-gray-300 px-4 py-6 mt-6 mx-auto w-11/12"
-      >
-        <div
-          class="flex-1"
-        >
-          <p>
-            Cubes Solved: 
-            0
-          </p>
-          <p>
-            Average: 
-            --
-          </p>
-          <p>
-            Ao5: 
-            --
-          </p>
-          <p>
-            Ao10: 
-            --
-          </p>
-        </div>
-        <div
-          class="flex-1 text-right"
-        >
-          <p>
-            Fastest: 
-            --
-          </p>
-          <p>
-            Slowest: 
-            --
-          </p>
-          <label
-            class="mr-2"
-          >
-            Cube Size:
-          </label>
-          <select
-            class="mt-1 p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300"
-            data-testid="select"
-          >
-            <option
-              value="2x2"
-            >
-              2x2
-            </option>
-            <option
-              selected=""
-              value="3x3"
-            >
-              3x3
-            </option>
-            <option
-              value="4x4"
-            >
-              4x4
-            </option>
-            <option
-              value="5x5"
-            >
-              5x5
-            </option>
-          </select>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div
-    class="mt-6 md:mt-12 w-11/12 mx-auto"
-  >
-    <h3
-      class="text-md text-gray-100 mx-auto text-center mb-2"
-    >
-      Times
-    </h3>
-    <div
-      class="bg-slate-700 rounded pt-2 pb-4 overflow-auto snap-y snap-mandatory"
-    >
-      <ul
-        class="h-96 text-gray-300 mx-auto w-11/12 pr-4"
-      />
-    </div>
-  </div>
-</div>
-`;
-
 exports[`<Timer> renders the components 1`] = `
 <div>
   <div
@@ -124,20 +9,21 @@ exports[`<Timer> renders the components 1`] = `
       <p
         class="text-white text-2xl text-center mt-6"
       >
-        U L F' D R2 U' L F2 D F2 L2 B2 D2 L2 U R2 B' D' R D2 L'
+        U L2 B2 U B' R' U R' U2 L D2 L' F2 R2 U2 F2 U2 F R' U' L'
       </p>
       <div
-        class="card rounded bg-slate-700 py-4 mx-auto mt-6 text-center w-11/12"
+        class="w-11/12 py-4 mx-auto mt-6 text-center rounded card bg-slate-700"
       >
         <span
-          class="timer text-8xl text-white font-mono font-black"
+          class="font-mono font-black text-white timer text-8xl"
           id="timer-screen"
         >
           0:00
         </span>
       </div>
       <button
-        class="timer-btn-start block mx-auto mt-6 px-10 py-5 text-3xl rounded-md w-11/12 bg-yellow-300"
+        class="timer-btn-start block mx-auto mt-6 px-10 py-5 text-3xl 
+        rounded-md w-11/12 bg-yellow-300"
         id="timer-btn"
       >
         Press spacebar or click to start!
@@ -207,6 +93,34 @@ exports[`<Timer> renders the components 1`] = `
               5x5
             </option>
           </select>
+          <div>
+            <label
+              class="mr-2"
+            >
+              Inspection Time:
+            </label>
+            <select
+              class="mt-1 p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300"
+              data-testid="select"
+            >
+              <option
+                selected=""
+                value="0"
+              >
+                0 sec.
+              </option>
+              <option
+                value="5"
+              >
+                5 sec.
+              </option>
+              <option
+                value="15"
+              >
+                15 sec.
+              </option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
