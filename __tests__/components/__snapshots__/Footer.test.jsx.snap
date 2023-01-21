@@ -9,7 +9,7 @@ exports[`<Footer> renders the component 1`] = `
       class="text-gray-500 text-xs text-center pt-3"
     >
       © 2014-
-      2022
+      2023
        ♥ 
       <a
         href="http://github.com/bryanmytko"
