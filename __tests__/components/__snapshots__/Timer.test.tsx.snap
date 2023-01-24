@@ -12,7 +12,7 @@ exports[`<Timer> renders the components 1`] = `
         U L2 B2 U B' R' U R' U2 L D2 L' F2 R2 U2 F2 U2 F R' U' L'
       </p>
       <div
-        class="w-11/12 py-4 mx-auto mt-6 text-center rounded card bg-slate-700"
+        class="w-11/12 py-4 mx-auto mt-6 text-center rounded card bg-neutral-800"
       >
         <span
           class="font-mono font-black text-white timer text-8xl"
@@ -134,7 +134,7 @@ exports[`<Timer> renders the components 1`] = `
       Times
     </h3>
     <div
-      class="bg-slate-700 rounded pt-2 pb-4 overflow-auto snap-y snap-mandatory"
+      class="bg-neutral-800 rounded pt-2 pb-4 overflow-auto snap-y snap-mandatory"
     >
       <ul
         class="h-96 text-gray-300 mx-auto w-11/12 pr-4"

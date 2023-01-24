@@ -3,7 +3,7 @@
 exports[`<Header> renders the component 1`] = `
 <div>
   <header
-    class="bg-amber-500 dark:bg-gray-900 text-gray-100"
+    class="bg-cyan-800 text-gray-100"
   >
     <nav
       class="px-2 sm:px-4"
