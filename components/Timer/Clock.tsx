@@ -12,7 +12,9 @@ const Clock = (props: ClockProps) => {
   return (
     <div
       className={`w-11/12 py-4 mx-auto mt-6 text-center rounded card ${
-        inspectionRunning ? "bg-transparent animate-iping-slow" : "bg-slate-700"
+        inspectionRunning
+          ? "bg-transparent animate-iping-slow"
+          : "bg-neutral-800"
       }`}
     >
       <span
