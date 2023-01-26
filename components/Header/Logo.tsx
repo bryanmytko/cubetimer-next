@@ -11,7 +11,7 @@ const Logo = () => (
       className="h-10 p-1"
       src="/assets/logo.png"
     />
-    <div className="text-xl text-black dark:text-white">cubetimer.io</div>
+    <div className="text-xl text-white">cubetimer.io</div>
   </Link>
 );
 
