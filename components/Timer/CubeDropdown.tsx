@@ -12,7 +12,7 @@ interface CubeDropdownProps {
 }
 
 const CubeDropdown = (props: CubeDropdownProps) => {
-  const { dispatch } = props;
+  const { dispatch, inspectionRunning } = props;
   const onChange = (e: SyntheticEvent & { target: HTMLSelectElement }) => {
     dispatch({ type: TimerActionKind.PUZZLE_TYPE, puzzle: e.target?.value });
   };
@@ -25,6 +25,7 @@ const CubeDropdown = (props: CubeDropdownProps) => {
         onChange={onChange}
         className="mt-1 p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300"
         data-testid="select"
+        disabled={inspectionRunning}
       >
         <option value="2x2">2x2</option>
         <option value="3x3">3x3</option>
