@@ -104,7 +104,11 @@ const Timer = () => {
             ready={state.ready}
             running={state.running}
           />
-          <Panel dispatch={dispatch} solveTimes={state.solveTimes} />
+          <Panel
+            dispatch={dispatch}
+            solveTimes={state.solveTimes}
+            inspectionRunning={state.inspectionRunning}
+          />
         </div>
       </div>
       <Times dispatch={dispatch} solveTimes={state.solveTimes} />
