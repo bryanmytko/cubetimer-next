@@ -3,6 +3,7 @@ import { TimerAction, TimerActionKind } from "../../types/timer";
 
 interface InspectionDropdownProps {
   dispatch: Dispatch<TimerAction>;
+  inspectionRunning: boolean;
 }
 
 const CubeDropdown = (props: InspectionDropdownProps) => {

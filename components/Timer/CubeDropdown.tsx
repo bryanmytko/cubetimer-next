@@ -9,6 +9,7 @@ type TimerAction = { type: TimerActionKind.PUZZLE_TYPE; puzzle: string };
 
 interface CubeDropdownProps {
   dispatch: Dispatch<TimerAction>;
+  inspectionRunning: boolean;
 }
 
 const CubeDropdown = (props: CubeDropdownProps) => {

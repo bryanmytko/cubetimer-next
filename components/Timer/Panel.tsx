@@ -12,6 +12,7 @@ import InspectionDropdown from "./InspectionDropdown";
 
 interface PanelProps {
   dispatch: Dispatch<TimerAction>;
+  inspectionRunning: boolean;
   solveTimes: number[];
 }
 
