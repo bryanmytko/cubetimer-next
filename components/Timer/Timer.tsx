@@ -12,14 +12,6 @@ const Timer = () => {
   const [state, dispatch] = useReducer(TimerReducer, initialState);
   const [playDing] = useSound(AUDIO_DING);
 
-  const handleKeyup = (e: KeyboardEvent) => {
-    if (e.key !== " " || state.inspectionRunning) return;
-    e.preventDefault();
-    state.inspectionTime && !state.running
-      ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
-      : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
-  };
-
   const handleKeydown = (e: KeyboardEvent) => {
     if (e.key !== " ") return;
     e.preventDefault();
@@ -35,6 +27,14 @@ const Timer = () => {
   }, []);
 
   useEffect(() => {
+    const handleKeyup = (e: KeyboardEvent) => {
+      if (e.key !== " " || state.inspectionRunning) return;
+      e.preventDefault();
+      state.inspectionTime && !state.running
+        ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
+        : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
+    };
+
     window.addEventListener("keydown", handleKeydown);
     window.addEventListener("keyup", handleKeyup);
 
@@ -72,7 +72,7 @@ const Timer = () => {
     });
 
     return () => clearInterval(interval);
-  }, [state.inspectionRunning]);
+  }, [state.countdown, state.inspectionRunning, state.inspectionTime, playDing]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
