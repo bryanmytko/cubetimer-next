@@ -105,6 +105,7 @@ const Timer = () => {
             running={state.running}
           />
           <Panel
+            classicModeEnabled={state.classicModeEnabled}
             dispatch={dispatch}
             solveTimes={state.solveTimes}
             inspectionRunning={state.inspectionRunning}
