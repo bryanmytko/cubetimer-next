@@ -100,7 +100,6 @@ const Timer = () => {
             time={state.time}
           />
           <ClockButton
-            classicModeEnabled={state.classicModeEnabled}
             dispatch={dispatch}
             inspectionRunning={state.inspectionRunning}
             inspectionTime={state.inspectionTime}
