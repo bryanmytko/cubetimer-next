@@ -50,8 +50,8 @@ const Panel = (props: PanelProps) => {
           inspectionRunning={inspectionRunning}
         />
         <div>
-          <label className="mr-2">Classic mode:</label>
-          <input type="checkbox" onChange={() => dispatch({ type: TimerActionKind.TOGGLE_CLASSIC_MODE })} />
+          <label htmlFor="classicMode" className="mr-2">Classic mode:</label>
+          <input id="classicMode" type="checkbox" onChange={() => dispatch({ type: TimerActionKind.TOGGLE_CLASSIC_MODE })} />
         </div>
       </div>
     </div>
