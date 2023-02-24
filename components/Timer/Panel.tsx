@@ -1,6 +1,7 @@
 import { Dispatch } from "react";
 import {
   average,
+  averageCurved,
   averageOfSize,
   fastestTime,
   slowestTime,
@@ -18,11 +19,13 @@ interface PanelProps {
   solveTimes: number[];
 }
 
+const SESSION_LENGTH = 12;
+
 const Panel = (props: PanelProps) => {
   const { classicModeEnabled, dispatch, inspectionRunning, solveTimes } = props;
   const runningTimes = () => {
     if (classicModeEnabled) {
-      return <p>Session Average: {humanReadableTime(averageOfSize(solveTimes, 12))}</p>
+      return <p>Session Average: {humanReadableTime(averageCurved(solveTimes, SESSION_LENGTH))}</p>
     } else {
       return <>
         <p>Ao5: {humanReadableTime(averageOfSize(solveTimes, 5))}</p>
