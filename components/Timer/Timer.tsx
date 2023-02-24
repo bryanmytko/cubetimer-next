@@ -105,6 +105,7 @@ const Timer = () => {
             inspectionTime={state.inspectionTime}
             ready={state.ready}
             running={state.running}
+            sessionComplete={state.classicModeEnabled && state.solveTimes.length >= 12}
           />
           {
             state.classicModeEnabled && <ClassicModeTimes
