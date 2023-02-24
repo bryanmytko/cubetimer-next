@@ -24,7 +24,7 @@ describe("calculate", () => {
   describe(".averageCurved", () => {
     it("returns the curved average", () => {
       const times = [22.34, 1.1, 12.9, 4.68, 300.0, 5.33, 4.56];
-      expect(averageCurved(times)).toEqual(9.962);
+      expect(averageCurved(times, times.length)).toEqual(9.962);
     });
   });
 
