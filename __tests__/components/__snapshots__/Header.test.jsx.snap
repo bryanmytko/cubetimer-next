@@ -28,7 +28,7 @@ exports[`<Header> renders the component 1`] = `
             width="45"
           />
           <div
-            class="text-xl text-black dark:text-white"
+            class="text-xl text-white"
           >
             cubetimer.io
           </div>
@@ -42,7 +42,7 @@ exports[`<Header> renders the component 1`] = `
           >
             <li>
               <a
-                class="block py-2 text-black dark:text-white"
+                class="block py-2 text-white"
                 href="/"
               >
                 Timer
@@ -50,7 +50,7 @@ exports[`<Header> renders the component 1`] = `
             </li>
             <li>
               <a
-                class="block py-2 text-black dark:text-white"
+                class="block py-2 text-white"
                 href="statistics"
               >
                 Statistics
@@ -58,7 +58,7 @@ exports[`<Header> renders the component 1`] = `
             </li>
             <li>
               <a
-                class="block py-2 text-black dark:text-white"
+                class="block py-2 text-white"
                 href="profile"
               >
                 Profile
@@ -66,20 +66,20 @@ exports[`<Header> renders the component 1`] = `
             </li>
             <li>
               <a
-                class="block py-2 text-black dark:text-white"
+                class="block py-2 text-white"
                 href="tutorials"
               >
                 Tutorials
               </a>
             </li>
             <li
-              class="block py-2 text-black dark:text-white"
+              class="block py-2 text-white"
             >
               |
             </li>
             <li>
               <a
-                class="block py-2 text-black dark:text-white"
+                class="block py-2 text-white"
                 href="login"
               >
                 Login

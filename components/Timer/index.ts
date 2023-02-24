@@ -1,3 +1,4 @@
+export { default as ClassicModeTimes } from "./ClassicModeTimes";
 export { default as Clock } from "./Clock";
 export { default as ClockButton } from "./ClockButton";
 export { default as Panel } from "./Panel";

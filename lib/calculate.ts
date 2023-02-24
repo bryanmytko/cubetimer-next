@@ -1,21 +1,15 @@
-const average = (times: number[]): number => {
-  if (!times.length) return 0;
-  return times.reduce((prev, cur) => prev + cur) / times.length;
-};
+const average = (times: number[]): number => !times.length ? 0 : times.reduce((prev, cur) => prev + cur) / times.length;
 
-const averageOfSize = (times: number[], size: number): number => {
-  if (times.length < size) return 0;
-  return times.slice(-size).reduce((prev, cur) => prev + cur) / size;
-};
+const averageOfSize = (times: number[], size: number, curve?: boolean): number => times.length < size ? 0 : times.slice(-size).reduce((prev, cur) => prev + cur) / size;
 
-const fastestTime = (times: number[]): number => {
-  if (!times.length) return 0;
-  return Math.min(...times);
-};
+const averageCurved = (times: number[], size: number): number => times.length < size ? 0 : times
+  .sort((a, b) => a - b)
+  .slice(0, -1)
+  .slice(1)
+  .reduce((prev, cur) => prev + cur) / (times.length - 2);
 
-const slowestTime = (times: number[]): number => {
-  if (!times.length) return 0;
-  return Math.max(...times);
-};
+const fastestTime = (times: number[]): number => !times.length ? 0 : Math.min(...times);
 
-export { average, averageOfSize, fastestTime, slowestTime };
+const slowestTime = (times: number[]): number => !times.length ? 0 : Math.max(...times);
+
+export { average, averageCurved, averageOfSize, fastestTime, slowestTime };

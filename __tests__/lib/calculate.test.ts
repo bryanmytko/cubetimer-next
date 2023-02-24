@@ -1,5 +1,6 @@
 import {
   average,
+  averageCurved,
   averageOfSize,
   fastestTime,
   slowestTime,
@@ -17,6 +18,13 @@ describe("calculate", () => {
     it("calculates the average of the last n times", () => {
       const times = [22.34, 12.9, 4.68, 5.33, 4.56];
       expect(averageOfSize(times, 3)).toEqual(4.8566666666666665);
+    });
+  });
+
+  describe(".averageCurved", () => {
+    it("returns the curved average", () => {
+      const times = [22.34, 1.1, 12.9, 4.68, 300.0, 5.33, 4.56];
+      expect(averageCurved(times, times.length)).toEqual(9.962);
     });
   });
 

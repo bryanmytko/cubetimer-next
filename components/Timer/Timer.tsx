@@ -1,7 +1,7 @@
 import { useEffect, useReducer } from "react";
 import useSound from "use-sound";
 
-import { Clock, Panel, Times, ClockButton } from "./";
+import { Clock, Panel, Times, ClassicModeTimes, ClockButton } from "./";
 import { Scramble } from "../";
 import { TimerReducer, TimerActionKind } from "../../reducers";
 import { initialState } from "./initialState";
@@ -12,20 +12,6 @@ const Timer = () => {
   const [state, dispatch] = useReducer(TimerReducer, initialState);
   const [playDing] = useSound(AUDIO_DING);
 
-  const handleKeyup = (e: KeyboardEvent) => {
-    if (e.key !== " " || state.inspectionRunning) return;
-    e.preventDefault();
-    state.inspectionTime && !state.running
-      ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
-      : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
-  };
-
-  const handleKeydown = (e: KeyboardEvent) => {
-    if (e.key !== " ") return;
-    e.preventDefault();
-    dispatch({ type: TimerActionKind.READY });
-  };
-
   /* This is necessary due to the random nature of the initial scramble.
    * Just trying to set an initial state with a random scramble will
    * cause hydration errors on rerender due to mismatched text
@@ -35,6 +21,22 @@ const Timer = () => {
   }, []);
 
   useEffect(() => {
+    const buttonLocked = (): boolean => state.inspectionRunning || (state.classicModeEnabled && state.solveTimes.length >= 12)
+
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key !== " " || buttonLocked()) return;
+      e.preventDefault();
+      dispatch({ type: TimerActionKind.READY });
+    };
+
+    const handleKeyup = (e: KeyboardEvent) => {
+      if (e.key !== " " || buttonLocked()) return;
+      e.preventDefault();
+      state.inspectionTime && !state.running
+        ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
+        : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
+    };
+
     window.addEventListener("keydown", handleKeydown);
     window.addEventListener("keyup", handleKeyup);
 
@@ -42,7 +44,7 @@ const Timer = () => {
       window.removeEventListener("keydown", handleKeydown);
       window.removeEventListener("keyup", handleKeyup);
     };
-  }, [state.inspectionRunning, state.inspectionTime, state.running]);
+  }, [state.inspectionRunning, state.inspectionTime, state.running, state.solveTimes.length, state.classicModeEnabled]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -72,7 +74,7 @@ const Timer = () => {
     });
 
     return () => clearInterval(interval);
-  }, [state.inspectionRunning]);
+  }, [state.countdown, state.inspectionRunning, state.inspectionTime, playDing]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -89,7 +91,7 @@ const Timer = () => {
 
   return (
     <>
-      <div className="col-span-5">
+      <div className={state.classicModeEnabled ? "col-span-6" : "col-span-5"}>
         <div>
           <Scramble scramble={state.scramble} />
           <Clock
@@ -103,15 +105,27 @@ const Timer = () => {
             inspectionTime={state.inspectionTime}
             ready={state.ready}
             running={state.running}
+            sessionComplete={state.classicModeEnabled && state.solveTimes.length >= 12}
           />
+          {
+            state.classicModeEnabled && <ClassicModeTimes
+              solveTimes={state.solveTimes}
+            />
+          }
           <Panel
+            classicModeEnabled={state.classicModeEnabled}
             dispatch={dispatch}
             solveTimes={state.solveTimes}
             inspectionRunning={state.inspectionRunning}
           />
         </div>
       </div>
-      <Times dispatch={dispatch} solveTimes={state.solveTimes} />
+      {
+        !state.classicModeEnabled && <Times
+          dispatch={dispatch}
+          solveTimes={state.solveTimes}
+        />
+      }
     </>
   );
 };

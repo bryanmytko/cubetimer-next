@@ -3,6 +3,13 @@ import { TimerAction, TimerActionKind, TimerState } from "../types/timer";
 
 const TimerReducer = (state: TimerState, action: TimerAction) => {
   switch (action.type) {
+    case TimerActionKind.TOGGLE_CLASSIC_MODE:
+      return {
+        ...state,
+        classicModeEnabled: !state.classicModeEnabled,
+        running: false,
+        solveTimes: []
+      };
     case TimerActionKind.INITIALIZE:
       return { ...state, scramble: new Scrambler("3x3").generate() };
     case TimerActionKind.TOGGLE_INSPECTION:
