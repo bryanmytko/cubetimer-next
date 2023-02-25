@@ -1,8 +1,22 @@
 import Link from "next/link";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 import Logo from "./Logo";
 
 const Nav = () => {
+  const { data: session } = useSession();
+  const auth = () => {
+    if (session) {
+      return <Link href="#" className="block py-2 text-white" onClick={() => signOut()}>
+        Logout
+      </Link>
+    }
+
+    return <Link href="#" className="block py-2 text-white" onClick={() => signIn()}>
+      Login
+    </Link>
+  }
+
   return (
     <nav className="px-2 sm:px-4">
       <div className="container flex flex-wrap items-center justify-between mx-auto">
@@ -55,9 +69,7 @@ const Nav = () => {
             </li>
             <li className="block py-2 text-white">|</li>
             <li>
-              <Link className="block py-2 text-white" href="login">
-                Login
-              </Link>
+              {auth()}
             </li>
           </ul>
         </div>
