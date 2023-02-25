@@ -1,9 +1,11 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { Layout } from "../components";
 import Head from "next/head";
+import { SessionProvider } from "next-auth/react"
 
-const App = ({ Component, pageProps }: AppProps) => {
+import { Layout } from "../components";
+
+const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
   return (
     <>
       <Head>
@@ -16,9 +18,11 @@ const App = ({ Component, pageProps }: AppProps) => {
         />
         <meta name="theme-color" content="#212121" />
       </Head>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <SessionProvider session={session}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </SessionProvider>
     </>
   );
 };
