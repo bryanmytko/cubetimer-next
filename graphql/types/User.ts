@@ -4,17 +4,22 @@ import prisma from "../../lib/prismadb";
 builder.prismaObject("User", {
   fields: (t) => ({
     id: t.exposeID("id"),
-    // name: t.exposeString("name"),
-    // email: t.exposeString("email"),
+    name: t.exposeString("name", { nullable: true }),
+    email: t.exposeString("email", { nullable: true }),
     solves: t.relation("solves"),
   }),
 });
 
-builder.queryField("user", (t) =>
-  t.prismaField({
-    type: ["User"],
-    resolve: (_query, _parent, _args, _ctx, _info) => prisma.user.findMany(),
-  })
-);
+builder.queryField("user", (t) => {
+  return t.prismaField({
+    type: "User",
+    resolve: async (_query, _parent, _args, ctx: any, _info) => {
+      const id = ctx.params.variables;
+      return prisma.user.findFirstOrThrow({ where: id });
+    },
+  });
+});
+
+//, where: { id: ctx.id } }), // gives admin context when we lock down the queries
 
 export default builder;
