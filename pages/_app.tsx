@@ -1,11 +1,16 @@
 import "../styles/globals.css";
 import type { AppProps, AppType } from "next/app";
 import Head from "next/head";
-import { SessionProvider } from "next-auth/react"
+import { SessionProvider } from "next-auth/react";
+import { ApolloProvider } from "@apollo/client";
 
 import { Layout } from "../components";
+import apolloClient from "../lib/apollo";
 
-const App: AppType = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
+const App: AppType = ({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) => {
   return (
     <>
       <Head>
@@ -18,11 +23,13 @@ const App: AppType = ({ Component, pageProps: { session, ...pageProps } }: AppPr
         />
         <meta name="theme-color" content="#212121" />
       </Head>
-      <SessionProvider session={session}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </SessionProvider>
+      <ApolloProvider client={apolloClient}>
+        <SessionProvider session={session}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </SessionProvider>
+      </ApolloProvider>
     </>
   );
 };
