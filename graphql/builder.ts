@@ -19,3 +19,5 @@ builder.queryType({
     }),
   }),
 });
+
+builder.mutationType({});
