@@ -1,20 +1,6 @@
-export const typeDefs = `
-  type User {
-    id: ID
-    name: String
-    email: String
-    solves: [Solve]
-  }
+import "./types/User";
+import "./types/Solve";
 
-  type Solve {
-    id: ID
-    puzzle: String
-    scramble: String
-    time: String
-    user: User
-  }
+import { builder } from "./builder";
 
-  type Query {
-    solves: [Solve]!
-  }
-`;
+export const schema = builder.toSchema();
