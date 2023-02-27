@@ -39,6 +39,7 @@ model Session {
 
 model Solve {
   id       Int    @id @default(autoincrement())
+  puzzle   String
   scramble String
   time     String
   user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
