@@ -1,5 +1,6 @@
 import { useEffect, useReducer } from "react";
 import useSound from "use-sound";
+import { useSession } from "next-auth/react";
 
 import { Clock, Panel, Times, ClassicModeTimes, ClockButton } from "./";
 import { Scramble } from "../";
@@ -10,6 +11,7 @@ const AUDIO_DING = "/assets/audio/ding.mp3";
 
 const Timer = () => {
   const [state, dispatch] = useReducer(TimerReducer, initialState);
+  const { data: session } = useSession();
   const [playDing] = useSound(AUDIO_DING);
 
   /* This is necessary due to the random nature of the initial scramble.
@@ -17,11 +19,15 @@ const Timer = () => {
    * cause hydration errors on rerender due to mismatched text
    */
   useEffect(() => {
+    console.log(session);
+
     dispatch({ type: TimerActionKind.INITIALIZE });
-  }, []);
+  }, [session]);
 
   useEffect(() => {
-    const buttonLocked = (): boolean => state.inspectionRunning || (state.classicModeEnabled && state.solveTimes.length >= 12)
+    const buttonLocked = (): boolean =>
+      state.inspectionRunning ||
+      (state.classicModeEnabled && state.solveTimes.length >= 12);
 
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key !== " " || buttonLocked()) return;
@@ -44,7 +50,13 @@ const Timer = () => {
       window.removeEventListener("keydown", handleKeydown);
       window.removeEventListener("keyup", handleKeyup);
     };
-  }, [state.inspectionRunning, state.inspectionTime, state.running, state.solveTimes.length, state.classicModeEnabled]);
+  }, [
+    state.inspectionRunning,
+    state.inspectionTime,
+    state.running,
+    state.solveTimes.length,
+    state.classicModeEnabled,
+  ]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -74,7 +86,12 @@ const Timer = () => {
     });
 
     return () => clearInterval(interval);
-  }, [state.countdown, state.inspectionRunning, state.inspectionTime, playDing]);
+  }, [
+    state.countdown,
+    state.inspectionRunning,
+    state.inspectionTime,
+    playDing,
+  ]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -105,13 +122,13 @@ const Timer = () => {
             inspectionTime={state.inspectionTime}
             ready={state.ready}
             running={state.running}
-            sessionComplete={state.classicModeEnabled && state.solveTimes.length >= 12}
+            sessionComplete={
+              state.classicModeEnabled && state.solveTimes.length >= 12
+            }
           />
-          {
-            state.classicModeEnabled && <ClassicModeTimes
-              solveTimes={state.solveTimes}
-            />
-          }
+          {state.classicModeEnabled && (
+            <ClassicModeTimes solveTimes={state.solveTimes} />
+          )}
           <Panel
             classicModeEnabled={state.classicModeEnabled}
             dispatch={dispatch}
@@ -120,12 +137,9 @@ const Timer = () => {
           />
         </div>
       </div>
-      {
-        !state.classicModeEnabled && <Times
-          dispatch={dispatch}
-          solveTimes={state.solveTimes}
-        />
-      }
+      {!state.classicModeEnabled && (
+        <Times dispatch={dispatch} solveTimes={state.solveTimes} />
+      )}
     </>
   );
 };
