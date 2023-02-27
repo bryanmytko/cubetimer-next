@@ -9,7 +9,12 @@ const Nav = () => {
   const { data: session } = useSession();
   const auth = () => {
     if (session) {
-      const avatarUrl = session.user?.image || gravatar.url(session.user?.email || "", { protocol: 'https', s: '100' });
+      // @TODO google avatars sometimes 403
+      // const avatarUrl = session.user?.image || gravatar.url(session.user?.email || "", { protocol: 'https', s: '100' });
+      const avatarUrl = gravatar.url(session.user?.email || "", {
+        protocol: "https",
+        s: "100",
+      });
       const displayEmail = session.user?.email || "";
       const displayName = session.user?.name || "";
 
@@ -26,12 +31,18 @@ const Nav = () => {
                   src={avatarUrl}
                   name=""
                 >
-                  <Text size={14} color="white" css={{ d: "flex" }}>{displayName}</Text>
+                  <Text size={14} color="white" css={{ d: "flex" }}>
+                    {displayName}
+                  </Text>
                   <Text size={12} color="$gray500" css={{ d: "flex" }}></Text>
                 </User>
               </Dropdown.Trigger>
               <Dropdown.Menu color="primary" aria-label="User Actions">
-                <Dropdown.Item key="user" css={{ height: "$18" }} textValue="user">
+                <Dropdown.Item
+                  key="user"
+                  css={{ height: "$18" }}
+                  textValue="user"
+                >
                   <Text color="$gray900" css={{ d: "flex" }}>
                     Signed in as
                   </Text>
@@ -39,7 +50,11 @@ const Nav = () => {
                     {displayEmail}
                   </Text>
                 </Dropdown.Item>
-                <Dropdown.Item key="statistics" textValue="statistics" withDivider>
+                <Dropdown.Item
+                  key="statistics"
+                  textValue="statistics"
+                  withDivider
+                >
                   Statistics
                 </Dropdown.Item>
                 <Dropdown.Item key="profile" textValue="profile" withDivider>
@@ -48,8 +63,15 @@ const Nav = () => {
                 <Dropdown.Item key="settings" textValue="settings">
                   Settings
                 </Dropdown.Item>
-                <Dropdown.Item key="logout" color="error" textValue="logout" withDivider>
-                  <Link href="#" onClick={() => signOut()}>Log Out</Link>
+                <Dropdown.Item
+                  key="logout"
+                  color="error"
+                  textValue="logout"
+                  withDivider
+                >
+                  <Link href="#" onClick={() => signOut()}>
+                    Log Out
+                  </Link>
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -58,10 +80,21 @@ const Nav = () => {
       );
     }
 
-    return <Button auto color="error" css={{ background: "rgb(250 202 21 / var(--tw-bg-opacity))", color: "black" }} href="#" onClick={() => signIn()}>
-      Login
-    </Button>
-  }
+    return (
+      <Button
+        auto
+        color="error"
+        css={{
+          background: "rgb(250 202 21 / var(--tw-bg-opacity))",
+          color: "black",
+        }}
+        href="#"
+        onClick={() => signIn()}
+      >
+        Login
+      </Button>
+    );
+  };
 
   return (
     <nav className="px-2 sm:px-4">
@@ -118,9 +151,7 @@ const Nav = () => {
                 Reviews
               </Link>
             </li>
-            <li>
-              {auth()}
-            </li>
+            <li>{auth()}</li>
           </ul>
         </div>
       </div>
