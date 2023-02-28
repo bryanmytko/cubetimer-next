@@ -16,6 +16,7 @@ export interface TimerState {
   countdown: number;
   inspectionTime: number;
   inspectionRunning: boolean;
+  puzzleType: string;
   ready: boolean;
   running: boolean;
   scramble: string;
