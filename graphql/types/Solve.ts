@@ -11,7 +11,6 @@ builder.prismaObject("Solve", {
   }),
 });
 
-
 builder.queryField("solves", (t) =>
   t.prismaField({
     type: ["Solve"],
@@ -22,9 +21,8 @@ builder.queryField("solves", (t) =>
   })
 );
 
-builder.mutationField(
-  "createSolve",
-  (t: any) => t.prismaField({
+builder.mutationField("createSolve", (t: any) =>
+  t.prismaField({
     type: "Solve",
     args: {
       scramble: t.arg.string({ required: true }),
@@ -41,9 +39,9 @@ builder.mutationField(
           scramble,
           puzzle,
           time,
-          userId
+          userId,
         },
       });
-    }
+    },
   })
 );
