@@ -55,13 +55,13 @@ const Nav = () => {
                   textValue="statistics"
                   withDivider
                 >
-                  Statistics
+                  <Link href="/statistics">Statistics</Link>
                 </Dropdown.Item>
                 <Dropdown.Item key="profile" textValue="profile" withDivider>
-                  Profile
+                  <Link href="/profile">Profile</Link>
                 </Dropdown.Item>
                 <Dropdown.Item key="settings" textValue="settings">
-                  Settings
+                  <Link href="/settings">Settings</Link>
                 </Dropdown.Item>
                 <Dropdown.Item
                   key="logout"
@@ -142,12 +142,12 @@ const Nav = () => {
               </Link>
             </li> */}
             <li>
-              <Link className="block py-2 text-white" href="tutorials">
+              <Link className="block py-2 text-white" href="/tutorials">
                 Tutorials
               </Link>
             </li>
             <li>
-              <Link className="block py-2 text-white" href="reviews">
+              <Link className="block py-2 text-white" href="/reviews">
                 Reviews
               </Link>
             </li>
