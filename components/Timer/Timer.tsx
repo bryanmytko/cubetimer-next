@@ -27,8 +27,9 @@ const Timer = () => {
   }, []);
 
   useEffect(() => {
-    if (state.classicModeEnabled && state.solveTimes.length >= 12) setButtonLocked(true);
-  }, [state.solveTimes, state.classicModeEnabled])
+    if (state.classicModeEnabled && state.solveTimes.length >= 12)
+      setButtonLocked(true);
+  }, [state.solveTimes, state.classicModeEnabled]);
 
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
