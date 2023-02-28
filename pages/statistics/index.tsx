@@ -3,20 +3,10 @@ import { gql, useQuery } from "@apollo/client";
 
 import { humanReadableTime } from "../../lib/format";
 import type { Solve } from "@prisma/client";
-
-const AllSolvesQuery = gql`
-  query {
-    solves {
-      id
-      puzzle
-      scramble
-      time
-    }
-  }
-`;
+import { SOLVES_FOR_USER } from "../../graphql/queries";
 
 const Statistics = () => {
-  const { data, loading, error } = useQuery(AllSolvesQuery);
+  const { data, loading, error } = useQuery(SOLVES_FOR_USER);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Oh no... {error.message}</p>;
