@@ -1,40 +1,19 @@
 import { useEffect, useReducer, useState } from "react";
 import useSound from "use-sound";
 import { useSession } from "next-auth/react";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 
 import { Clock, Panel, Times, ClassicModeTimes, ClockButton } from "./";
 import { Scramble } from "../";
 import { TimerReducer, TimerActionKind } from "../../reducers";
 import { initialState } from "./initialState";
+import { SAVE_SOLVE } from "../../graphql/mutations";
 
 const AUDIO_DING = "/assets/audio/ding.mp3";
 
-const SAVE_SOLVE = gql`
-  mutation Solve(
-    $scramble: String!
-    $time: String!
-    $puzzle: String!
-    $userId: String!
-  ) {
-    createSolve(
-      scramble: $scramble
-      time: $time
-      puzzle: $puzzle
-      userId: $userId
-    ) {
-      scramble
-      time
-      user {
-        name
-      }
-    }
-  }
-`;
-
 const Timer = () => {
   const [state, dispatch] = useReducer(TimerReducer, initialState);
-  const [currentUserId, setCurrentUserId] = useState("");
+  const [buttonLocked, setButtonLocked] = useState(false);
   const [saveSolve, { data, loading, error }] = useMutation(SAVE_SOLVE);
   const { data: session } = useSession();
   const [playDing] = useSound(AUDIO_DING);
@@ -48,25 +27,25 @@ const Timer = () => {
   }, []);
 
   useEffect(() => {
-    const buttonLocked = (): boolean =>
-      state.inspectionRunning ||
-      (state.classicModeEnabled && state.solveTimes.length >= 12);
+    if (state.classicModeEnabled && state.solveTimes.length >= 12) setButtonLocked(true);
+  }, [state.solveTimes, state.classicModeEnabled])
 
+  useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
-      if (e.key !== " " || buttonLocked()) return;
+      if (e.key !== " " || buttonLocked) return;
       e.preventDefault();
       dispatch({ type: TimerActionKind.READY });
     };
 
     const handleKeyup = async (e: KeyboardEvent) => {
-      if (e.key !== " " || buttonLocked()) return;
+      if (e.key !== " " || buttonLocked) return;
       e.preventDefault();
 
       state.inspectionTime && !state.running
         ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
         : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
 
-      if (session && !state.inspectionTime && state.running) {
+      if (session && state.running) {
         await saveSolve({
           variables: {
             puzzle: state.puzzleType,
@@ -88,11 +67,10 @@ const Timer = () => {
   }, [
     saveSolve,
     session,
-    state.inspectionRunning,
+    buttonLocked,
     state.inspectionTime,
     state.running,
     state.solveTimes.length,
-    state.classicModeEnabled,
     state.puzzleType,
     state.scramble,
     state.time,
@@ -102,6 +80,8 @@ const Timer = () => {
     let interval: NodeJS.Timeout;
 
     if (state.inspectionRunning) {
+      setButtonLocked(true);
+
       const countDown = () => {
         if (state.countdown > 1) {
           dispatch({
@@ -109,6 +89,7 @@ const Timer = () => {
             value: --state.countdown,
           });
         } else {
+          setButtonLocked(false);
           clearInterval(interval);
           playDing();
           dispatch({ type: TimerActionKind.TOGGLE_INSPECTION });
