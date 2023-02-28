@@ -1,6 +1,7 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import useSound from "use-sound";
 import { useSession } from "next-auth/react";
+import { gql, useMutation } from "@apollo/client";
 
 import { Clock, Panel, Times, ClassicModeTimes, ClockButton } from "./";
 import { Scramble } from "../";
@@ -9,8 +10,32 @@ import { initialState } from "./initialState";
 
 const AUDIO_DING = "/assets/audio/ding.mp3";
 
+const SAVE_SOLVE = gql`
+  mutation Solve(
+    $scramble: String!
+    $time: String!
+    $puzzle: String!
+    $userId: String!
+  ) {
+    createSolve(
+      scramble: $scramble
+      time: $time
+      puzzle: $puzzle
+      userId: $userId
+    ) {
+      scramble
+      time
+      user {
+        name
+      }
+    }
+  }
+`;
+
 const Timer = () => {
   const [state, dispatch] = useReducer(TimerReducer, initialState);
+  const [currentUserId, setCurrentUserId] = useState("");
+  const [saveSolve, { data, loading, error }] = useMutation(SAVE_SOLVE);
   const { data: session } = useSession();
   const [playDing] = useSound(AUDIO_DING);
 
@@ -19,10 +44,8 @@ const Timer = () => {
    * cause hydration errors on rerender due to mismatched text
    */
   useEffect(() => {
-    console.log(session);
-
     dispatch({ type: TimerActionKind.INITIALIZE });
-  }, [session]);
+  }, []);
 
   useEffect(() => {
     const buttonLocked = (): boolean =>
@@ -35,9 +58,21 @@ const Timer = () => {
       dispatch({ type: TimerActionKind.READY });
     };
 
-    const handleKeyup = (e: KeyboardEvent) => {
+    const handleKeyup = async (e: KeyboardEvent) => {
       if (e.key !== " " || buttonLocked()) return;
       e.preventDefault();
+
+      if (session && !state.inspectionTime && state.running) {
+        await saveSolve({
+          variables: {
+            puzzle: state.puzzleType,
+            scramble: state.scramble,
+            time: String(state.time),
+            userId: session.user.id,
+          },
+        });
+      }
+
       state.inspectionTime && !state.running
         ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
         : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
@@ -51,11 +86,16 @@ const Timer = () => {
       window.removeEventListener("keyup", handleKeyup);
     };
   }, [
+    saveSolve,
+    session,
     state.inspectionRunning,
     state.inspectionTime,
     state.running,
     state.solveTimes.length,
     state.classicModeEnabled,
+    state.puzzleType,
+    state.scramble,
+    state.time,
   ]);
 
   useEffect(() => {
