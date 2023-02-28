@@ -62,6 +62,10 @@ const Timer = () => {
       if (e.key !== " " || buttonLocked()) return;
       e.preventDefault();
 
+      state.inspectionTime && !state.running
+        ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
+        : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
+
       if (session && !state.inspectionTime && state.running) {
         await saveSolve({
           variables: {
@@ -72,10 +76,6 @@ const Timer = () => {
           },
         });
       }
-
-      state.inspectionTime && !state.running
-        ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
-        : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
     };
 
     window.addEventListener("keydown", handleKeydown);
