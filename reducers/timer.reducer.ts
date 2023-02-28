@@ -1,15 +1,7 @@
 import Scrambler from "../lib/scrambler";
 import { TimerAction, TimerActionKind, TimerState } from "../types/timer";
 
-// import prisma from '../lib/prismadb';
-//const user = await prisma.user.
-
 const TimerReducer = (state: TimerState, action: TimerAction) => {
-  const saveTime = async () => {
-    // const user = await prisma.user.count;
-    // console.log("Session in TimerReducer:", user);
-  };
-
   switch (action.type) {
     case TimerActionKind.TOGGLE_CLASSIC_MODE:
       return {
@@ -24,7 +16,6 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
       return { ...state, inspectionRunning: !state.inspectionRunning };
     case TimerActionKind.TOGGLE_RUNNING:
       if (state.running) {
-        saveTime();
         return {
           ...state,
           running: false,
