@@ -55,13 +55,19 @@ const Nav = () => {
                   textValue="statistics"
                   withDivider
                 >
-                  <Link href="/statistics" className="block">Statistics</Link>
+                  <Link href="/statistics" className="block">
+                    Statistics
+                  </Link>
                 </Dropdown.Item>
                 <Dropdown.Item key="profile" textValue="profile" withDivider>
-                  <Link href="/profile" className="block">Profile</Link>
+                  <Link href="/profile" className="block">
+                    Profile
+                  </Link>
                 </Dropdown.Item>
                 <Dropdown.Item key="settings" textValue="settings">
-                  <Link href="/settings" className="block">Settings</Link>
+                  <Link href="/settings" className="block">
+                    Settings
+                  </Link>
                 </Dropdown.Item>
                 <Dropdown.Item
                   key="logout"
