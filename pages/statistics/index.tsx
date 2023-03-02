@@ -1,5 +1,4 @@
-import React from "react";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import { humanReadableTime } from "../../lib/format";
 import type { Solve } from "@prisma/client";
