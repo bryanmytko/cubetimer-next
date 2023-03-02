@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Button, Dropdown, Text, Grid, User } from "@nextui-org/react";
+import router from "next/router";
 import gravatar from "gravatar";
 
 import Logo from "./Logo";
@@ -15,6 +16,11 @@ const Nav = () => {
       });
       const displayEmail = session.user?.email || "";
       const displayName = session.user?.name || "";
+
+      const dropdownAction = (key: string) => {
+        if (key === "logout") return signOut();
+        return router.push({ pathname: key });
+      }
 
       return (
         <Grid.Container justify="flex-start" gap={0}>
@@ -35,7 +41,7 @@ const Nav = () => {
                   <Text size={12} color="$gray500" css={{ d: "flex" }}></Text>
                 </User>
               </Dropdown.Trigger>
-              <Dropdown.Menu color="primary" aria-label="User Actions">
+              <Dropdown.Menu onAction={dropdownAction} color="primary" aria-label="User Actions">
                 <Dropdown.Item
                   key="user"
                   css={{ height: "$18" }}
@@ -53,19 +59,13 @@ const Nav = () => {
                   textValue="statistics"
                   withDivider
                 >
-                  <Link href="/statistics" className="block">
-                    Statistics
-                  </Link>
+                  Statistics
                 </Dropdown.Item>
                 <Dropdown.Item key="profile" textValue="profile" withDivider>
-                  <Link href="/profile" className="block">
-                    Profile
-                  </Link>
+                  Profile
                 </Dropdown.Item>
                 <Dropdown.Item key="settings" textValue="settings">
-                  <Link href="/settings" className="block">
-                    Settings
-                  </Link>
+                  Settings
                 </Dropdown.Item>
                 <Dropdown.Item
                   key="logout"
@@ -73,14 +73,12 @@ const Nav = () => {
                   textValue="logout"
                   withDivider
                 >
-                  <Link href="/" className="block" onClick={() => signOut()}>
-                    Log Out
-                  </Link>
+                  Log Out
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Grid>
-        </Grid.Container>
+        </Grid.Container >
       );
     }
 
@@ -105,7 +103,7 @@ const Nav = () => {
       <div className="container flex flex-wrap items-center justify-between mx-auto">
         <Logo />
         <div className="block w-auto" id="navbar-default">
-          <ul className="flex p-4 flex-row space-x-6 text-sm font-medium border-0">
+          <ul className="flex flex-row p-4 space-x-6 text-sm font-medium border-0">
             <li>
               <Link className="block py-2 text-white" href="/">
                 Timer
