@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const SOLVES_FOR_USER = gql`
-  query {
-    solves {
+  query SolvesForUser($userId: String!){
+    solves(userId: $userId) {
       id
       puzzle
       scramble

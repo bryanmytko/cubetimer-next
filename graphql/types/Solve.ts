@@ -14,9 +14,12 @@ builder.prismaObject("Solve", {
 builder.queryField("solves", (t) =>
   t.prismaField({
     type: ["Solve"],
-    resolve: async (_query, _parent, _args, ctx: any, _info) => {
-      const userId = ctx.params.variables;
-      return prisma.solve.findMany({ where: userId });
+    args: {
+      userId: t.arg.string({ required: true })
+    },
+    resolve: async (_query, _parent, args, _ctx, _info) => {
+      const { userId } = args;
+      return prisma.solve.findMany({ where: { userId } });
     },
   })
 );

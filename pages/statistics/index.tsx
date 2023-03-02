@@ -3,9 +3,12 @@ import { useQuery } from "@apollo/client";
 import { humanReadableTime } from "../../lib/format";
 import type { Solve } from "@prisma/client";
 import { SOLVES_FOR_USER } from "../../graphql/queries";
+import { useSession } from "next-auth/react";
 
 const Statistics = () => {
-  const { data, loading, error } = useQuery(SOLVES_FOR_USER);
+  const { data: session } = useSession();
+  const userId = session?.user.id;
+  const { data, loading, error } = useQuery(SOLVES_FOR_USER, { variables: { userId } });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Oh no... {error.message}</p>;
