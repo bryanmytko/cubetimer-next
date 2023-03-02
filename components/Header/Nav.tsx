@@ -5,6 +5,7 @@ import router from "next/router";
 import gravatar from "gravatar";
 
 import Logo from "./Logo";
+import { Key } from "react";
 
 const Nav = () => {
   const { data: session } = useSession();
@@ -17,9 +18,9 @@ const Nav = () => {
       const displayEmail = session.user?.email || "";
       const displayName = session.user?.name || "";
 
-      const dropdownAction = (key: string) => {
+      const dropdownAction = (key: Key) => {
         if (key === "logout") return signOut();
-        return router.push({ pathname: key });
+        return router.push({ pathname: String(key) });
       }
 
       return (
