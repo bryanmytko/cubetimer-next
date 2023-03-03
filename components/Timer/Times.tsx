@@ -22,6 +22,7 @@ const Times = (props: TimesProps) => {
 
   const deleteTime = (index: number, solveId: number | string) => {
     dispatch({ type: TimerActionKind.REMOVE_TIME, index });
+    // if(session) ...
     // @TODO this doesn't work right now
     // Check: id type, currently string | number, need to pick one
     //deleteSolve({ variables: { id: solveId } })
