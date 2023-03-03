@@ -91,7 +91,6 @@ const Nav = () => {
           background: "rgb(250 202 21 / var(--tw-bg-opacity))",
           color: "black",
         }}
-        href="#"
         onClick={() => signIn()}
       >
         Login
