@@ -14,7 +14,7 @@ export enum TimerActionKind {
 
 export interface Solve {
   time: number;
-  id: number | string;
+  id: string;
 }
 
 export interface TimerState {
@@ -40,7 +40,7 @@ export type TimerAction =
     | TimerActionKind.READY
     | TimerActionKind.TICK_UP;
   }
-  | { type: TimerActionKind.ADD_TIME; solveId: number }
+  | { type: TimerActionKind.ADD_TIME; solveId: string }
   | { type: TimerActionKind.REMOVE_TIME; index: number }
   | { type: TimerActionKind.PUZZLE_TYPE; puzzle: string }
   | { type: TimerActionKind.INSPECTION_TIME; inspectionTime: number }
