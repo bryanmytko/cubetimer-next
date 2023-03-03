@@ -1,11 +1,11 @@
 import { gql } from "@apollo/client";
 
 export const DELETE_SOLVE = gql`
-  mutation Solve(
-    $id: Number!
+  mutation DeleteSolve(
+    $id: String!
   ) {
-    deleteSolve(
-      id: $id
-    )
+    deleteSolve(id: $id) {
+      id
+    }
   }
 `;
