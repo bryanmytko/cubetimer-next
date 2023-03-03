@@ -22,13 +22,17 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
           ...state,
           running: false,
           ready: false,
-          solveTimes: [...state.solveTimes, state.time],
-          scramble: new Scrambler("3x3").generate(),
+          scramble: new Scrambler(state.puzzleType).generate(),
         };
       }
       return { ...state, time: 0, ready: false, running: true };
     case TimerActionKind.READY:
       return state.running ? state : { ...state, ready: true };
+    case TimerActionKind.ADD_TIME:
+      return {
+        ...state,
+        solveTimes: [...state.solveTimes, state.time]
+      }
     case TimerActionKind.REMOVE_TIME:
       return {
         ...state,
@@ -41,6 +45,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
     case TimerActionKind.PUZZLE_TYPE:
       return {
         ...state,
+        puzzleType: action.puzzle,
         running: false,
         solveTimes: [],
         scramble: new Scrambler(action.puzzle).generate(),
