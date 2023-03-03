@@ -8,22 +8,23 @@ import { useSession } from "next-auth/react";
 const Statistics = () => {
   const { data: session } = useSession();
   const userId = session?.user.id;
-  const { data, loading, error } = useQuery(SOLVES_FOR_USER, { variables: { userId } });
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Oh no... {error.message}</p>;
+  const { data } = useQuery(SOLVES_FOR_USER, {
+    skip: !session,
+    variables: { userId },
+  });
 
   return (
     <div className="container text-white statistics-container">
       <h1 className="text-3xl">Statistics</h1>
-      {data.solves.map((d: Solve) => {
-        return (
-          <p key={d.id}>
-            {humanReadableTime(parseInt(d.time))}:{" "}
-            <pre className="inline">{d.scramble}</pre>
-          </p>
-        );
-      })}
+      {data &&
+        data.solves.map((d: Solve) => {
+          return (
+            <p key={d.id}>
+              {humanReadableTime(parseInt(d.time))}:{" "}
+              <code className="inline">{d.scramble}</code>
+            </p>
+          );
+        })}
     </div>
   );
 };
