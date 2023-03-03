@@ -1,31 +1,26 @@
 import { Dispatch } from "react";
+import { useMutation } from "@apollo/client";
+import { Session } from "next-auth";
 
 import { humanReadableTime } from "../../lib/format";
-import { Solve } from "../../types/timer";
+import { Solve, TimerActionKind } from "../../types/timer";
 import { DELETE_SOLVE } from "../../graphql/mutations";
-import { useMutation } from "@apollo/client";
 
 interface TimesProps {
   dispatch: Dispatch<TimerAction>;
+  session: Session | null;
   solveTimes: Solve[];
-}
-
-enum TimerActionKind {
-  REMOVE_TIME = "REMOVE_TIME",
 }
 
 type TimerAction = { type: TimerActionKind.REMOVE_TIME; index: number };
 
 const Times = (props: TimesProps) => {
-  const { dispatch, solveTimes } = props;
-  const [deleteSolve, { data, loading, error }] = useMutation(DELETE_SOLVE);
+  const { dispatch, session, solveTimes } = props;
+  const [deleteSolve, {}] = useMutation(DELETE_SOLVE);
 
-  const deleteTime = (index: number, solveId: number | string) => {
+  const deleteTime = (index: number, solveId: string | undefined) => {
     dispatch({ type: TimerActionKind.REMOVE_TIME, index });
-    // if(session) ...
-    // @TODO this doesn't work right now
-    // Check: id type, currently string | number, need to pick one
-    //deleteSolve({ variables: { id: solveId } })
+    if (session && solveId) deleteSolve({ variables: { id: solveId } });
   };
 
   return (
@@ -36,8 +31,9 @@ const Times = (props: TimesProps) => {
           {solveTimes.map((solve: Solve, index: number) => (
             <li
               key={index}
-              className={`px-2 py-1 cursor-pointer last:snap-end ${index % 2 == 0 ? "bg-neutral-800" : "bg-neutral-700"
-                }`}
+              className={`px-2 py-1 cursor-pointer last:snap-end ${
+                index % 2 == 0 ? "bg-neutral-800" : "bg-neutral-700"
+              }`}
               onClick={() => deleteTime(index, solve.id)}
             >
               {humanReadableTime(solve.time)}
