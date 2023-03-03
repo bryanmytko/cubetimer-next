@@ -1,7 +1,8 @@
 import { humanReadableTime } from "../../lib/format";
+import { Solve } from "../../types/timer";
 
 interface ClassicModeTimesProps {
-  solveTimes: number[];
+  solveTimes: Solve[];
 }
 
 const ClassicModeTimes = (props: ClassicModeTimesProps) => {
@@ -9,13 +10,13 @@ const ClassicModeTimes = (props: ClassicModeTimesProps) => {
   return (
     <div className="content-center w-8/12 mx-auto">
       <ol className="grid grid-cols-6 mt-5 text-xl text-gray-300 lg:grid-cols-12 content-evenly">
-        {solveTimes.map((time: number, index: number) => (
+        {solveTimes.map((solve: Solve, index: number) => (
           <li
             key={index}
             id={String(index)}
             className="inline px-4"
           >
-            {humanReadableTime(time)}
+            {humanReadableTime(solve.time)}
           </li>
         ))}
       </ol>

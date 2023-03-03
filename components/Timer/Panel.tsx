@@ -7,7 +7,7 @@ import {
   slowestTime,
 } from "../../lib/calculate";
 import { humanReadableTime } from "../../lib/format";
-import { TimerAction } from "../../types/timer";
+import { Solve, TimerAction } from "../../types/timer";
 import { TimerActionKind } from "../../reducers";
 import CubeDropdown from "./CubeDropdown";
 import InspectionDropdown from "./InspectionDropdown";
@@ -16,20 +16,22 @@ interface PanelProps {
   classicModeEnabled: boolean;
   dispatch: Dispatch<TimerAction>;
   inspectionRunning: boolean;
-  solveTimes: number[];
+  solveTimes: Solve[];
 }
 
 const SESSION_LENGTH = 12;
 
 const Panel = (props: PanelProps) => {
   const { classicModeEnabled, dispatch, inspectionRunning, solveTimes } = props;
+  const times = solveTimes.map(s => s.time);
+
   const runningTimes = () => {
     if (classicModeEnabled) {
-      return <p>Session Average: {humanReadableTime(averageCurved(solveTimes, SESSION_LENGTH))}</p>
+      return <p>Session Average: {humanReadableTime(averageCurved(times, SESSION_LENGTH))}</p>
     } else {
       return <>
-        <p>Ao5: {humanReadableTime(averageOfSize(solveTimes, 5))}</p>
-        <p>Ao10: {humanReadableTime(averageOfSize(solveTimes, 10))}</p>
+        <p>Ao5: {humanReadableTime(averageOfSize(times, 5))}</p>
+        <p>Ao10: {humanReadableTime(averageOfSize(times, 10))}</p>
       </>
     }
   }
@@ -38,12 +40,12 @@ const Panel = (props: PanelProps) => {
     <div className="flex w-11/12 px-4 py-6 mx-auto mt-6 bg-gray-300 rounded card">
       <div className="flex-1">
         <p>Cubes Solved: {solveTimes.length}</p>
-        <p>Average: {humanReadableTime(average(solveTimes))}</p>
+        <p>Average: {humanReadableTime(average(times))}</p>
         {runningTimes()}
       </div>
       <div className="flex-1 text-right">
-        <p>Fastest: {humanReadableTime(fastestTime(solveTimes))}</p>
-        <p>Slowest: {humanReadableTime(slowestTime(solveTimes))}</p>
+        <p>Fastest: {humanReadableTime(fastestTime(times))}</p>
+        <p>Slowest: {humanReadableTime(slowestTime(times))}</p>
         <CubeDropdown
           dispatch={dispatch}
           inspectionRunning={inspectionRunning}

@@ -42,12 +42,16 @@ const Timer = () => {
       if (e.key !== " " || buttonLocked) return;
       e.preventDefault();
 
+      let solveId = 0;
+
       state.inspectionTime && !state.running
         ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
         : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
 
-      if (session && state.running) {
-        await saveSolve({
+      if (!state.running) return;
+
+      if (session) {
+        const response = await saveSolve({
           variables: {
             puzzle: state.puzzleType,
             scramble: state.scramble,
@@ -55,7 +59,11 @@ const Timer = () => {
             userId: session.user.id,
           },
         });
+
+        solveId = response.data?.id;
       }
+
+      dispatch({ type: TimerActionKind.ADD_TIME, id: solveId });
     };
 
     window.addEventListener("keydown", handleKeydown);
