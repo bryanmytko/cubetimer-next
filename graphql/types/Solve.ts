@@ -24,7 +24,7 @@ builder.queryField("solves", (t) =>
   })
 );
 
-builder.mutationField("createSolve", (t: any) =>
+builder.mutationField("createSolve", (t) =>
   t.prismaField({
     type: "Solve",
     args: {
@@ -46,5 +46,18 @@ builder.mutationField("createSolve", (t: any) =>
         },
       });
     },
+  })
+);
+
+builder.mutationField("deleteSolve", (t) =>
+  t.prismaField({
+    type: "Solve",
+    args: {
+      id: t.arg.string({ required: true })
+    },
+    resolve: async (_query, _parent, args, _ctx, _info) => {
+      const { id } = args;
+      return prisma.solve.delete({ where: { id: parseInt(id) } })
+    }
   })
 );
