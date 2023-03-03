@@ -13,6 +13,7 @@ export const SAVE_SOLVE = gql`
       puzzle: $puzzle
       userId: $userId
     ) {
+      id
       scramble
       time
       user {
