@@ -15,9 +15,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
     case TimerActionKind.TOGGLE_INSPECTION:
       return { ...state, inspectionRunning: !state.inspectionRunning };
     case TimerActionKind.TOGGLE_RUNNING:
-      /* @TODO state.time is a band-aid over this being called incorrectly
-         from inspection finishing */
-      if (state.running && state.time) {
+      if (state.running) {
         return {
           ...state,
           running: false,
@@ -31,7 +29,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
     case TimerActionKind.ADD_TIME:
       return {
         ...state,
-        solveTimes: [...state.solveTimes, state.time]
+        solveTimes: [...state.solveTimes, { time: state.time, id: action.solveId }],
       }
     case TimerActionKind.REMOVE_TIME:
       return {
