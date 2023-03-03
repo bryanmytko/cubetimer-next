@@ -14,7 +14,7 @@ const AUDIO_DING = "/assets/audio/ding.mp3";
 const Timer = () => {
   const [state, dispatch] = useReducer(TimerReducer, initialState);
   const [buttonLocked, setButtonLocked] = useState(false);
-  const [saveSolve, { data, loading, error }] = useMutation(SAVE_SOLVE);
+  const [saveSolve, {}] = useMutation(SAVE_SOLVE);
   const { data: session } = useSession();
   const [playDing] = useSound(AUDIO_DING);
 
@@ -42,7 +42,7 @@ const Timer = () => {
       if (e.key !== " " || buttonLocked) return;
       e.preventDefault();
 
-      let solveId = 0;
+      let solveId;
 
       state.inspectionTime && !state.running
         ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
@@ -60,10 +60,10 @@ const Timer = () => {
           },
         });
 
-        solveId = response.data?.id;
+        solveId = response.data?.createSolve.id;
       }
 
-      dispatch({ type: TimerActionKind.ADD_TIME, id: solveId });
+      dispatch({ type: TimerActionKind.ADD_TIME, solveId });
     };
 
     window.addEventListener("keydown", handleKeydown);
@@ -168,7 +168,11 @@ const Timer = () => {
         </div>
       </div>
       {!state.classicModeEnabled && (
-        <Times dispatch={dispatch} solveTimes={state.solveTimes} />
+        <Times
+          dispatch={dispatch}
+          session={session}
+          solveTimes={state.solveTimes}
+        />
       )}
     </>
   );
