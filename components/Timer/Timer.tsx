@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import useSound from "use-sound";
 import { useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
@@ -14,7 +14,7 @@ const AUDIO_DING = "/assets/audio/ding.mp3";
 const Timer = () => {
   const [state, dispatch] = useReducer(TimerReducer, initialState);
   const [buttonLocked, setButtonLocked] = useState(false);
-  const [saveSolve, {}] = useMutation(SAVE_SOLVE);
+  const [saveSolve, { }] = useMutation(SAVE_SOLVE);
   const { data: session } = useSession();
   const [playDing] = useSound(AUDIO_DING);
 
@@ -31,41 +31,52 @@ const Timer = () => {
       setButtonLocked(true);
   }, [state.solveTimes, state.classicModeEnabled]);
 
+  const handleKeydown = useCallback((e: KeyboardEvent) => {
+    if (e.key !== " " || buttonLocked) return;
+    e.preventDefault();
+
+    dispatch({ type: TimerActionKind.READY });
+  }, [buttonLocked]);
+
+  const handleKeyup = useCallback(async (e: KeyboardEvent | React.MouseEvent) => {
+    if (e.type === "keyup" && (e as KeyboardEvent).key !== " ") return;
+    if (buttonLocked) return;
+    e.preventDefault();
+
+    let solveId;
+
+    state.inspectionTime && !state.running
+      ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
+      : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
+
+    if (!state.running) return;
+
+    if (session) {
+      const response = await saveSolve({
+        variables: {
+          puzzle: state.puzzleType,
+          scramble: state.scramble,
+          time: String(state.time),
+          userId: session.user.id,
+        },
+      });
+
+      solveId = response.data?.createSolve.id;
+    }
+
+    dispatch({ type: TimerActionKind.ADD_TIME, solveId });
+  }, [
+    saveSolve,
+    session,
+    buttonLocked,
+    state.inspectionTime,
+    state.running,
+    state.puzzleType,
+    state.scramble,
+    state.time
+  ]);
+
   useEffect(() => {
-    const handleKeydown = (e: KeyboardEvent) => {
-      if (e.key !== " " || buttonLocked) return;
-      e.preventDefault();
-      dispatch({ type: TimerActionKind.READY });
-    };
-
-    const handleKeyup = async (e: KeyboardEvent) => {
-      if (e.key !== " " || buttonLocked) return;
-      e.preventDefault();
-
-      let solveId;
-
-      state.inspectionTime && !state.running
-        ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
-        : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
-
-      if (!state.running) return;
-
-      if (session) {
-        const response = await saveSolve({
-          variables: {
-            puzzle: state.puzzleType,
-            scramble: state.scramble,
-            time: String(state.time),
-            userId: session.user.id,
-          },
-        });
-
-        solveId = response.data?.createSolve.id;
-      }
-
-      dispatch({ type: TimerActionKind.ADD_TIME, solveId });
-    };
-
     window.addEventListener("keydown", handleKeydown);
     window.addEventListener("keyup", handleKeyup);
 
@@ -73,17 +84,7 @@ const Timer = () => {
       window.removeEventListener("keydown", handleKeydown);
       window.removeEventListener("keyup", handleKeyup);
     };
-  }, [
-    saveSolve,
-    session,
-    buttonLocked,
-    state.inspectionTime,
-    state.running,
-    state.solveTimes.length,
-    state.puzzleType,
-    state.scramble,
-    state.time,
-  ]);
+  }, [handleKeydown, handleKeyup]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -136,6 +137,10 @@ const Timer = () => {
     return () => clearInterval(interval);
   }, [state.running]);
 
+  const k = () => {
+    console.log('KEY DOWN')
+  }
+
   return (
     <>
       <div className={state.classicModeEnabled ? "col-span-6" : "col-span-5"}>
@@ -147,11 +152,8 @@ const Timer = () => {
             time={state.time}
           />
           <ClockButton
-            dispatch={dispatch}
-            inspectionRunning={state.inspectionRunning}
-            inspectionTime={state.inspectionTime}
+            handleKeyup={handleKeyup}
             ready={state.ready}
-            running={state.running}
             sessionComplete={
               state.classicModeEnabled && state.solveTimes.length >= 12
             }
