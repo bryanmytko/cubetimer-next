@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Button, Dropdown, Text, Grid, User } from "@nextui-org/react";
-import router from "next/router";
+import router, { useRouter } from "next/router";
 import gravatar from "gravatar";
 
 import Logo from "./Logo";
@@ -9,6 +9,14 @@ import { Key } from "react";
 
 const Nav = () => {
   const { data: session } = useSession();
+  const { asPath } = useRouter();
+
+  const navItems = [
+    { url: "/", name: "timer" },
+    { url: "/tutorials", name: "tutorials" },
+    { url: "/reviews", name: "reviews" },
+  ];
+
   const auth = () => {
     if (session) {
       const avatarUrl = gravatar.url(session.user?.email || "", {
@@ -21,7 +29,7 @@ const Nav = () => {
       const dropdownAction = (key: Key) => {
         if (key === "logout") return signOut();
         return router.push({ pathname: String(key) });
-      }
+      };
 
       return (
         <Grid.Container justify="flex-start" gap={0}>
@@ -42,7 +50,11 @@ const Nav = () => {
                   <Text size={12} color="$gray500" css={{ d: "flex" }}></Text>
                 </User>
               </Dropdown.Trigger>
-              <Dropdown.Menu onAction={dropdownAction} color="primary" aria-label="User Actions">
+              <Dropdown.Menu
+                onAction={dropdownAction}
+                color="primary"
+                aria-label="User Actions"
+              >
                 <Dropdown.Item
                   key="user"
                   css={{ height: "$18" }}
@@ -79,7 +91,7 @@ const Nav = () => {
               </Dropdown.Menu>
             </Dropdown>
           </Grid>
-        </Grid.Container >
+        </Grid.Container>
       );
     }
 
@@ -103,22 +115,21 @@ const Nav = () => {
       <div className="container flex flex-wrap items-center justify-between mx-auto">
         <Logo />
         <div className="block w-auto" id="navbar-default">
-          <ul className="flex flex-row p-4 space-x-6 text-sm font-medium border-0">
-            <li>
-              <Link className="block py-2 text-white" href="/">
-                Timer
-              </Link>
-            </li>
-            <li>
-              <Link className="block py-2 text-white" href="/tutorials">
-                Tutorials
-              </Link>
-            </li>
-            <li>
-              <Link className="block py-2 text-white" href="/reviews">
-                Reviews
-              </Link>
-            </li>
+          <ul className="flex flex-row px-4 py-3 pt-4 space-x-6 text-sm font-medium border-0">
+            {navItems.map((item, index) => {
+              return (
+                <li
+                  key={`nav-item-${index}`}
+                  className={`${
+                    item.url === asPath ? "text-cyan-100" : "text-white"
+                  }`}
+                >
+                  <Link className="block py-2 capitalize" href={item.url}>
+                    {item.name}
+                  </Link>
+                </li>
+              );
+            })}
             <li>{auth()}</li>
           </ul>
         </div>
