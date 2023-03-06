@@ -1,5 +1,6 @@
 import "./types/User";
 import "./types/Solve";
+import "./types/SolveSession";
 
 import { builder } from "./builder";
 
