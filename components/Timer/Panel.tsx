@@ -1,4 +1,4 @@
-import { Dispatch } from "react";
+import { Dispatch, SetStateAction } from "react";
 import {
   average,
   averageCurved,
@@ -11,18 +11,24 @@ import { Solve, TimerAction } from "../../types/timer";
 import { TimerActionKind } from "../../reducers";
 import CubeDropdown from "./CubeDropdown";
 import InspectionDropdown from "./InspectionDropdown";
+import { CREATE_SOLVE_SESSION } from "../../graphql/mutations";
+import { useMutation } from "@apollo/client";
+import { useSession } from "next-auth/react";
 
 interface PanelProps {
   classicModeEnabled: boolean;
   dispatch: Dispatch<TimerAction>;
   inspectionRunning: boolean;
+  setSolveSessionId: Dispatch<SetStateAction<null>>;
   solveTimes: Solve[];
-}
+};
 
 const SESSION_LENGTH = 12;
 
 const Panel = (props: PanelProps) => {
-  const { classicModeEnabled, dispatch, inspectionRunning, solveTimes } = props;
+  const { classicModeEnabled, dispatch, inspectionRunning, setSolveSessionId, solveTimes } = props;
+  const { data: session } = useSession();
+  const [createSolveSession, { }] = useMutation(CREATE_SOLVE_SESSION);
   const times = solveTimes.map(s => s.time);
 
   const runningTimes = () => {
@@ -34,7 +40,17 @@ const Panel = (props: PanelProps) => {
         <p>Ao10: {humanReadableTime(averageOfSize(times, 10))}</p>
       </>
     }
-  }
+  };
+
+  const toggleClassicMode = async () => {
+    if (!classicModeEnabled && session) {
+      const userId = session.user.id;
+      const response = await createSolveSession({ variables: { userId, size: 12 } });
+      setSolveSessionId(response.data?.createSolveSession.id);
+    }
+
+    dispatch({ type: TimerActionKind.TOGGLE_CLASSIC_MODE });
+  };
 
   return (
     <div className="flex w-11/12 px-4 py-6 mx-auto mt-6 bg-gray-300 rounded card">
@@ -56,7 +72,7 @@ const Panel = (props: PanelProps) => {
         />
         <div>
           <label htmlFor="classicMode" className="mr-2">Classic mode:</label>
-          <input id="classicMode" type="checkbox" onChange={() => dispatch({ type: TimerActionKind.TOGGLE_CLASSIC_MODE })} />
+          <input id="classicMode" type="checkbox" onChange={toggleClassicMode} />
         </div>
       </div>
     </div>
