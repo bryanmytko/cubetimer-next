@@ -42,12 +42,22 @@ model Session {
 }
 
 model Solve {
-  id       Int    @id @default(autoincrement())
-  puzzle   String
-  scramble String
-  time     String
-  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        Int    @id @default(autoincrement())
+  puzzle    String
+  scramble  String
+  time      String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  solveSession   SolveSession? @relation(fields: [solveSessionId], references: [id], onDelete: Cascade)
+  solveSessionId String?
+}
+
+model SolveSession {
+  id       String    @id @default(cuid())
+  size     Int
+  solves   Solve[]
   userId   String
+  user     User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -59,6 +69,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   solves        Solve[]
+  solveSessions SolveSession[]
 }
 
 model VerificationToken {
