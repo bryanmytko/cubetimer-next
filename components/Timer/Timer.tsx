@@ -14,6 +14,7 @@ const AUDIO_DING = "/assets/audio/ding.mp3";
 const Timer = () => {
   const [state, dispatch] = useReducer(TimerReducer, initialState);
   const [buttonLocked, setButtonLocked] = useState(false);
+  const [solveSessionId, setSolveSessionId] = useState(null);
   const [saveSolve, { }] = useMutation(SAVE_SOLVE);
   const { data: session } = useSession();
   const [playDing] = useSound(AUDIO_DING);
@@ -58,6 +59,7 @@ const Timer = () => {
           scramble: state.scramble,
           time: String(state.time),
           userId: session.user.id,
+          solveSessionId,
         },
       });
 
@@ -68,6 +70,7 @@ const Timer = () => {
   }, [
     saveSolve,
     session,
+    solveSessionId,
     buttonLocked,
     state.inspectionTime,
     state.running,
@@ -137,10 +140,6 @@ const Timer = () => {
     return () => clearInterval(interval);
   }, [state.running]);
 
-  const k = () => {
-    console.log('KEY DOWN')
-  }
-
   return (
     <>
       <div className={state.classicModeEnabled ? "col-span-6" : "col-span-5"}>
@@ -164,6 +163,7 @@ const Timer = () => {
           <Panel
             classicModeEnabled={state.classicModeEnabled}
             dispatch={dispatch}
+            setSolveSessionId={setSolveSessionId}
             solveTimes={state.solveTimes}
             inspectionRunning={state.inspectionRunning}
           />
