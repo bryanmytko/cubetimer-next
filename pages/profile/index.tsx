@@ -11,6 +11,7 @@ const Profile = () => {
   });
 
   return <div className="container profile-container">
+    <div className="w-64 h-64 bg-cover bg-y-200 bg-[url(https://www.gamesver.com/wp-content/uploads/2022/03/Rubiks-cube-on-the-colored-background.jpg)]"></div>
     <h1 className="text-3xl text-white">{`${displayName}'s`} Profile</h1>
     <Image height={100} width={100} alt="profile pic" src={photoUrl} />
     <div className="text-white rounded-md card border-1">
