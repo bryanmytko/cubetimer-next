@@ -26,36 +26,46 @@ const Statistics = () => {
   });
 
   return (
-    <div className="container statistics-container bg-gray-200 m-auto p-12 mt-12 w-11/12 rounded text-black">
-      <h1 className="text-3xl">Past Solves</h1>
-      <div className="p-6 mt-4 border">
-        <table className="bg-slate-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                Time
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Scramble
-              </th>
-            </tr>
-          </thead>
+    <div className="container statistics-container m-auto p-12 w-11/12 text-black">
+      <h1 className="text-2xl text-bold text-white mb-6">Past Solves</h1>
+      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead className="text-xs text-black uppercase bg-green-600">
+          <tr>
+            <th scope="col" className="pl-6 pr-1 py-3">
+              Time
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Scramble
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Puzzle
+            </th>
+          </tr>
+        </thead>
+        <tbody>
           {solveData &&
             solveData.solves.map((solve: Solve, index: number) => {
               return (
                 <tr
                   key={index}
-                  className={`px-6 py-3 ${
-                    index % 2 === 0 ? "bg-slate-400" : "bg-slate-800"
+                  className={`px-6 py-3 border-b ${
+                    index % 2 === 0 ? "bg-slate-200" : "bg-white"
                   }`}
                 >
-                  <td>{humanReadableTime(parseInt(solve.time))}: </td>
-                  <td>{solve.scramble}</td>
+                  <td className="px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                    {humanReadableTime(parseInt(solve.time))}
+                  </td>
+                  <td className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
+                    {solve.scramble}
+                  </td>
+                  <td className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
+                    {solve.puzzle}
+                  </td>
                 </tr>
               );
             })}
-        </table>
-      </div>
+        </tbody>
+      </table>
       <h2 className="mt-6 text-3xl">Classic Mode Sessions</h2>
       {solveSessionsData &&
         solveSessionsData.solveSessionsForUser.map((session: SolveSession) => {
