@@ -15,7 +15,7 @@ const Timer = () => {
   const [state, dispatch] = useReducer(TimerReducer, initialState);
   const [buttonLocked, setButtonLocked] = useState(false);
   const [solveSessionId, setSolveSessionId] = useState(null);
-  const [saveSolve, { }] = useMutation(SAVE_SOLVE);
+  const [saveSolve, {}] = useMutation(SAVE_SOLVE);
   const { data: session } = useSession();
   const [playDing] = useSound(AUDIO_DING);
 
@@ -28,56 +28,63 @@ const Timer = () => {
   }, []);
 
   useEffect(() => {
-    if (state.classicModeEnabled && state.solveTimes.length >= 12)
-      setButtonLocked(true);
+    state.classicModeEnabled && state.solveTimes.length >= 12
+      ? setButtonLocked(true)
+      : setButtonLocked(false);
   }, [state.solveTimes, state.classicModeEnabled]);
 
-  const handleKeydown = useCallback((e: KeyboardEvent) => {
-    if (e.key !== " " || buttonLocked) return;
-    e.preventDefault();
+  const handleKeydown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key !== " " || buttonLocked) return;
+      e.preventDefault();
 
-    dispatch({ type: TimerActionKind.READY });
-  }, [buttonLocked]);
+      dispatch({ type: TimerActionKind.READY });
+    },
+    [buttonLocked]
+  );
 
-  const handleKeyup = useCallback(async (e: KeyboardEvent | React.MouseEvent) => {
-    if (e.type === "keyup" && (e as KeyboardEvent).key !== " ") return;
-    if (buttonLocked) return;
-    e.preventDefault();
+  const handleKeyup = useCallback(
+    async (e: KeyboardEvent | React.MouseEvent) => {
+      if (e.type === "keyup" && (e as KeyboardEvent).key !== " ") return;
+      if (buttonLocked) return;
+      e.preventDefault();
 
-    let solveId;
+      let solveId;
 
-    state.inspectionTime && !state.running
-      ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
-      : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
+      state.inspectionTime && !state.running
+        ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
+        : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
 
-    if (!state.running) return;
+      if (!state.running) return;
 
-    if (session) {
-      const response = await saveSolve({
-        variables: {
-          puzzle: state.puzzleType,
-          scramble: state.scramble,
-          time: String(state.time),
-          userId: session.user.id,
-          solveSessionId,
-        },
-      });
+      if (session) {
+        const response = await saveSolve({
+          variables: {
+            puzzle: state.puzzleType,
+            scramble: state.scramble,
+            time: String(state.time),
+            userId: session.user.id,
+            solveSessionId,
+          },
+        });
 
-      solveId = response.data?.createSolve.id;
-    }
+        solveId = response.data?.createSolve.id;
+      }
 
-    dispatch({ type: TimerActionKind.ADD_TIME, solveId });
-  }, [
-    saveSolve,
-    session,
-    solveSessionId,
-    buttonLocked,
-    state.inspectionTime,
-    state.running,
-    state.puzzleType,
-    state.scramble,
-    state.time
-  ]);
+      dispatch({ type: TimerActionKind.ADD_TIME, solveId });
+    },
+    [
+      saveSolve,
+      session,
+      solveSessionId,
+      buttonLocked,
+      state.inspectionTime,
+      state.running,
+      state.puzzleType,
+      state.scramble,
+      state.time,
+    ]
+  );
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeydown);
