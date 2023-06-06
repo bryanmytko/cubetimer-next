@@ -42,30 +42,31 @@ model Session {
 }
 
 model Solve {
-  id        Int    @id @default(autoincrement())
-  puzzle    String
-  scramble  String
-  time      String
-  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
+  id             Int           @id @default(autoincrement())
+  puzzle         String
+  scramble       String
+  time           String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
   solveSession   SolveSession? @relation(fields: [solveSessionId], references: [id], onDelete: Cascade)
   solveSessionId String?
 }
 
 model SolveSession {
-  id       String    @id @default(cuid())
-  size     Int
-  solves   Solve[]
-  userId   String
-  user     User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String  @id @default(cuid())
+  size   Int
+  solves Solve[]
+  userId String
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?        @unique
   emailVerified DateTime?
   image         String?
+  role          Role           @default(USER)
   accounts      Account[]
   sessions      Session[]
   solves        Solve[]
@@ -78,4 +79,9 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum Role {
+  USER
+  ADMIN
 }
