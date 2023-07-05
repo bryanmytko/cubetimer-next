@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import Byline from "../../components/Byline";
+
 const Reviews = () => {
   return (
     <div className="container profile-container">
@@ -9,21 +11,7 @@ const Reviews = () => {
             <h1 className="text-3xl font-bold m-auto mb-6">
               Top 5 Speed Cubes for 2023 (What Rubik's Cube to buy)
             </h1>
-            <div>
-              <Image
-                src="https://en.gravatar.com/userimage/4046405/3db0ec823880c20cf6c1ab24a9ad4843"
-                alt="author"
-                height={30}
-                width={30}
-                className="inline-block"
-              />
-              <span>
-                <a href="#" className="px-2 text-blue-700">
-                  Bryan Mytko
-                </a>
-                <h2 className="inline-block m-auto">July 3rd, 2023</h2>
-              </span>
-            </div>
+            <Byline name={"Bryan Mytko"} />
             <Image
               src="https://i.imgur.com/wLJlOOY.jpeg"
               height={900}
@@ -31,24 +19,24 @@ const Reviews = () => {
               alt="preview"
               className="my-6"
             />
+            <h3 className="text-2xl font-bold mb-6">
+              1. GAN 365 M, 3x3 Magnetic Speed Cube (
+              <a
+                className="text-blue-700"
+                href="https://www.amazon.com/GAN-Magnetic-Speed-Stickerless-Magic/dp/B086PNKX2P/ref=sr_1_5"
+              >
+                buy on Amazon
+              </a>
+              )
+            </h3>
             <p className="mb-6">
-              <h3 className="text-2xl font-bold mb-6">
-                1. GAN 365 M, 3x3 Magnetic Speed Cube (
-                <a
-                  className="text-blue-700"
-                  href="https://www.amazon.com/GAN-Magnetic-Speed-Stickerless-Magic/dp/B086PNKX2P/ref=sr_1_5"
-                >
-                  buy on Amazon
-                </a>
-                )
-              </h3>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent{" "}
               <a
                 className="text-blue-700"
                 href="https://www.amazon.com/GAN-Magnetic-Speed-Stickerless-Magic/dp/B086PNKX2P/ref=sr_1_5"
               >
                 GAN 356 M, 3x3 Magnetic Speed Cube Stickerless Gans
               </a>{" "}
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
               vel sodales libero. Phasellus luctus laoreet rutrum. Aliquam in
               purus sed leo interdum vehicula non nec felis. Vivamus vitae neque
               lorem. Maecenas ut ante ut urna interdum varius vitae eu mauris.
@@ -64,7 +52,6 @@ const Reviews = () => {
               Pellentesque vestibulum libero nulla, ac iaculis velit pharetra
               auctor.
             </p>
-
             <p className="mb-6">
               Sed nec velit lectus. Nunc varius odio vitae nisi vehicula, vitae
               euismod sem pellentesque. Integer rutrum sollicitudin ullamcorper.
@@ -77,7 +64,6 @@ const Reviews = () => {
               lorem. Maecenas quam purus, hendrerit at nibh quis, malesuada
               commodo elit.
             </p>
-
             <p className="mb-6">
               Nullam auctor porttitor metus sit amet lacinia. Etiam convallis ac
               tellus a posuere. Vivamus in diam auctor, tempus turpis eget,
@@ -87,7 +73,6 @@ const Reviews = () => {
               Aenean malesuada suscipit ipsum ac imperdiet. Maecenas facilisis
               auctor lectus nec consectetur.
             </p>
-
             <p className="mb-6">
               In venenatis scelerisque tellus. Morbi sollicitudin faucibus
               dolor, sit amet ultricies lorem vestibulum eget. Pellentesque nec
