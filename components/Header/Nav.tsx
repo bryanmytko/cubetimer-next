@@ -121,7 +121,7 @@ const Nav = () => {
                 <li
                   key={`nav-item-${index}`}
                   className={`${
-                    item.url === asPath ? "text-cyan-100" : "text-white"
+                    item.url === asPath ? "text-yellow-300" : "text-white"
                   }`}
                 >
                   <Link className="block py-2 capitalize" href={item.url}>
