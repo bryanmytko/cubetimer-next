@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Button, Dropdown, Text, Grid, User } from "@nextui-org/react";
-import router, { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import gravatar from "gravatar";
 
 import Logo from "./Logo";
@@ -9,7 +9,8 @@ import { Key } from "react";
 
 const Nav = () => {
   const { data: session } = useSession();
-  const { asPath } = useRouter();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const navItems = [
     { url: "/", name: "timer" },
@@ -28,7 +29,7 @@ const Nav = () => {
 
       const dropdownAction = (key: Key) => {
         if (key === "logout") return signOut();
-        return router.push({ pathname: String(key) });
+        return router.push(String(key));
       };
 
       return (
@@ -121,7 +122,7 @@ const Nav = () => {
                 <li
                   key={`nav-item-${index}`}
                   className={`${
-                    item.url === asPath ? "text-yellow-300" : "text-white"
+                    item.url === pathname ? "text-yellow-300" : "text-white"
                   }`}
                 >
                   <Link className="block py-2 capitalize" href={item.url}>

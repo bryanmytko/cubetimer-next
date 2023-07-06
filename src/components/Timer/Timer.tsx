@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useReducer, useState } from "react";
 import useSound from "use-sound";
 import { useSession } from "next-auth/react";
