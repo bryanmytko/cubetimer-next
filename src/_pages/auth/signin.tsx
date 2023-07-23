@@ -7,7 +7,7 @@ import { getServerSession } from "next-auth/next";
 import { Button } from "@nextui-org/react";
 
 import Logo from "../../components/Header/Logo";
-import authOptions from "../api/auth/[...nextauth]";
+import authOptions from "../../app/api/auth/[...nextauth]";
 
 export default function SignIn({
   providers,

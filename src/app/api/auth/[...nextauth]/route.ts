@@ -2,19 +2,19 @@ import NextAuth from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import prisma from "../../../lib/prismadb";
+import prisma from "../../../../lib/prismadb";
 
-export default NextAuth({
+const handler = NextAuth({
   adapter: PrismaAdapter(prisma),
-  callbacks: {
-    session: async ({ session, user, token }) => {
-      if (user) session.user.id = user.id;
-      return session;
-    },
-  },
-  pages: {
-    signIn: "/auth/signin",
-  },
+  // callbacks: {
+  //   session: async ({ session, user, token }) => {
+  //     if (user) session.user.id = user.id;
+  //     return session;
+  //   },
+  // },
+  // pages: {
+  //   signIn: "/auth/signin",
+  // },
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID || "",
@@ -26,3 +26,5 @@ export default NextAuth({
     }),
   ],
 });
+
+export { handler as GET, handler as POST };
