@@ -1,4 +1,5 @@
 import { useQuery } from "@apollo/client";
+import { useState, MouseEvent } from "react";
 
 import {
   SOLVES_FOR_USER,
@@ -19,9 +20,36 @@ const Statistics = () => {
     variables: { userId },
   });
 
+  const [activeTab, setActiveTab] = useState("");
+
+  const changeTab = (e: MouseEvent<HTMLElement>) => {
+    let target = e.target as HTMLUListElement;
+    setActiveTab(target.id);
+  };
+
   return (
     <div className="container statistics-container m-auto p-12 w-11/12 text-black">
       <h1 className="text-2xl text-bold text-white mb-6">Statistics</h1>
+
+      <div className="tabs">
+        <ul className="tabs-nav flex">
+          <li
+            className="bg-gray-400 rounded-tl-md px-4 py-2"
+            id="1"
+            onClick={changeTab}
+          >
+            Solves
+          </li>
+          <li
+            className="bg-gray-500 rounded-tr-md px-4 py-2"
+            id="2"
+            onClick={changeTab}
+          >
+            Sessions
+          </li>
+        </ul>
+      </div>
+
       <Solves data={solveData?.solves} />
       <h2 className="mt-6 text-3xl">Classic Mode Sessions</h2>
       <ClassicSolves data={solveSessionsData?.solveSessionsForUser} />
