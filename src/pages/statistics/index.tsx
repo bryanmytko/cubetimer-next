@@ -20,11 +20,11 @@ const Statistics = () => {
     variables: { userId },
   });
 
-  const [activeTab, setActiveTab] = useState("");
+  const [activeTab, setActiveTab] = useState("1");
 
   const changeTab = (e: MouseEvent<HTMLElement>) => {
-    let target = e.target as HTMLUListElement;
-    setActiveTab(target.id);
+    let target = e.target as HTMLElement;
+    if (target.dataset["tab"]) setActiveTab(target.dataset["tab"]);
   };
 
   return (
@@ -32,27 +32,33 @@ const Statistics = () => {
       <h1 className="text-2xl text-bold text-white mb-6">Statistics</h1>
 
       <div className="tabs">
-        <ul className="tabs-nav flex">
+        <ul className="tabsNav flex">
           <li
-            className="bg-gray-400 rounded-tl-md px-4 py-2"
-            id="1"
+            className={`cursor-pointer rounded-t-md mr-1 px-4 py-2 ${
+              activeTab === "1" ? "bg-yellow-400" : "bg-gray-500"
+            }`}
+            data-tab="1"
             onClick={changeTab}
           >
             Solves
           </li>
           <li
-            className="bg-gray-500 rounded-tr-md px-4 py-2"
-            id="2"
+            className={`cursor-pointer rounded-t-md px-4 py-2 ${
+              activeTab === "2" ? "bg-yellow-400" : "bg-gray-500"
+            }`}
+            data-tab="2"
             onClick={changeTab}
           >
             Sessions
           </li>
         </ul>
       </div>
-
-      <Solves data={solveData?.solves} />
-      <h2 className="mt-6 text-3xl">Classic Mode Sessions</h2>
-      <ClassicSolves data={solveSessionsData?.solveSessionsForUser} />
+      <div className={activeTab === "1" ? "" : "hidden"}>
+        <Solves data={solveData?.solves} />
+      </div>
+      <div className={activeTab === "2" ? "" : "hidden"}>
+        <ClassicSolves data={solveSessionsData?.solveSessionsForUser} />
+      </div>
     </div>
   );
 };
