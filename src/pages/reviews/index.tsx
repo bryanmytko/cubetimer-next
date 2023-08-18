@@ -3,7 +3,8 @@ import Image from "next/image";
 import Byline from "../../components/Byline";
 
 const Reviews = () => {
-  return (
+  return "";
+  /*return (
     <div className="container profile-container">
       <div className="bg-gray-200 m-auto p-12 w-11/12 mt-4 text-black">
         <div className="grid grid-cols-3 gap-20">
@@ -118,7 +119,7 @@ const Reviews = () => {
         </div>
       </div>
     </div>
-  );
+  );*/
 };
 
 export default Reviews;
