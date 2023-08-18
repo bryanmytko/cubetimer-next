@@ -4,8 +4,8 @@
 
 @font-face {
   font-family: "Droid Sans";
-  src: url("../public/fonts/DroidSans.ttf");
-  src: url("../public/fonts/DroidSans-Bold.ttf");
+  src: url("/fonts/DroidSans.ttf");
+  src: url("/fonts/DroidSans-Bold.ttf");
 }
 
 html,
