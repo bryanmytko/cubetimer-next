@@ -19,8 +19,8 @@ const ClassicSolves = (props: ClassicSolvesProps) => {
     <>
       {data.map((session: SolveSession) => {
         return (
-          <div key={session.id} className="p-6 mt-4 border">
-            <h3 className="text-xl">Session ${session.id}</h3>
+          <div key={session.id}>
+            {/* <h3 className="text-xl text-white">Session ${session.id}</h3> */}
             <Solves data={session.solves} />
           </div>
         );
