@@ -2,6 +2,9 @@
   "name": "cubetimer",
   "version": "0.1.0",
   "private": true,
+  "prisma": {
+    "schema": "src/schema.prisma"
+  },
   "cacheDirectories": [
     ".next/cache"
   ],
