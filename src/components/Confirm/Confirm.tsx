@@ -1,5 +1,4 @@
 import { Button } from "@nextui-org/react";
-import { Dispatch, SetStateAction } from "react";
 
 interface OkOptions {
   penalty: number;
@@ -8,11 +7,11 @@ interface OkOptions {
 interface ConfirmProps {
   active: boolean;
   ok: (arg0?: OkOptions) => Promise<void>;
-  setActive: Dispatch<SetStateAction<boolean>>;
+  toggle: () => void;
 }
 
 const Confirm = (props: ConfirmProps) => {
-  const { active, ok, setActive } = props;
+  const { active, ok, toggle } = props;
 
   if (!active) return <></>;
 
@@ -32,10 +31,7 @@ const Confirm = (props: ConfirmProps) => {
               color: "black",
               borderRadius: "4px",
             }}
-            onClick={() => {
-              ok();
-              setActive(false);
-            }}
+            onClick={() => ok()}
           >
             Confirm
           </Button>
@@ -48,7 +44,6 @@ const Confirm = (props: ConfirmProps) => {
             }}
             onClick={() => {
               ok({ penalty: 2000 });
-              setActive(false);
             }}
           >
             +2
@@ -60,7 +55,7 @@ const Confirm = (props: ConfirmProps) => {
               color: "black",
               borderRadius: "4px",
             }}
-            onClick={() => setActive(false)}
+            onClick={toggle}
           >
             Reject
           </Button>
