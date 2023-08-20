@@ -12,6 +12,10 @@ import { SAVE_SOLVE } from "../../graphql/mutations";
 
 const AUDIO_DING = "/assets/audio/ding.mp3";
 
+interface OkOptions {
+  penalty: number;
+}
+
 const Timer = () => {
   const [state, dispatch] = useReducer(TimerReducer, initialState);
   const [buttonLocked, setButtonLocked] = useState(false);
@@ -48,6 +52,7 @@ const Timer = () => {
   const handleKeyup = useCallback(
     async (e: KeyboardEvent | React.MouseEvent) => {
       if (e.type === "keyup" && (e as KeyboardEvent).key !== " ") return;
+      if (buttonLocked && confirmActive) recordSolve();
       if (buttonLocked) return;
       e.preventDefault();
 
@@ -57,7 +62,7 @@ const Timer = () => {
 
       if (!state.running) return;
 
-      setConfirmActive(true);
+      toggleConfirmModal();
     },
     [
       saveSolve,
@@ -72,7 +77,7 @@ const Timer = () => {
     ]
   );
 
-  const recordSolve = async (options = { penalty: 0 }) => {
+  const recordSolve = async (options: OkOptions = { penalty: 0 }) => {
     const { penalty } = options;
     let solveId;
 
@@ -92,7 +97,13 @@ const Timer = () => {
       solveId = response.data?.createSolve.id;
     }
 
+    toggleConfirmModal();
     dispatch({ type: TimerActionKind.ADD_TIME, solveId });
+  };
+
+  const toggleConfirmModal = () => {
+    setConfirmActive(!confirmActive);
+    setButtonLocked(!buttonLocked);
   };
 
   useEffect(() => {
@@ -179,7 +190,7 @@ const Timer = () => {
           <Confirm
             active={confirmActive}
             ok={recordSolve}
-            setActive={setConfirmActive}
+            toggle={toggleConfirmModal}
           />
           <Panel
             classicModeEnabled={state.classicModeEnabled}
