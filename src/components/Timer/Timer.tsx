@@ -72,8 +72,11 @@ const Timer = () => {
     ]
   );
 
-  const recordSolve = async () => {
+  const recordSolve = async (options = { penalty: 0 }) => {
+    const { penalty } = options;
     let solveId;
+
+    if (penalty) dispatch({ type: TimerActionKind.PENALTY, value: penalty });
 
     if (session) {
       const response = await saveSolve({
@@ -89,7 +92,6 @@ const Timer = () => {
       solveId = response.data?.createSolve.id;
     }
 
-    setConfirmActive(false);
     dispatch({ type: TimerActionKind.ADD_TIME, solveId });
   };
 
@@ -174,7 +176,11 @@ const Timer = () => {
           {state.classicModeEnabled && (
             <ClassicModeTimes solveTimes={state.solveTimes} />
           )}
-          <Confirm active={confirmActive} callback={recordSolve} />
+          <Confirm
+            active={confirmActive}
+            ok={recordSolve}
+            setActive={setConfirmActive}
+          />
           <Panel
             classicModeEnabled={state.classicModeEnabled}
             dispatch={dispatch}
