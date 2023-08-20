@@ -5,6 +5,7 @@ import { useMutation } from "@apollo/client";
 
 import { Clock, Panel, Times, ClassicModeTimes, ClockButton } from "./";
 import { Scramble } from "../";
+import { Confirm } from "../Confirm";
 import { TimerReducer, TimerActionKind } from "../../reducers";
 import { initialState } from "./initialState";
 import { SAVE_SOLVE } from "../../graphql/mutations";
@@ -15,6 +16,7 @@ const Timer = () => {
   const [state, dispatch] = useReducer(TimerReducer, initialState);
   const [buttonLocked, setButtonLocked] = useState(false);
   const [solveSessionId, setSolveSessionId] = useState(null);
+  const [confirmActive, setConfirmActive] = useState(false);
   const [saveSolve, {}] = useMutation(SAVE_SOLVE);
   const { data: session } = useSession();
   const [playDing] = useSound(AUDIO_DING);
@@ -49,29 +51,13 @@ const Timer = () => {
       if (buttonLocked) return;
       e.preventDefault();
 
-      let solveId;
-
       state.inspectionTime && !state.running
         ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
         : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
 
       if (!state.running) return;
 
-      if (session) {
-        const response = await saveSolve({
-          variables: {
-            puzzle: state.puzzleType,
-            scramble: state.scramble,
-            time: String(state.time),
-            userId: session.user.id,
-            solveSessionId,
-          },
-        });
-
-        solveId = response.data?.createSolve.id;
-      }
-
-      dispatch({ type: TimerActionKind.ADD_TIME, solveId });
+      setConfirmActive(true);
     },
     [
       saveSolve,
@@ -85,6 +71,27 @@ const Timer = () => {
       state.time,
     ]
   );
+
+  const recordSolve = async () => {
+    let solveId;
+
+    if (session) {
+      const response = await saveSolve({
+        variables: {
+          puzzle: state.puzzleType,
+          scramble: state.scramble,
+          time: String(state.time),
+          userId: session.user.id,
+          solveSessionId,
+        },
+      });
+
+      solveId = response.data?.createSolve.id;
+    }
+
+    setConfirmActive(false);
+    dispatch({ type: TimerActionKind.ADD_TIME, solveId });
+  };
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeydown);
@@ -167,6 +174,7 @@ const Timer = () => {
           {state.classicModeEnabled && (
             <ClassicModeTimes solveTimes={state.solveTimes} />
           )}
+          <Confirm active={confirmActive} callback={recordSolve} />
           <Panel
             classicModeEnabled={state.classicModeEnabled}
             dispatch={dispatch}
