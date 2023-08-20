@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import {
   average,
   averageCurved,
@@ -21,31 +21,48 @@ interface PanelProps {
   inspectionRunning: boolean;
   setSolveSessionId: Dispatch<SetStateAction<null>>;
   solveTimes: Solve[];
-};
+}
 
 const SESSION_LENGTH = 12;
 
 const Panel = (props: PanelProps) => {
-  const { classicModeEnabled, dispatch, inspectionRunning, setSolveSessionId, solveTimes } = props;
+  const {
+    classicModeEnabled,
+    dispatch,
+    inspectionRunning,
+    setSolveSessionId,
+    solveTimes,
+  } = props;
   const { data: session } = useSession();
-  const [createSolveSession, { }] = useMutation(CREATE_SOLVE_SESSION);
-  const times = solveTimes.map(s => s.time);
+  const [createSolveSession, {}] = useMutation(CREATE_SOLVE_SESSION);
+  const times = solveTimes.map((s) => s.time);
 
   const runningTimes = () => {
     if (classicModeEnabled) {
-      return <p>Session Average: {humanReadableTime(averageCurved(times, SESSION_LENGTH))}</p>
+      return (
+        <p>
+          Session Average:{" "}
+          {humanReadableTime(averageCurved(times, SESSION_LENGTH))}
+        </p>
+      );
     } else {
-      return <>
-        <p>Ao5: {humanReadableTime(averageOfSize(times, 5))}</p>
-        <p>Ao10: {humanReadableTime(averageOfSize(times, 10))}</p>
-      </>
+      return (
+        <>
+          <p>Ao5: {humanReadableTime(averageOfSize(times, 5))}</p>
+          <p>Ao10: {humanReadableTime(averageOfSize(times, 10))}</p>
+        </>
+      );
     }
   };
 
-  const toggleClassicMode = async () => {
+  const toggleClassicMode = async (event: ChangeEvent<HTMLInputElement>) => {
+    event.target.blur();
+
     if (!classicModeEnabled && session) {
       const userId = session.user.id;
-      const response = await createSolveSession({ variables: { userId, size: 12 } });
+      const response = await createSolveSession({
+        variables: { userId, size: 12 },
+      });
       setSolveSessionId(response.data?.createSolveSession.id);
     }
 
@@ -71,8 +88,14 @@ const Panel = (props: PanelProps) => {
           inspectionRunning={inspectionRunning}
         />
         <div>
-          <label htmlFor="classicMode" className="mr-2">Classic mode:</label>
-          <input id="classicMode" type="checkbox" onChange={toggleClassicMode} />
+          <label htmlFor="classicMode" className="mr-2">
+            Classic mode:
+          </label>
+          <input
+            id="classicMode"
+            type="checkbox"
+            onChange={toggleClassicMode}
+          />
         </div>
       </div>
     </div>
