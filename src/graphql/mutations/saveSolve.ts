@@ -4,7 +4,7 @@ export const SAVE_SOLVE = gql`
   mutation Solve(
     $scramble: String!
     $time: String!
-    $penalty: String!
+    $penalty: Int
     $puzzle: String!
     $userId: String!
     $solveSessionId: String
