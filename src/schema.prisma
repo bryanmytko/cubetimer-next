@@ -43,6 +43,7 @@ model Session {
 
 model Solve {
   id        Int    @id @default(autoincrement())
+  penalty   Int
   puzzle    String
   scramble  String
   time      String
