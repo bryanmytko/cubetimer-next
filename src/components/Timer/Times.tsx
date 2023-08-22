@@ -23,6 +23,10 @@ const Times = (props: TimesProps) => {
     if (session && solveId) deleteSolve({ variables: { id: solveId } });
   };
 
+  const penalty = (value: number) => (
+    <span className="text-red-300 pl-2">(+{value / 1000})</span>
+  );
+
   return (
     <div className="w-11/12 mx-auto mt-6 md:mt-12">
       <h3 className="mx-auto mb-2 text-center text-gray-100 text-md">Times</h3>
@@ -37,6 +41,7 @@ const Times = (props: TimesProps) => {
               onClick={() => deleteTime(index, solve.id)}
             >
               {humanReadableTime(solve.time)}
+              {solve.penalty && penalty(solve.penalty)}
             </li>
           ))}
         </ul>

@@ -16,6 +16,7 @@ export enum TimerActionKind {
 export interface Solve {
   time: number;
   id: string;
+  penalty?: number;
 }
 
 export interface TimerState {
@@ -23,6 +24,7 @@ export interface TimerState {
   countdown: number;
   inspectionTime: number;
   inspectionRunning: boolean;
+  penalty?: number;
   puzzleType: string;
   ready: boolean;
   running: boolean;

@@ -11,6 +11,7 @@ import { initialState } from "./initialState";
 import { SAVE_SOLVE } from "../../graphql/mutations";
 
 const AUDIO_DING = "/assets/audio/ding.mp3";
+const CLASSIC_SOLVE_LENGTH = 12;
 
 interface OkOptions {
   penalty: number;
@@ -34,7 +35,7 @@ const Timer = () => {
   }, []);
 
   useEffect(() => {
-    state.classicModeEnabled && state.solveTimes.length >= 12
+    state.classicModeEnabled && state.solveTimes.length >= CLASSIC_SOLVE_LENGTH
       ? setButtonLocked(true)
       : setButtonLocked(false);
   }, [state.solveTimes, state.classicModeEnabled]);
@@ -86,6 +87,7 @@ const Timer = () => {
     if (session) {
       const response = await saveSolve({
         variables: {
+          penalty: state.penalty,
           puzzle: state.puzzleType,
           scramble: state.scramble,
           time: String(state.time),

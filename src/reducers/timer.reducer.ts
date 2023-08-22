@@ -31,7 +31,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
         ...state,
         solveTimes: [
           ...state.solveTimes,
-          { time: state.time, id: action.solveId },
+          { time: state.time, penalty: state.penalty, id: action.solveId },
         ],
       };
     case TimerActionKind.REMOVE_TIME:
