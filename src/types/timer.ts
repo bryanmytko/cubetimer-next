@@ -4,7 +4,6 @@ export enum TimerActionKind {
   INITIALIZE = "INITIALIZE",
   INSPECTION_TIME = "INSPECTION_TIME",
   PUZZLE_TYPE = "PUZZLE_TYPE",
-  PENALTY = "PENALTY",
   READY = "READY",
   REMOVE_TIME = "REMOVE_TIME",
   TICK_UP = "TICK_UP",
@@ -16,6 +15,7 @@ export enum TimerActionKind {
 export interface Solve {
   time: number;
   id: string;
+  penalty: number;
 }
 
 export interface TimerState {
@@ -23,6 +23,7 @@ export interface TimerState {
   countdown: number;
   inspectionTime: number;
   inspectionRunning: boolean;
+  penalty?: number;
   puzzleType: string;
   ready: boolean;
   running: boolean;
@@ -41,9 +42,8 @@ export type TimerAction =
         | TimerActionKind.READY
         | TimerActionKind.TICK_UP;
     }
-  | { type: TimerActionKind.ADD_TIME; solveId: string }
+  | { type: TimerActionKind.ADD_TIME; penalty: number; solveId: string }
   | { type: TimerActionKind.COUNTDOWN; value: number }
   | { type: TimerActionKind.INSPECTION_TIME; inspectionTime: number }
-  | { type: TimerActionKind.PENALTY; value: number }
   | { type: TimerActionKind.PUZZLE_TYPE; puzzle: string }
   | { type: TimerActionKind.REMOVE_TIME; index: number };

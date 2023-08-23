@@ -4,6 +4,7 @@ export const SAVE_SOLVE = gql`
   mutation Solve(
     $scramble: String!
     $time: String!
+    $penalty: Int
     $puzzle: String!
     $userId: String!
     $solveSessionId: String
@@ -11,6 +12,7 @@ export const SAVE_SOLVE = gql`
     createSolve(
       scramble: $scramble
       time: $time
+      penalty: $penalty
       puzzle: $puzzle
       userId: $userId
       solveSessionId: $solveSessionId
@@ -18,6 +20,7 @@ export const SAVE_SOLVE = gql`
       id
       scramble
       time
+      penalty
       user {
         name
       }

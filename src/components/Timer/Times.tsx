@@ -2,7 +2,7 @@ import { Dispatch } from "react";
 import { useMutation } from "@apollo/client";
 import { Session } from "next-auth";
 
-import { humanReadableTime } from "../../lib/format";
+import { HumanReadableTime } from "./";
 import { Solve, TimerActionKind } from "../../types/timer";
 import { DELETE_SOLVE } from "../../graphql/mutations";
 
@@ -36,7 +36,7 @@ const Times = (props: TimesProps) => {
               }`}
               onClick={() => deleteTime(index, solve.id)}
             >
-              {humanReadableTime(solve.time)}
+              <HumanReadableTime time={solve.time} penalty={solve.penalty} />
             </li>
           ))}
         </ul>

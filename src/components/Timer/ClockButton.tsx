@@ -1,3 +1,5 @@
+import { MouseEvent } from "react";
+
 interface ClockButtonProps {
   handleKeyup: (e: KeyboardEvent | React.MouseEvent) => Promise<void>;
   ready: boolean;
@@ -6,6 +8,11 @@ interface ClockButtonProps {
 
 const ClockButton = (props: ClockButtonProps) => {
   const { handleKeyup, ready, sessionComplete } = props;
+
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
+    event.currentTarget.blur();
+    handleKeyup(event);
+  };
 
   const buttonColor = () => {
     if (sessionComplete) return "bg-green-500";
@@ -21,7 +28,7 @@ const ClockButton = (props: ClockButtonProps) => {
       id="timer-btn"
       className={`timer-btn-start block mx-auto mt-6 px-10 py-5 text-3xl 
         rounded-md w-11/12 ${buttonColor()}`}
-      onClick={handleKeyup}
+      onClick={handleClick}
     >
       {buttonText()}
     </button>

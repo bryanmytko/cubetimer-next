@@ -35,7 +35,7 @@ const Panel = (props: PanelProps) => {
   } = props;
   const { data: session } = useSession();
   const [createSolveSession, {}] = useMutation(CREATE_SOLVE_SESSION);
-  const times = solveTimes.map((s) => s.time);
+  const times = solveTimes.map((s) => s.time + s.penalty);
 
   const runningTimes = () => {
     if (classicModeEnabled) {
