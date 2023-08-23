@@ -82,12 +82,10 @@ const Timer = () => {
     const { penalty } = options;
     let solveId;
 
-    if (penalty) dispatch({ type: TimerActionKind.PENALTY, value: penalty });
-
     if (session) {
       const response = await saveSolve({
         variables: {
-          penalty: state.penalty,
+          penalty,
           puzzle: state.puzzleType,
           scramble: state.scramble,
           time: String(state.time),
@@ -100,7 +98,7 @@ const Timer = () => {
     }
 
     toggleConfirmModal();
-    dispatch({ type: TimerActionKind.ADD_TIME, solveId });
+    dispatch({ type: TimerActionKind.ADD_TIME, penalty, solveId });
   };
 
   const toggleConfirmModal = () => {
