@@ -2,7 +2,7 @@ import { Dispatch } from "react";
 import { useMutation } from "@apollo/client";
 import { Session } from "next-auth";
 
-import { humanReadableTime } from "../../lib/format";
+import { HumanReadableTime } from "./";
 import { Solve, TimerActionKind } from "../../types/timer";
 import { DELETE_SOLVE } from "../../graphql/mutations";
 
@@ -23,10 +23,6 @@ const Times = (props: TimesProps) => {
     if (session && solveId) deleteSolve({ variables: { id: solveId } });
   };
 
-  const penalty = (value: number) => (
-    <span className="text-red-300 pl-2">(+{value / 1000})</span>
-  );
-
   return (
     <div className="w-11/12 mx-auto mt-6 md:mt-12">
       <h3 className="mx-auto mb-2 text-center text-gray-100 text-md">Times</h3>
@@ -40,8 +36,7 @@ const Times = (props: TimesProps) => {
               }`}
               onClick={() => deleteTime(index, solve.id)}
             >
-              {humanReadableTime(solve.time + solve.penalty)}
-              {!!solve.penalty && penalty(solve.penalty)}
+              <HumanReadableTime time={solve.time} penalty={solve.penalty} />
             </li>
           ))}
         </ul>
