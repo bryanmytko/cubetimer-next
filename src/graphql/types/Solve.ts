@@ -4,7 +4,7 @@ import prisma from "../../lib/prismadb";
 builder.prismaObject("Solve", {
   fields: (t) => ({
     id: t.exposeID("id"),
-    penalty: t.exposeInt("penalty"),
+    penalty: t.exposeInt("penalty", { nullable: true }),
     puzzle: t.exposeString("puzzle"),
     scramble: t.exposeString("scramble"),
     time: t.exposeString("time"),
