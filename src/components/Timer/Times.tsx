@@ -40,8 +40,8 @@ const Times = (props: TimesProps) => {
               }`}
               onClick={() => deleteTime(index, solve.id)}
             >
-              {humanReadableTime(solve.time)}
-              {solve.penalty && penalty(solve.penalty)}
+              {humanReadableTime(solve.time + solve.penalty)}
+              {!!solve.penalty && penalty(solve.penalty)}
             </li>
           ))}
         </ul>
