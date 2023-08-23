@@ -31,7 +31,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
         ...state,
         solveTimes: [
           ...state.solveTimes,
-          { time: state.time, penalty: state.penalty, id: action.solveId },
+          { time: state.time, penalty: action.penalty, id: action.solveId },
         ],
       };
     case TimerActionKind.REMOVE_TIME:
@@ -43,12 +43,6 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
       return { ...state, time: state.time + 60 };
     case TimerActionKind.COUNTDOWN:
       return { ...state, countdown: action.value };
-    case TimerActionKind.PENALTY:
-      return {
-        ...state,
-        time: state.time + action.value,
-        penalty: action.value,
-      };
     case TimerActionKind.PUZZLE_TYPE:
       return {
         ...state,
