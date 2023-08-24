@@ -1,4 +1,5 @@
 const { fontFamily } = require("tailwindcss/defaultTheme");
+const { nextui } = require("@nextui-org/react");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -6,6 +7,7 @@ module.exports = {
     "./src/app/**/*.{js,ts,jsx,tsx}",
     "./src/pages/**/*.{js,ts,jsx,tsx}",
     "./src/components/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -17,5 +19,6 @@ module.exports = {
       mono: ["Droid Sans", "Monaco", "SFMono-Regular", "ui-monospace"],
     },
   },
-  plugins: [],
+  darkMode: "class",
+  plugins: [nextui()],
 };
