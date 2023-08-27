@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { Button, Dropdown, Text, Grid, User } from "@nextui-org/react";
+import {
+  Button,
+  Dropdown,
+  DropdownMenu,
+  DropdownTrigger,
+  DropdownItem,
+  User,
+} from "@nextui-org/react";
 import router, { useRouter } from "next/router";
 import gravatar from "gravatar";
 
@@ -32,79 +39,42 @@ const Nav = () => {
       };
 
       return (
-        <Grid.Container justify="flex-start" gap={0}>
-          <Grid>
-            <Dropdown placement="bottom-left">
-              <Dropdown.Trigger>
-                <User
-                  bordered
-                  as="button"
-                  size="md"
-                  color="gradient"
-                  src={avatarUrl}
-                  name=""
-                >
-                  <Text size={14} color="white" css={{ d: "flex" }}>
-                    {displayName}
-                  </Text>
-                  <Text size={12} color="$gray500" css={{ d: "flex" }}></Text>
-                </User>
-              </Dropdown.Trigger>
-              <Dropdown.Menu
-                onAction={dropdownAction}
-                color="primary"
-                aria-label="User Actions"
-              >
-                <Dropdown.Item
-                  key="user"
-                  css={{ height: "$18" }}
-                  textValue="user"
-                >
-                  <Text color="$gray900" css={{ d: "flex" }}>
-                    Signed in as
-                  </Text>
-                  <Text b color="$gray900" css={{ d: "flex" }}>
-                    {displayEmail}
-                  </Text>
-                </Dropdown.Item>
-                <Dropdown.Item
-                  key="statistics"
-                  textValue="statistics"
-                  withDivider
-                >
-                  Statistics
-                </Dropdown.Item>
-                <Dropdown.Item key="profile" textValue="profile" withDivider>
-                  Profile
-                </Dropdown.Item>
-                <Dropdown.Item key="settings" textValue="settings">
-                  Settings
-                </Dropdown.Item>
-                <Dropdown.Item
-                  key="logout"
-                  color="error"
-                  textValue="logout"
-                  withDivider
-                >
-                  Log Out
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Grid>
-        </Grid.Container>
+        <div className="grid justify-start">
+          <Dropdown>
+            <DropdownTrigger>
+              <User as="button" name="" avatarProps={{ src: avatarUrl }}>
+                <p>{displayName}</p>
+              </User>
+            </DropdownTrigger>
+            <DropdownMenu
+              onAction={dropdownAction}
+              color="primary"
+              aria-label="User Actions"
+            >
+              <DropdownItem key="user" textValue="user">
+                <p>Signed in as:</p>
+                <p className="font-bold">{displayEmail}</p>
+              </DropdownItem>
+              <DropdownItem key="statistics" textValue="statistics">
+                Statistics
+              </DropdownItem>
+              <DropdownItem key="profile" textValue="profile">
+                Profile
+              </DropdownItem>
+              <DropdownItem key="settings" textValue="settings">
+                Settings
+              </DropdownItem>
+              <DropdownItem key="logout" color="warning" textValue="logout">
+                Log Out
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
       );
     }
 
     return (
-      <Button
-        auto
-        color="error"
-        css={{
-          background: "rgb(250 202 21 / var(--tw-bg-opacity))",
-          color: "black",
-        }}
-        onClick={() => signIn()}
-      >
+      <Button color="warning" radius="md" onClick={() => signIn()}>
         Login
       </Button>
     );
