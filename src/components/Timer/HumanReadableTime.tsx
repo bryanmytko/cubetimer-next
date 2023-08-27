@@ -3,6 +3,7 @@ import { humanReadableTime } from "../../lib/format";
 interface HumanReadableTimeProps {
   penalty: number;
   time: number;
+  compact?: boolean;
 }
 
 const displayPenalty = (value: number) => (
@@ -10,13 +11,23 @@ const displayPenalty = (value: number) => (
 );
 
 const HumanReadableTime = (props: HumanReadableTimeProps) => {
-  const { penalty, time } = props;
+  const { compact, penalty, time } = props;
+
+  if (compact && penalty) {
+    return (
+      <>
+        <span className="text-red-300">
+          {humanReadableTime(time + penalty)}
+        </span>
+      </>
+    );
+  }
 
   return (
-    <span>
+    <>
       {humanReadableTime(time + penalty)}
       {!!penalty && displayPenalty(penalty)}
-    </span>
+    </>
   );
 };
 
