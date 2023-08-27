@@ -21,42 +21,21 @@ const Confirm = (props: ConfirmProps) => {
         active ? "" : "hidden"
       }`}
     >
-      <div className="relative p-8 bg-white max-w-md m-auto border-2 border-zinc-900 flex-col flex rounded-lg">
+      <div className="relative p-8 bg-gray-50 max-w-md m-auto border-2 border-zinc-900 flex-col flex rounded-lg">
         <p className="pb-6">Would you like to save this time?</p>
         <div className="flex gap-x-4">
-          <Button
-            auto
-            css={{
-              background: "#22c55e",
-              color: "black",
-              borderRadius: "4px",
-            }}
-            onClick={() => ok()}
-          >
+          <Button color="success" onClick={() => ok()}>
             Confirm
           </Button>
           <Button
-            auto
-            css={{
-              color: "black",
-              background: "#fb923c",
-              borderRadius: "4px",
-            }}
+            color="warning"
             onClick={() => {
               ok({ penalty: 2000 });
             }}
           >
             +2
           </Button>
-          <Button
-            auto
-            css={{
-              background: "#ef4444",
-              color: "black",
-              borderRadius: "4px",
-            }}
-            onClick={toggle}
-          >
+          <Button color="danger" onClick={toggle}>
             Reject
           </Button>
         </div>
@@ -67,5 +46,3 @@ const Confirm = (props: ConfirmProps) => {
 };
 
 export default Confirm;
-
-/*background: "rgb(250 202 21 / var(--tw-bg-opacity))",*/

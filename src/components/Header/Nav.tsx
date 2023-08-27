@@ -74,7 +74,7 @@ const Nav = () => {
     }
 
     return (
-      <Button color="warning" onClick={() => signIn()}>
+      <Button color="warning" radius="md" onClick={() => signIn()}>
         Login
       </Button>
     );
