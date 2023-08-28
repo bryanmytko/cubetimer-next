@@ -21,9 +21,9 @@ const Confirm = (props: ConfirmProps) => {
         active ? "" : "hidden"
       }`}
     >
-      <div className="relative p-8 bg-gray-50 max-w-md m-auto border-2 border-zinc-900 flex-col flex rounded-lg">
+      <div className="relative p-8 bg-gray-50 max-w-sm m-auto border-2 border-zinc-900 flex-col flex rounded-lg">
         <p className="pb-6">Would you like to save this time?</p>
-        <div className="flex gap-x-4">
+        <div className="flex flex-col md:flex-row gap-2 md:gap-4">
           <Button color="success" onClick={() => ok()}>
             Confirm
           </Button>
