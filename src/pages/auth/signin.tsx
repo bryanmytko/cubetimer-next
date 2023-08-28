@@ -9,6 +9,15 @@ import { Button } from "@nextui-org/react";
 import Logo from "../../components/Header/Logo";
 import authOptions from "../api/auth/[...nextauth]";
 
+interface ButtonIconProps {
+  url: string;
+}
+
+const ButtonIcon = (props: ButtonIconProps) => {
+  const { url } = props;
+  return <img src={`/assets/${url.toLowerCase()}.png`} />;
+};
+
 export default function SignIn({
   providers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -29,8 +38,9 @@ export default function SignIn({
                     onClick={async () =>
                       await signIn(provider.id, { callbackUrl: "/" })
                     }
-                    size="xl"
-                    css={{ margin: "auto", background: `url("/assets/${provider.name.toLowerCase()}.png") 22px 16px no-repeat #fff`, backgroundSize: "32px 32px" }}
+                    className="bg-white border-gray-400 border-1"
+                    size="lg"
+                    startContent={<ButtonIcon url={provider.name} />}
                   >
                     <span className="inline-block text-black">
                       Sign in with {provider.name}
@@ -40,7 +50,7 @@ export default function SignIn({
               ))}
           </div>
         </div>
-      </div >
+      </div>
     </>
   );
 }
