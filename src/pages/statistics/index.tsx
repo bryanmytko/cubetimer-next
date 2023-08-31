@@ -1,24 +1,20 @@
 import { useQuery } from "@apollo/client";
 import { useState, MouseEvent } from "react";
 
-import {
-  SOLVES_FOR_USER,
-  SOLVE_SESSIONS_FOR_USER,
-} from "../../graphql/queries";
+import { SOLVE_SESSIONS_FOR_USER } from "../../graphql/queries";
 import { useSession } from "next-auth/react";
-import { ClassicSolves, Solves } from "../../components/Statistics";
+import { ClassicSolves, Error, Solves } from "../../components/Statistics";
 
 const Statistics = () => {
   const { data: session } = useSession();
   const userId = session?.user.id;
-  const { data: solveData } = useQuery(SOLVES_FOR_USER, {
-    skip: !session,
-    variables: { userId },
-  });
-  const { data: solveSessionsData } = useQuery(SOLVE_SESSIONS_FOR_USER, {
-    skip: !session,
-    variables: { userId },
-  });
+  const { data: solveSessionsData, error: solveSessionsDataError } = useQuery(
+    SOLVE_SESSIONS_FOR_USER,
+    {
+      skip: !session,
+      variables: { userId },
+    }
+  );
 
   const [activeTab, setActiveTab] = useState("1");
 
@@ -26,6 +22,8 @@ const Statistics = () => {
     let target = e.target as HTMLElement;
     if (target.dataset["tab"]) setActiveTab(target.dataset["tab"]);
   };
+
+  if (solveSessionsDataError) return <Error />;
 
   return (
     <div className="container statistics-container m-auto p-12 w-11/12 text-black">
@@ -54,10 +52,14 @@ const Statistics = () => {
         </ul>
       </div>
       <div className={activeTab === "1" ? "" : "hidden"}>
-        <Solves data={solveData?.solves} />
+        <Solves />
       </div>
       <div className={activeTab === "2" ? "" : "hidden"}>
-        <ClassicSolves data={solveSessionsData?.solveSessionsForUser} />
+        {false ? (
+          "Loading..."
+        ) : (
+          <ClassicSolves data={solveSessionsData?.solveSessionsForUser} />
+        )}
       </div>
     </div>
   );
