@@ -28,7 +28,6 @@ const Statistics = () => {
   return (
     <div className="container statistics-container m-auto p-12 w-11/12 text-black">
       <h1 className="text-2xl text-bold text-white mb-6">Statistics</h1>
-
       <div className="tabs">
         <ul className="tabsNav flex">
           <li
