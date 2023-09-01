@@ -1,24 +1,12 @@
-import { useQuery } from "@apollo/client";
 import { useState, MouseEvent } from "react";
-
-import {
-  SOLVES_FOR_USER,
-  SOLVE_SESSIONS_FOR_USER,
-} from "../../graphql/queries";
 import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+
 import { ClassicSolves, Solves } from "../../components/Statistics";
 
 const Statistics = () => {
   const { data: session } = useSession();
   const userId = session?.user.id;
-  const { data: solveData } = useQuery(SOLVES_FOR_USER, {
-    skip: !session,
-    variables: { userId },
-  });
-  const { data: solveSessionsData } = useQuery(SOLVE_SESSIONS_FOR_USER, {
-    skip: !session,
-    variables: { userId },
-  });
 
   const [activeTab, setActiveTab] = useState("1");
 
@@ -27,10 +15,11 @@ const Statistics = () => {
     if (target.dataset["tab"]) setActiveTab(target.dataset["tab"]);
   };
 
+  // if (!userId) return redirect("/signin");
+
   return (
     <div className="container statistics-container m-auto p-12 w-11/12 text-black">
       <h1 className="text-2xl text-bold text-white mb-6">Statistics</h1>
-
       <div className="tabs">
         <ul className="tabsNav flex">
           <li
@@ -54,10 +43,10 @@ const Statistics = () => {
         </ul>
       </div>
       <div className={activeTab === "1" ? "" : "hidden"}>
-        <Solves data={solveData?.solves} />
+        <Solves userId={userId} />
       </div>
       <div className={activeTab === "2" ? "" : "hidden"}>
-        <ClassicSolves data={solveSessionsData?.solveSessionsForUser} />
+        <ClassicSolves userId={userId} />
       </div>
     </div>
   );

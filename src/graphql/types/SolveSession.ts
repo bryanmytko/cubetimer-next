@@ -11,14 +11,19 @@ builder.prismaObject("SolveSession", {
 });
 
 builder.queryField("solveSessionsForUser", (t) =>
-  t.prismaField({
-    type: ["SolveSession"],
+  t.prismaConnection({
+    type: "SolveSession",
+    cursor: "id",
     args: {
-      userId: t.arg.string({ required: true })
+      userId: t.arg.string({ required: true }),
     },
-    resolve: async (_query, _parent, args, _ctx, _info) => {
+    resolve: async (query, _parent, args, _ctx, _info) => {
       const { userId } = args;
-      return prisma.solveSession.findMany({ where: { userId }, include: { solves: true } });
+      return prisma.solveSession.findMany({
+        ...query,
+        where: { userId },
+        include: { solves: true },
+      });
     },
   })
 );
@@ -37,7 +42,7 @@ builder.mutationField("createSolveSession", (t) =>
         ...query,
         data: {
           size,
-          userId
+          userId,
         },
       });
     },
