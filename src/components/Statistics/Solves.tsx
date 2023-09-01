@@ -1,17 +1,19 @@
 import { useQuery } from "@apollo/client";
-import { useSession } from "next-auth/react";
 
 import { SOLVES_FOR_USER } from "../../graphql/queries";
 import { humanReadableTime } from "../../lib/format";
-import { Error, Pagination } from "../../components/Statistics";
+import { Error } from "./";
 
-const SOLVES_PER_PAGE = 20;
+interface SolvesProps {
+  userId: number;
+}
 
-const Solves = () => {
-  const { data: session } = useSession();
-  const userId = session?.user.id;
+const SOLVES_PER_PAGE = 12;
+
+const Solves = (props: SolvesProps) => {
+  const { userId } = props;
   const { loading, data, error, fetchMore } = useQuery(SOLVES_FOR_USER, {
-    skip: !session,
+    skip: !userId,
     variables: { userId, first: SOLVES_PER_PAGE },
   });
 
@@ -61,14 +63,55 @@ const Solves = () => {
           })}
         </tbody>
       </table>
-      <Pagination
-        endCursor={endCursor}
-        fetchMore={fetchMore}
-        hasNextPage={hasNextPage}
-        hasPreviousPage={hasPreviousPage}
-        per_page={SOLVES_PER_PAGE}
-        startCursor={startCursor}
-      />
+      <div className="flex justify-center">
+        {hasPreviousPage ? (
+          <button
+            className="px-4 py-2 my-10 mr-4 text-white bg-blue-500 rounded"
+            onClick={() => {
+              fetchMore({
+                variables: {
+                  before: startCursor,
+                  first: null,
+                  last: SOLVES_PER_PAGE,
+                },
+                updateQuery: (_: any, { fetchMoreResult }: any) => {
+                  fetchMoreResult.solves.edges = [
+                    ...fetchMoreResult.solves.edges,
+                  ];
+                  return fetchMoreResult;
+                },
+              });
+            }}
+          >
+            &lt;
+          </button>
+        ) : (
+          ""
+        )}
+        {hasNextPage ? (
+          <button
+            className="px-4 py-2 my-10 text-white bg-blue-500 rounded"
+            onClick={() => {
+              fetchMore({
+                variables: {
+                  after: endCursor,
+                  first: SOLVES_PER_PAGE,
+                },
+                updateQuery: (_: any, { fetchMoreResult }: any) => {
+                  fetchMoreResult.solves.edges = [
+                    ...fetchMoreResult.solves.edges,
+                  ];
+                  return fetchMoreResult;
+                },
+              });
+            }}
+          >
+            &gt;
+          </button>
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 };
