@@ -5,6 +5,7 @@ import type {
 import { getProviders, signIn } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
 import { Button } from "@nextui-org/react";
+import Image from "next/image";
 
 import Logo from "../../components/Header/Logo";
 import authOptions from "../api/auth/[...nextauth]";
@@ -15,7 +16,7 @@ interface ButtonIconProps {
 
 const ButtonIcon = (props: ButtonIconProps) => {
   const { url } = props;
-  return <img src={`/assets/${url.toLowerCase()}.png`} />;
+  return <Image alt={url} src={`/assets/${url.toLowerCase()}.png`} />;
 };
 
 export default function SignIn({
