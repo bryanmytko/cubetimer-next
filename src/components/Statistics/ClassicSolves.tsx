@@ -40,7 +40,10 @@ const ClassicSolves = (props: ClassicSolvesProps) => {
         if (!node.solves.length) return;
 
         return (
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <table
+            key={index}
+            className="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+          >
             <thead className="text-xs text-black uppercase bg-yellow-400">
               <tr>
                 <th scope="col" className="pl-6 pr-1 py-3">
