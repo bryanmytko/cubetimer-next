@@ -40,44 +40,6 @@ const Timer = () => {
       : setButtonLocked(false);
   }, [state.solveTimes, state.classicModeEnabled]);
 
-  const handleKeydown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key !== " " || buttonLocked) return;
-      e.preventDefault();
-
-      dispatch({ type: TimerActionKind.READY });
-    },
-    [buttonLocked]
-  );
-
-  const handleKeyup = useCallback(
-    async (e: KeyboardEvent | React.MouseEvent) => {
-      if (e.type === "keyup" && (e as KeyboardEvent).key !== " ") return;
-      if (buttonLocked && confirmActive) recordSolve();
-      if (buttonLocked) return;
-      e.preventDefault();
-
-      state.inspectionTime && !state.running
-        ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
-        : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
-
-      if (!state.running) return;
-
-      toggleConfirmModal();
-    },
-    [
-      saveSolve,
-      session,
-      solveSessionId,
-      buttonLocked,
-      state.inspectionTime,
-      state.running,
-      state.puzzleType,
-      state.scramble,
-      state.time,
-    ]
-  );
-
   const recordSolve = async (options: OkOptions = { penalty: 0 }) => {
     const { penalty } = options;
     let solveId;
@@ -105,6 +67,47 @@ const Timer = () => {
     setConfirmActive(!confirmActive);
     setButtonLocked(!buttonLocked);
   };
+
+  const handleKeydown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key !== " " || buttonLocked) return;
+      e.preventDefault();
+
+      dispatch({ type: TimerActionKind.READY });
+    },
+    [buttonLocked]
+  );
+
+  const handleKeyup = useCallback(
+    async (e: KeyboardEvent | React.MouseEvent) => {
+      if (e.type === "keyup" && (e as KeyboardEvent).key !== " ") return;
+      if (buttonLocked && confirmActive) recordSolve();
+      if (buttonLocked) return;
+      e.preventDefault();
+
+      state.inspectionTime && !state.running
+        ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
+        : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
+
+      if (!state.running) return;
+
+      toggleConfirmModal();
+    },
+    [
+      buttonLocked,
+      confirmActive,
+      recordSolve,
+      saveSolve,
+      session,
+      solveSessionId,
+      state.inspectionTime,
+      state.puzzleType,
+      state.running,
+      state.scramble,
+      state.time,
+      toggleConfirmModal,
+    ]
+  );
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeydown);
