@@ -16,7 +16,14 @@ interface ButtonIconProps {
 
 const ButtonIcon = (props: ButtonIconProps) => {
   const { url } = props;
-  return <Image alt={url} src={`/assets/${url.toLowerCase()}.png`} />;
+  return (
+    <Image
+      alt={url}
+      height={24}
+      width={24}
+      src={`/assets/${url.toLowerCase()}.png`}
+    />
+  );
 };
 
 export default function SignIn({
