@@ -50,7 +50,7 @@ const Timer = () => {
           penalty,
           puzzle: state.puzzleType,
           scramble: state.scramble,
-          time: String(state.time),
+          time: state.time,
           userId: session.user.id,
           solveSessionId,
         },

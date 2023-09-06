@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 export const SAVE_SOLVE = gql`
   mutation Solve(
     $scramble: String!
-    $time: String!
+    $time: Int!
     $penalty: Int
     $puzzle: String!
     $userId: String!

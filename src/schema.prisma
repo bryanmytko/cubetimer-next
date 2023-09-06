@@ -52,7 +52,7 @@ model Solve {
   penalty   Int?
   puzzle    String
   scramble  String
-  time      String
+  time      Int
   user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   solveSession   SolveSession? @relation(fields: [solveSessionId], references: [id], onDelete: Cascade)
