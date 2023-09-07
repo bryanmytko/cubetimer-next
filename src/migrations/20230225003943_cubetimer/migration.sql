@@ -30,7 +30,7 @@ CREATE TABLE "Session" (
 CREATE TABLE "Solve" (
     "id" SERIAL NOT NULL,
     "scramble" TEXT NOT NULL,
-    "time" TEXT NOT NULL,
+    "time" INTEGER NOT NULL,
     "userId" TEXT NOT NULL,
 
     CONSTRAINT "Solve_pkey" PRIMARY KEY ("id")
