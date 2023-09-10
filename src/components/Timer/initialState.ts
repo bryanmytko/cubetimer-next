@@ -2,6 +2,7 @@ import { TimerState } from "../../types/timer";
 
 export const initialState: TimerState = {
   classicModeEnabled: false,
+  classicModeLength: 12,
   countdown: 0,
   inspectionRunning: false,
   inspectionTime: 0,
