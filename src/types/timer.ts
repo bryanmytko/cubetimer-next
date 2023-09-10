@@ -8,9 +8,14 @@ export enum TimerActionKind {
   REMOVE_TIME = "REMOVE_TIME",
   SET_SOLVE_SESSION_ID = "SET_SOLVE_SESSION_ID",
   TICK_UP = "TICK_UP",
+  TOGGLE_CONFIRM_ACTIVE = "TOGGLE_CONFIRM_ACTIVE",
   TOGGLE_CLASSIC_MODE = "TOGGLE_CLASSIC_MODE",
   TOGGLE_INSPECTION = "TOGGLE_INSPECTION",
   TOGGLE_RUNNING = "TOGGLE_RUNNING",
+}
+
+export interface RecordSolveOptions {
+  penalty: number;
 }
 
 export interface Solve {
@@ -22,6 +27,7 @@ export interface Solve {
 export interface TimerState {
   classicModeEnabled: boolean;
   classicModeLength: number;
+  confirmActive: boolean;
   countdown: number;
   inspectionRunning: boolean;
   inspectionTime: number;
@@ -42,6 +48,7 @@ export type TimerAction =
         | TimerActionKind.READY
         | TimerActionKind.TICK_UP
         | TimerActionKind.TOGGLE_CLASSIC_MODE
+        | TimerActionKind.TOGGLE_CONFIRM_ACTIVE
         | TimerActionKind.TOGGLE_INSPECTION
         | TimerActionKind.TOGGLE_RUNNING;
     }
