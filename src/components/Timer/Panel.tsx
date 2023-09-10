@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction, useContext } from "react";
+import { ChangeEvent, Dispatch, useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { useSession } from "next-auth/react";
 
@@ -10,14 +10,11 @@ import {
   slowestTime,
 } from "../../lib/calculate";
 import { humanReadableTime } from "../../lib/format";
-import { TimerAction, TimerActionKind } from "../../types/timer";
+import { TimerAction, TimerActionKind, TimerState } from "../../types/timer";
 import CubeDropdown from "./CubeDropdown";
 import InspectionDropdown from "./InspectionDropdown";
 import { CREATE_SOLVE_SESSION } from "../../graphql/mutations";
 import { TimerContext, TimerDispatchContext } from "../Timer/TimerContext";
-import { TimerState } from "../../types/timer";
-
-const SESSION_LENGTH = 12;
 
 const Panel = () => {
   const timer = useContext(TimerContext) as TimerState;
@@ -32,7 +29,7 @@ const Panel = () => {
       return (
         <p>
           Session Average:{" "}
-          {humanReadableTime(averageCurved(times, SESSION_LENGTH))}
+          {humanReadableTime(averageCurved(times, timer.classicModeLength))}
         </p>
       );
     } else {
@@ -51,7 +48,7 @@ const Panel = () => {
     if (!classicModeEnabled && session) {
       const userId = session.user.id;
       const response = await createSolveSession({
-        variables: { userId, size: 12 },
+        variables: { userId, size: timer.classicModeLength },
       });
       dispatch({
         type: TimerActionKind.SET_SOLVE_SESSION_ID,
