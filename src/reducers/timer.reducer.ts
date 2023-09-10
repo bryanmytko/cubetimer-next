@@ -47,6 +47,11 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
         running: false,
         solveTimes: [],
       };
+    case TimerActionKind.TOGGLE_CONFIRM_ACTIVE:
+      return {
+        ...state,
+        confirmActive: !state.confirmActive,
+      };
     case TimerActionKind.TOGGLE_INSPECTION:
       return { ...state, inspectionRunning: !state.inspectionRunning };
     case TimerActionKind.TOGGLE_RUNNING:
