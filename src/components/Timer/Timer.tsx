@@ -40,73 +40,101 @@ const Timer = () => {
       : setButtonLocked(false);
   }, [state.solveTimes, state.classicModeEnabled]);
 
-  const recordSolve = async (options: OkOptions = { penalty: 0 }) => {
-    const { penalty } = options;
-    let solveId;
-
-    if (session) {
-      const response = await saveSolve({
-        variables: {
-          penalty,
-          puzzle: state.puzzleType,
-          scramble: state.scramble,
-          time: state.time,
-          userId: session.user.id,
-          solveSessionId,
-        },
-      });
-
-      solveId = response.data?.createSolve.id;
-    }
-
-    toggleConfirmModal();
-    dispatch({ type: TimerActionKind.ADD_TIME, penalty, solveId });
-  };
-
-  const toggleConfirmModal = () => {
+  const toggleConfirmModal = useCallback(() => {
     setConfirmActive(!confirmActive);
     setButtonLocked(!buttonLocked);
-  };
+  }, [buttonLocked, confirmActive]);
+
+  const recordSolve = useCallback(
+    async (options: OkOptions = { penalty: 0 }) => {
+      const { penalty } = options;
+      let solveId;
+
+      if (session) {
+        const response = await saveSolve({
+          variables: {
+            penalty,
+            puzzle: state.puzzleType,
+            scramble: state.scramble,
+            time: state.time,
+            userId: session.user.id,
+            solveSessionId,
+          },
+        });
+
+        solveId = response.data?.createSolve.id;
+      }
+
+      toggleConfirmModal();
+      dispatch({ type: TimerActionKind.ADD_TIME, penalty, solveId });
+    },
+    [
+      saveSolve,
+      session,
+      solveSessionId,
+      state.puzzleType,
+      state.scramble,
+      state.time,
+      toggleConfirmModal,
+    ]
+  );
 
   const handleKeydown = useCallback(
     (e: KeyboardEvent) => {
+      if (e.key === " ") e.preventDefault();
       if (e.key !== " " || buttonLocked) return;
-      e.preventDefault();
 
       dispatch({ type: TimerActionKind.READY });
     },
     [buttonLocked]
   );
 
+  const handleEscape = useCallback(() => {
+    if (confirmActive) toggleConfirmModal();
+  }, [confirmActive, toggleConfirmModal]);
+
+  const handleEnter = useCallback(() => {
+    if (confirmActive) recordSolve();
+  }, [confirmActive, recordSolve]);
+
+  const handleSpacebar = useCallback(() => {
+    if (buttonLocked) return handleEnter();
+
+    state.inspectionTime && !state.running
+      ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
+      : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
+
+    if (!state.running) return;
+
+    toggleConfirmModal();
+  }, [
+    buttonLocked,
+    handleEnter,
+    state.inspectionTime,
+    state.running,
+    toggleConfirmModal,
+  ]);
+
   const handleKeyup = useCallback(
     async (e: KeyboardEvent | React.MouseEvent) => {
-      if (e.type === "keyup" && (e as KeyboardEvent).key !== " ") return;
-      if (buttonLocked && confirmActive) recordSolve();
-      if (buttonLocked) return;
-      e.preventDefault();
-
-      state.inspectionTime && !state.running
-        ? dispatch({ type: TimerActionKind.TOGGLE_INSPECTION })
-        : dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
-
-      if (!state.running) return;
-
-      toggleConfirmModal();
+      switch ((e as KeyboardEvent).key) {
+        case " ":
+          e.preventDefault();
+          handleSpacebar();
+          break;
+        case "Escape":
+          e.preventDefault();
+          handleEscape();
+          break;
+        case "Enter":
+          e.preventDefault();
+          handleEnter();
+          break;
+        default:
+          return;
+      }
     },
-    [
-      buttonLocked,
-      confirmActive,
-      recordSolve,
-      saveSolve,
-      session,
-      solveSessionId,
-      state.inspectionTime,
-      state.puzzleType,
-      state.running,
-      state.scramble,
-      state.time,
-      toggleConfirmModal,
-    ]
+    [handleEnter, handleEscape, handleSpacebar]
   );
 
   useEffect(() => {
