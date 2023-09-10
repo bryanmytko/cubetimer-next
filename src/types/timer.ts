@@ -20,6 +20,7 @@ export interface Solve {
 
 export interface TimerState {
   classicModeEnabled: boolean;
+  classicModeLength: number;
   countdown: number;
   inspectionTime: number;
   inspectionRunning: boolean;
