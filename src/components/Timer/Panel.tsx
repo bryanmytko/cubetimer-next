@@ -1,4 +1,7 @@
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useContext } from "react";
+import { useMutation } from "@apollo/client";
+import { useSession } from "next-auth/react";
+
 import {
   average,
   averageCurved,
@@ -7,32 +10,19 @@ import {
   slowestTime,
 } from "../../lib/calculate";
 import { humanReadableTime } from "../../lib/format";
-import { Solve, TimerAction } from "../../types/timer";
-import { TimerActionKind } from "../../reducers";
+import { TimerAction, TimerActionKind } from "../../types/timer";
 import CubeDropdown from "./CubeDropdown";
 import InspectionDropdown from "./InspectionDropdown";
 import { CREATE_SOLVE_SESSION } from "../../graphql/mutations";
-import { useMutation } from "@apollo/client";
-import { useSession } from "next-auth/react";
-
-interface PanelProps {
-  classicModeEnabled: boolean;
-  dispatch: Dispatch<TimerAction>;
-  inspectionRunning: boolean;
-  setSolveSessionId: Dispatch<SetStateAction<null>>;
-  solveTimes: Solve[];
-}
+import { TimerContext, TimerDispatchContext } from "../Timer/TimerContext";
+import { TimerState } from "../../types/timer";
 
 const SESSION_LENGTH = 12;
 
-const Panel = (props: PanelProps) => {
-  const {
-    classicModeEnabled,
-    dispatch,
-    inspectionRunning,
-    setSolveSessionId,
-    solveTimes,
-  } = props;
+const Panel = () => {
+  const timer = useContext(TimerContext) as TimerState;
+  const dispatch = useContext(TimerDispatchContext) as Dispatch<TimerAction>;
+  const { classicModeEnabled, inspectionRunning, solveTimes } = timer;
   const { data: session } = useSession();
   const [createSolveSession, {}] = useMutation(CREATE_SOLVE_SESSION);
   const times = solveTimes.map((s) => s.time + s.penalty);
@@ -63,7 +53,10 @@ const Panel = (props: PanelProps) => {
       const response = await createSolveSession({
         variables: { userId, size: 12 },
       });
-      setSolveSessionId(response.data?.createSolveSession.id);
+      dispatch({
+        type: TimerActionKind.SET_SOLVE_SESSION_ID,
+        id: response.data?.createSolveSession.id,
+      });
     }
 
     dispatch({ type: TimerActionKind.TOGGLE_CLASSIC_MODE });

@@ -1,13 +1,12 @@
+import { useContext } from "react";
+
+import { TimerContext } from "../Timer/TimerContext";
 import { humanReadableTime } from "../../lib/format";
+import { TimerState } from "../../types/timer";
 
-interface ClockProps {
-  countdown: number;
-  inspectionRunning: boolean;
-  time: number;
-}
-
-const Clock = (props: ClockProps) => {
-  const { countdown, inspectionRunning, time } = props;
+const Clock = () => {
+  const timer = useContext(TimerContext) as TimerState;
+  const { countdown, inspectionRunning, time } = timer;
 
   return (
     <div

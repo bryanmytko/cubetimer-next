@@ -2,7 +2,6 @@ import { Dispatch, createContext, useReducer } from "react";
 
 import { initialState } from "./initialState";
 import { TimerReducer } from "../../reducers";
-
 import { TimerAction, TimerState } from "../../types/timer";
 
 const TimerContext = createContext<TimerState | null>(null);
