@@ -3,24 +3,30 @@ import useSound from "use-sound";
 import { useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
 
-import { Clock, Panel, Times, ClassicModeTimes, ClockButton } from "./";
+import {
+  ClassicModeTimes,
+  Clock,
+  ClockButton,
+  ConfirmModal,
+  Panel,
+  Times,
+} from "./";
 import { Scramble } from "../";
-import { Confirm } from "../Confirm";
 import { SAVE_SOLVE } from "../../graphql/mutations";
-import { TimerAction, TimerActionKind, TimerState } from "../../types/timer";
+import {
+  RecordSolveOptions,
+  TimerAction,
+  TimerActionKind,
+  TimerState,
+} from "../../types/timer";
 import { TimerContext, TimerDispatchContext } from "./TimerContext";
 
 const AUDIO_DING = "/assets/audio/ding.mp3";
-const CLASSIC_SOLVE_LENGTH = 12;
-
-interface OkOptions {
-  penalty: number;
-}
 
 const TimerContainer = () => {
   /* TODO move these to reducer */
   const [buttonLocked, setButtonLocked] = useState(false);
-  const [confirmActive, setConfirmActive] = useState(false);
+
   const [saveSolve, {}] = useMutation(SAVE_SOLVE);
   const { data: session } = useSession();
   const [playDing] = useSound(AUDIO_DING);
@@ -37,18 +43,19 @@ const TimerContainer = () => {
   }, []);
 
   useEffect(() => {
-    timer.classicModeEnabled && timer.solveTimes.length >= CLASSIC_SOLVE_LENGTH
+    timer.classicModeEnabled &&
+    timer.solveTimes.length >= timer.classicModeLength
       ? setButtonLocked(true)
       : setButtonLocked(false);
   }, [timer.solveTimes, timer.classicModeEnabled]);
 
   const toggleConfirmModal = useCallback(() => {
-    setConfirmActive(!confirmActive);
+    dispatch({ type: TimerActionKind.TOGGLE_CONFIRM_ACTIVE });
     setButtonLocked(!buttonLocked);
-  }, [buttonLocked, confirmActive]);
+  }, [buttonLocked, timer.confirmActive]);
 
   const recordSolve = useCallback(
-    async (options: OkOptions = { penalty: 0 }) => {
+    async (options: RecordSolveOptions = { penalty: 0 }) => {
       const { penalty } = options;
       let solveId;
 
@@ -92,12 +99,12 @@ const TimerContainer = () => {
   );
 
   const handleEscape = useCallback(() => {
-    if (confirmActive) toggleConfirmModal();
-  }, [confirmActive, toggleConfirmModal]);
+    if (timer.confirmActive) toggleConfirmModal();
+  }, [timer.confirmActive, toggleConfirmModal]);
 
   const handleEnter = useCallback(() => {
-    if (confirmActive) recordSolve();
-  }, [confirmActive, recordSolve]);
+    if (timer.confirmActive) recordSolve();
+  }, [timer.confirmActive, recordSolve]);
 
   const handleSpacebar = useCallback(() => {
     if (buttonLocked) return handleEnter();
@@ -210,11 +217,7 @@ const TimerContainer = () => {
           <Clock />
           <ClockButton handleKeyup={handleKeyup} />
           {timer.classicModeEnabled && <ClassicModeTimes />}
-          <Confirm
-            active={confirmActive}
-            ok={recordSolve}
-            toggle={toggleConfirmModal}
-          />
+          <ConfirmModal action={recordSolve} cancel={toggleConfirmModal} />
           <Panel />
         </div>
       </div>
