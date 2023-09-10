@@ -1,27 +1,35 @@
-import { MouseEvent } from "react";
+import { MouseEvent, useContext } from "react";
+
+import { TimerContext } from "../Timer/TimerContext";
+import { TimerState } from "../../types/timer";
 
 interface ClockButtonProps {
   handleKeyup: (e: KeyboardEvent | React.MouseEvent) => Promise<void>;
-  ready: boolean;
-  sessionComplete: boolean;
 }
 
 const ClockButton = (props: ClockButtonProps) => {
-  const { handleKeyup, ready, sessionComplete } = props;
+  const { handleKeyup } = props;
+  const timer = useContext(TimerContext) as TimerState;
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     event.currentTarget.blur();
     handleKeyup(event);
   };
 
+  const sessionComplete = () =>
+    timer.classicModeEnabled &&
+    timer.solveTimes.length >= timer.classicModeLength;
+
   const buttonColor = () => {
-    if (sessionComplete) return "bg-green-500";
-    if (ready) return "bg-red-500";
+    if (sessionComplete()) return "bg-green-500";
+    if (timer.ready) return "bg-red-500";
     return "bg-yellow-300";
   };
 
   const buttonText = () =>
-    sessionComplete ? "Session complete!" : "Press spacebar or click to start!";
+    sessionComplete()
+      ? "Session complete!"
+      : "Press spacebar or click to start!";
 
   return (
     <button
