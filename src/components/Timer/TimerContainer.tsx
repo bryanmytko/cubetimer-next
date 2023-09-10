@@ -6,14 +6,9 @@ import { useMutation } from "@apollo/client";
 import { Clock, Panel, Times, ClassicModeTimes, ClockButton } from "./";
 import { Scramble } from "../";
 import { Confirm } from "../Confirm";
-import { TimerActionKind } from "../../reducers";
 import { SAVE_SOLVE } from "../../graphql/mutations";
-import { TimerAction, TimerState } from "../../types/timer";
-import {
-  TimerContext,
-  TimerDispatchContext,
-  TimerProvider,
-} from "./TimerContext";
+import { TimerAction, TimerActionKind, TimerState } from "../../types/timer";
+import { TimerContext, TimerDispatchContext } from "./TimerContext";
 
 const AUDIO_DING = "/assets/audio/ding.mp3";
 const CLASSIC_SOLVE_LENGTH = 12;
@@ -23,8 +18,8 @@ interface OkOptions {
 }
 
 const TimerContainer = () => {
+  /* TODO move these to reducer */
   const [buttonLocked, setButtonLocked] = useState(false);
-  const [solveSessionId, setSolveSessionId] = useState(null);
   const [confirmActive, setConfirmActive] = useState(false);
   const [saveSolve, {}] = useMutation(SAVE_SOLVE);
   const { data: session } = useSession();
@@ -65,7 +60,7 @@ const TimerContainer = () => {
             scramble: timer.scramble,
             time: timer.time,
             userId: session.user.id,
-            solveSessionId,
+            solveSessionId: timer.solveSessionId,
           },
         });
 
@@ -78,7 +73,7 @@ const TimerContainer = () => {
     [
       saveSolve,
       session,
-      solveSessionId,
+      timer.solveSessionId,
       timer.puzzleType,
       timer.scramble,
       timer.time,
@@ -124,6 +119,8 @@ const TimerContainer = () => {
 
   const handleKeyup = useCallback(
     async (e: KeyboardEvent | React.MouseEvent) => {
+      if (e.type === "click") return handleSpacebar();
+
       switch ((e as KeyboardEvent).key) {
         case " ":
           e.preventDefault();
@@ -206,42 +203,24 @@ const TimerContainer = () => {
   }, [timer.running]);
 
   return (
-    <div>
-      <ClockButton handleKeyup={handleKeyup} />
-      <Scramble />
-    </div>
+    <>
+      <div className={timer.classicModeEnabled ? "col-span-6" : "col-span-5"}>
+        <div>
+          <Scramble />
+          <Clock />
+          <ClockButton handleKeyup={handleKeyup} />
+          {timer.classicModeEnabled && <ClassicModeTimes />}
+          <Confirm
+            active={confirmActive}
+            ok={recordSolve}
+            toggle={toggleConfirmModal}
+          />
+          <Panel />
+        </div>
+      </div>
+      {!timer.classicModeEnabled && <Times session={session} />}
+    </>
   );
 };
 
-// TODO inplement the rest of the components using the new context!
-
-// <div className={/*timer.classicModeEnabled ? "col-span-6" : "col-span-5"*/} >
 export default TimerContainer;
-
-// {timer.classicModeEnabled && (
-//   <ClassicModeTimes solveTimes={timer.solveTimes} />
-// )}
-// <Confirm
-//   active={confirmActive}
-//   ok={recordSolve}
-//   toggle={toggleConfirmModal}
-// />
-// <Panel
-//   classicModeEnabled={timer.classicModeEnabled}
-//   dispatch={dispatch}
-//   setSolveSessionId={setSolveSessionId}
-//   solveTimes={timer.solveTimes}
-//   inspectionRunning={timer.inspectionRunning}
-// />
-//
-//
-//
-//
-// {/* </div> */}
-// {/* {!timer.classicModeEnabled && ( */}
-// {/*   <Times */}
-// {/*     dispatch={dispatch} */}
-// {/*     session={session} */}
-// {/*     solveTimes={timer.solveTimes} */}
-// {/*   /> */}
-// {/* )} */}
