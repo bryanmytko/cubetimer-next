@@ -3,6 +3,43 @@ import { TimerAction, TimerActionKind, TimerState } from "../types/timer";
 
 const TimerReducer = (state: TimerState, action: TimerAction) => {
   switch (action.type) {
+    case TimerActionKind.ADD_TIME:
+      return {
+        ...state,
+        solveTimes: [
+          ...state.solveTimes,
+          { time: state.time, penalty: action.penalty, id: action.solveId },
+        ],
+      };
+    case TimerActionKind.COUNTDOWN:
+      return { ...state, countdown: action.value };
+    case TimerActionKind.INITIALIZE:
+      return { ...state, scramble: new Scrambler("3x3").generate() };
+    case TimerActionKind.INSPECTION_TIME:
+      return {
+        ...state,
+        countdown: action.inspectionTime,
+        inspectionTime: action.inspectionTime,
+      };
+    case TimerActionKind.PUZZLE_TYPE:
+      return {
+        ...state,
+        puzzleType: action.puzzle,
+        running: false,
+        solveTimes: [],
+        scramble: new Scrambler(action.puzzle).generate(),
+      };
+    case TimerActionKind.READY:
+      return state.running ? state : { ...state, ready: true };
+    case TimerActionKind.REMOVE_TIME:
+      return {
+        ...state,
+        solveTimes: state.solveTimes.filter((_, i) => i !== action.index),
+      };
+    case TimerActionKind.SET_SOLVE_SESSION_ID:
+      return { ...state, solveSessionId: action.id };
+    case TimerActionKind.TICK_UP:
+      return { ...state, time: state.time + 60 };
     case TimerActionKind.TOGGLE_CLASSIC_MODE:
       return {
         ...state,
@@ -10,8 +47,6 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
         running: false,
         solveTimes: [],
       };
-    case TimerActionKind.INITIALIZE:
-      return { ...state, scramble: new Scrambler("3x3").generate() };
     case TimerActionKind.TOGGLE_INSPECTION:
       return { ...state, inspectionRunning: !state.inspectionRunning };
     case TimerActionKind.TOGGLE_RUNNING:
@@ -24,40 +59,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
         };
       }
       return { ...state, time: 0, ready: false, running: true };
-    case TimerActionKind.READY:
-      return state.running ? state : { ...state, ready: true };
-    case TimerActionKind.ADD_TIME:
-      return {
-        ...state,
-        solveTimes: [
-          ...state.solveTimes,
-          { time: state.time, penalty: action.penalty, id: action.solveId },
-        ],
-      };
-    case TimerActionKind.REMOVE_TIME:
-      return {
-        ...state,
-        solveTimes: state.solveTimes.filter((_, i) => i !== action.index),
-      };
-    case TimerActionKind.TICK_UP:
-      return { ...state, time: state.time + 60 };
-    case TimerActionKind.COUNTDOWN:
-      return { ...state, countdown: action.value };
-    case TimerActionKind.PUZZLE_TYPE:
-      return {
-        ...state,
-        puzzleType: action.puzzle,
-        running: false,
-        solveTimes: [],
-        scramble: new Scrambler(action.puzzle).generate(),
-      };
-    case TimerActionKind.INSPECTION_TIME:
-      return {
-        ...state,
-        countdown: action.inspectionTime,
-        inspectionTime: action.inspectionTime,
-      };
   }
 };
 
-export { TimerReducer, TimerActionKind };
+export { TimerReducer };

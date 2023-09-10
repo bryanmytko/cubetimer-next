@@ -1,9 +1,9 @@
 import { Dispatch, SyntheticEvent } from "react";
-import { TimerActionKind } from "../../reducers";
+import { TimerActionKind } from "../../types/timer";
 
 type TimerAction = {
   type: TimerActionKind.PUZZLE_TYPE;
-  puzzle: string
+  puzzle: string;
 };
 
 interface CubeDropdownProps {

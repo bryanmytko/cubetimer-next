@@ -1,1 +1,1 @@
-export { TimerReducer, TimerActionKind } from './timer.reducer';
+export { TimerReducer } from "./timer.reducer";

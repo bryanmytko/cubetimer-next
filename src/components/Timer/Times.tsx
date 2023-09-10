@@ -1,21 +1,25 @@
-import { Dispatch } from "react";
+import { Dispatch, useContext } from "react";
 import { useMutation } from "@apollo/client";
 import { Session } from "next-auth";
 
 import { HumanReadableTime } from "./";
-import { Solve, TimerActionKind } from "../../types/timer";
+import {
+  Solve,
+  TimerState,
+  TimerAction,
+  TimerActionKind,
+} from "../../types/timer";
+import { TimerContext, TimerDispatchContext } from "../Timer/TimerContext";
 import { DELETE_SOLVE } from "../../graphql/mutations";
 
 interface TimesProps {
-  dispatch: Dispatch<TimerAction>;
   session: Session | null;
-  solveTimes: Solve[];
 }
 
-type TimerAction = { type: TimerActionKind.REMOVE_TIME; index: number };
-
 const Times = (props: TimesProps) => {
-  const { dispatch, session, solveTimes } = props;
+  const { session } = props;
+  const timer = useContext(TimerContext) as TimerState;
+  const dispatch = useContext(TimerDispatchContext) as Dispatch<TimerAction>;
   const [deleteSolve, {}] = useMutation(DELETE_SOLVE);
 
   const deleteTime = (index: number, solveId: string | undefined) => {
@@ -28,7 +32,7 @@ const Times = (props: TimesProps) => {
       <h3 className="mx-auto mb-2 text-center text-gray-100 text-md">Times</h3>
       <div className="pt-2 pb-4 overflow-auto rounded bg-neutral-800 snap-y snap-mandatory">
         <ul className="w-11/12 pr-4 mx-auto text-gray-300 h-96">
-          {solveTimes.map((solve: Solve, index: number) => (
+          {timer.solveTimes.map((solve: Solve, index: number) => (
             <li
               key={index}
               className={`px-2 py-1 cursor-pointer last:snap-end ${

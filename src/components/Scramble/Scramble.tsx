@@ -1,9 +1,13 @@
-interface ScrambleProps {
-  scramble: string;
-};
+import { useContext } from "react";
+import { TimerContext } from "../Timer/TimerContext";
+import { TimerState } from "../../types/timer";
 
-const Scramble = (props: ScrambleProps) => (
-  <p className="text-white text-2xl text-center mt-6">{props.scramble}</p>
-);
+const Scramble = () => {
+  const timer = useContext(TimerContext) as TimerState;
+
+  return (
+    <p className="text-white text-2xl text-center mt-6">{timer.scramble}</p>
+  );
+};
 
 export default Scramble;
