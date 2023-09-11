@@ -1,3 +1,3 @@
-web: npm start
+web: bun start
 
-release: npx prisma migrate deploy
+release: bun prisma migrate deploy
