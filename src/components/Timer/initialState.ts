@@ -1,4 +1,6 @@
-import { TimerState } from "../../types/timer";
+import { PuzzleNameObj, TimerState } from "../../types/timer";
+
+const DEFAULT_CUBE_SIZE = PuzzleNameObj["3x3"];
 
 export const initialState: TimerState = {
   classicModeEnabled: false,
@@ -8,7 +10,7 @@ export const initialState: TimerState = {
   inspectionRunning: false,
   inspectionTime: 0,
   locked: false,
-  puzzleType: "3x3",
+  puzzleType: DEFAULT_CUBE_SIZE,
   ready: false,
   running: false,
   scramble: "",
