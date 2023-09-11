@@ -9,6 +9,8 @@ import {
   //   cubeMegaminx
 } from "./cubes";
 
+import { PuzzleNameObj, PuzzleValueType } from "../types/timer";
+
 const puzzles: PuzzleArray = {
   "2x2": cube2x2,
   "3x3": cube3x3,
@@ -41,14 +43,15 @@ class Scrambler {
   private puzzle: PuzzleType;
   private scrambleLength: number;
 
-  constructor(puzzleName: string = "3x3") {
-    this.puzzle = puzzles[puzzleName];
+  constructor() {
+    this.puzzle = puzzles[PuzzleNameObj["3x3"]];
     this.scrambleLength = 21;
   }
 
-  public generate = (): string => {
+  public generate = (puzzleName?: PuzzleValueType): string => {
     const moves = [];
     let currMove, currFace, prevFace;
+    if (puzzleName) this.puzzle = puzzles[puzzleName];
 
     for (let i = 0; i < this.scrambleLength; i++) {
       currFace = this.getRandomFace(prevFace);
