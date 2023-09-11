@@ -1,8 +1,10 @@
 export enum TimerActionKind {
   ADD_TIME = "ADD_TIME",
+  CANCEL_SOLVE = "CANCEL_SOLVE",
   COUNTDOWN = "COUNTDOWN",
   INITIALIZE = "INITIALIZE",
   INSPECTION_TIME = "INSPECTION_TIME",
+  LOCK = "LOCK",
   PUZZLE_TYPE = "PUZZLE_TYPE",
   READY = "READY",
   REMOVE_TIME = "REMOVE_TIME",
@@ -13,6 +15,22 @@ export enum TimerActionKind {
   TOGGLE_INSPECTION = "TOGGLE_INSPECTION",
   TOGGLE_RUNNING = "TOGGLE_RUNNING",
 }
+
+type PuzzleName = {
+  "2x2": string;
+  "3x3": string;
+  "4x4": string;
+  "5x5": string;
+};
+
+export const PuzzleNameObj: PuzzleName = {
+  "2x2": "2x2",
+  "3x3": "3x3",
+  "4x4": "4x4",
+  "5x5": "5x5",
+};
+
+export type PuzzleValueType = PuzzleName[keyof PuzzleName];
 
 export interface RecordSolveOptions {
   penalty: number;
@@ -31,8 +49,9 @@ export interface TimerState {
   countdown: number;
   inspectionRunning: boolean;
   inspectionTime: number;
+  locked: boolean;
   penalty?: number;
-  puzzleType: string;
+  puzzleType: PuzzleValueType;
   ready: boolean;
   running: boolean;
   scramble: string;
@@ -44,6 +63,7 @@ export interface TimerState {
 export type TimerAction =
   | {
       type:
+        | TimerActionKind.CANCEL_SOLVE
         | TimerActionKind.INITIALIZE
         | TimerActionKind.READY
         | TimerActionKind.TICK_UP
@@ -55,6 +75,7 @@ export type TimerAction =
   | { type: TimerActionKind.ADD_TIME; penalty: number; solveId: string }
   | { type: TimerActionKind.COUNTDOWN; value: number }
   | { type: TimerActionKind.INSPECTION_TIME; inspectionTime: number }
+  | { type: TimerActionKind.LOCK; value: boolean }
   | { type: TimerActionKind.PUZZLE_TYPE; puzzle: string }
   | { type: TimerActionKind.REMOVE_TIME; index: number }
   | { type: TimerActionKind.SET_SOLVE_SESSION_ID; id: string };
