@@ -1,17 +1,23 @@
 import { useContext } from "react";
 import { Button } from "@nextui-org/react";
 
-import { TimerContext } from "../Timer/TimerContext";
-import { TimerState, RecordSolveOptions } from "../../types/timer";
+import { Dispatch } from "react";
+import { TimerContext, TimerDispatchContext } from "../Timer/TimerContext";
+import {
+  TimerActionKind,
+  RecordSolveOptions,
+  TimerAction,
+  TimerState,
+} from "../../types/timer";
 
 interface ConfirmProps {
   action: (arg0?: RecordSolveOptions) => Promise<void>;
-  cancel: () => void;
 }
 
 const ConfirmModal = (props: ConfirmProps) => {
-  const { action, cancel } = props;
+  const { action } = props;
   const timer = useContext(TimerContext) as TimerState;
+  const dispatch = useContext(TimerDispatchContext) as Dispatch<TimerAction>;
   const { confirmActive } = timer;
 
   if (!confirmActive) return <></>;
@@ -32,7 +38,10 @@ const ConfirmModal = (props: ConfirmProps) => {
           >
             +2
           </Button>
-          <Button color="danger" onClick={cancel}>
+          <Button
+            color="danger"
+            onClick={() => dispatch({ type: TimerActionKind.CANCEL_SOLVE })}
+          >
             Reject
           </Button>
         </div>
