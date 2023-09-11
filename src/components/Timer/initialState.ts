@@ -7,6 +7,7 @@ export const initialState: TimerState = {
   countdown: 0,
   inspectionRunning: false,
   inspectionTime: 0,
+  locked: false,
   puzzleType: "3x3",
   ready: false,
   running: false,
