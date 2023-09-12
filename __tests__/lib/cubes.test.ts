@@ -7,7 +7,7 @@ import {
   cube7x7,
   cubePyraminx,
   cubeMegaminx,
-} from "../../lib/cubes";
+} from "../../src/lib/cubes";
 
 describe("cubes", () => {
   describe("2x2", () => {

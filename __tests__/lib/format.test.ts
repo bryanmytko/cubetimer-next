@@ -1,4 +1,4 @@
-import { humanReadableTime } from "../../lib/format";
+import { humanReadableTime } from "../../src/lib/format";
 
 describe("format", () => {
   describe("humanReadableTime", () => {

@@ -4,7 +4,7 @@ import {
   averageOfSize,
   fastestTime,
   slowestTime,
-} from "../../lib/calculate";
+} from "../../src/lib/calculate";
 
 describe("calculate", () => {
   describe(".average", () => {
