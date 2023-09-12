@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 
 import "@testing-library/jest-dom";
 
-import CubeDropdown from "../../components/Timer/CubeDropdown";
+import CubeDropdown from "../../src/components/Timer/CubeDropdown";
 
 describe("<CubeDropdown>", () => {
   it("renders the component", () => {

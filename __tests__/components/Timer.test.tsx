@@ -3,7 +3,7 @@ import { MockedProvider } from "@apollo/client/testing";
 import "@testing-library/jest-dom";
 
 import Scrambler, { mockGenerate } from "../__mocks__/scrambler";
-import Timer from "../../components/Timer/Timer";
+import TimerContainer from "../../src/components/Timer/TimerContainer";
 
 jest.mock("../../lib/scrambler", () => Scrambler);
 
@@ -22,7 +22,7 @@ jest.mock("next-auth/react", () => {
   };
 });
 
-describe("<Timer>", () => {
+describe("<TimerContainer>", () => {
   beforeEach(() => {
     Scrambler.mockClear();
     mockGenerate.mockClear();
@@ -31,7 +31,7 @@ describe("<Timer>", () => {
   it("renders the components", () => {
     const { container } = render(
       <MockedProvider>
-        <Timer />
+        <TimerContainer />
       </MockedProvider>
     );
 

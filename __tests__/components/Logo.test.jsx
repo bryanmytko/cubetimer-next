@@ -1,9 +1,8 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render } from "@testing-library/react";
 
 import "@testing-library/jest-dom";
 
-import Logo from "../../components/Header/Logo";
+import Logo from "../../src/components/Header/Logo";
 
 describe("<Logo>", () => {
   it("renders the component", () => {
