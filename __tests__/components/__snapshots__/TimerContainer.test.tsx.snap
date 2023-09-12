@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Timer> renders the components 1`] = `
+exports[`<TimerContainer> renders the components 1`] = `
 <div>
   <div
     class="col-span-5"

@@ -4,8 +4,9 @@ import "@testing-library/jest-dom";
 
 import Scrambler, { mockGenerate } from "../__mocks__/scrambler";
 import TimerContainer from "../../src/components/Timer/TimerContainer";
+import { TimerProvider } from "../../src/components/Timer/TimerContext";
 
-jest.mock("../../lib/scrambler", () => Scrambler);
+jest.mock("../../src/lib/scrambler", () => Scrambler);
 
 jest.mock("next-auth/react", () => {
   const originalModule = jest.requireActual("next-auth/react");
@@ -31,7 +32,9 @@ describe("<TimerContainer>", () => {
   it("renders the components", () => {
     const { container } = render(
       <MockedProvider>
-        <TimerContainer />
+        <TimerProvider>
+          <TimerContainer />
+        </TimerProvider>
       </MockedProvider>
     );
 
