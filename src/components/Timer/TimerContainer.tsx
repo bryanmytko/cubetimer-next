@@ -1,4 +1,4 @@
-import { Dispatch, useCallback, useContext, useEffect } from "react";
+import { Dispatch, useCallback, useContext, useEffect, useState } from "react";
 import useSound from "use-sound";
 import { useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
@@ -22,6 +22,7 @@ import {
 import { TimerContext, TimerDispatchContext } from "./TimerContext";
 
 const AUDIO_DING = "/assets/audio/ding.mp3";
+const TICK = 60;
 
 const TimerContainer = () => {
   const [saveSolve, {}] = useMutation(SAVE_SOLVE);
@@ -133,8 +134,14 @@ const TimerContainer = () => {
     toggleConfirmModal,
   ]);
 
+  const [activeKey, setActiveKey] = useState(false);
+
   const handleKeyup = useCallback(
-    async (e: KeyboardEvent | React.MouseEvent) => {
+    (e: KeyboardEvent | React.MouseEvent) => {
+      if (activeKey) return; // Avoid race condition with mouse + keyboard
+      setActiveKey(true);
+      setTimeout(() => setActiveKey(false), TICK);
+
       if (e.type === "click") return handleSpacebar();
 
       switch ((e as KeyboardEvent).key) {
@@ -171,8 +178,6 @@ const TimerContainer = () => {
     let interval: NodeJS.Timeout;
 
     if (timer.inspectionRunning) {
-      setButtonLocked(true);
-
       const countDown = () => {
         if (timer.countdown > 1) {
           dispatch({
@@ -180,10 +185,8 @@ const TimerContainer = () => {
             value: --timer.countdown,
           });
         } else {
-          setButtonLocked(false);
           clearInterval(interval);
           playDing();
-          dispatch({ type: TimerActionKind.TOGGLE_INSPECTION });
           dispatch({ type: TimerActionKind.TOGGLE_RUNNING });
         }
       };
@@ -213,7 +216,7 @@ const TimerContainer = () => {
     if (timer.running) {
       interval = setInterval(
         () => dispatch({ type: TimerActionKind.TICK_UP }),
-        60
+        TICK
       );
     }
 
