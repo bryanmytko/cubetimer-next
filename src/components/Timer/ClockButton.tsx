@@ -4,7 +4,7 @@ import { TimerContext } from "../Timer/TimerContext";
 import { TimerState } from "../../types/timer";
 
 interface ClockButtonProps {
-  handleKeyup: (e: KeyboardEvent | React.MouseEvent) => Promise<void>;
+  handleKeyup: (e: KeyboardEvent | React.MouseEvent) => void;
 }
 
 const ClockButton = (props: ClockButtonProps) => {
