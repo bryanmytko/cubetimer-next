@@ -11,7 +11,11 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
         scramble: scrambler.generate(state.puzzleType),
         solveTimes: [
           ...state.solveTimes,
-          { time: state.time, penalty: action.penalty, id: action.solveId },
+          {
+            time: state.time,
+            penalty: action.penalty,
+            id: action.solveId,
+          },
         ],
       };
     case TimerActionKind.CANCEL_SOLVE:
@@ -65,7 +69,11 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
         confirmActive: !state.confirmActive,
       };
     case TimerActionKind.TOGGLE_INSPECTION:
-      return { ...state, inspectionRunning: !state.inspectionRunning };
+      return {
+        ...state,
+        inspectionRunning: !state.inspectionRunning,
+        locked: !state.locked,
+      };
     case TimerActionKind.TOGGLE_RUNNING:
       if (state.running) {
         return {
@@ -74,7 +82,14 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
           ready: false,
         };
       }
-      return { ...state, time: 0, ready: false, running: true };
+      return {
+        ...state,
+        inspectionRunning: false,
+        locked: false,
+        time: 0,
+        ready: false,
+        running: true,
+      };
   }
 };
 
