@@ -16,6 +16,7 @@ const ClassicModeTimes = () => {
               time={solve.time}
               penalty={solve.penalty}
               compact={true}
+              initialValue={"0:00"}
             />
           </li>
         ))}

@@ -40,7 +40,11 @@ const Times = (props: TimesProps) => {
               }`}
               onClick={() => deleteTime(index, solve.id)}
             >
-              <HumanReadableTime time={solve.time} penalty={solve.penalty} />
+              <HumanReadableTime
+                time={solve.time}
+                penalty={solve.penalty}
+                initialValue={"0:00"}
+              />
             </li>
           ))}
         </ul>
