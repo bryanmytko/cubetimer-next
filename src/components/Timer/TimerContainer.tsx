@@ -58,6 +58,7 @@ const TimerContainer = () => {
   ]);
 
   const toggleConfirmModal = useCallback(() => {
+    setActiveKey(false);
     dispatch({ type: TimerActionKind.TOGGLE_CONFIRM_ACTIVE });
     setButtonLocked(!timer.locked);
   }, [dispatch, setButtonLocked, timer.locked]);
