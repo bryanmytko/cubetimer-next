@@ -109,7 +109,10 @@ const TimerContainer = () => {
   );
 
   const handleEscape = useCallback(() => {
-    if (timer.confirmActive) dispatch({ type: TimerActionKind.CANCEL_SOLVE });
+    if (timer.confirmActive) {
+      setActiveKey(false);
+      dispatch({ type: TimerActionKind.CANCEL_SOLVE });
+    }
   }, [dispatch, timer.confirmActive]);
 
   const handleEnter = useCallback(() => {
@@ -139,6 +142,7 @@ const TimerContainer = () => {
 
   const handleKeyup = useCallback(
     (e: KeyboardEvent | React.MouseEvent) => {
+      // @TODO can we refactor this to use the regular lock and/or move to state mgmt
       if (activeKey) return; // Avoid race condition with mouse + keyboard
       setActiveKey(true);
       setTimeout(() => setActiveKey(false), TICK);

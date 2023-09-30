@@ -67,6 +67,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
       return {
         ...state,
         confirmActive: !state.confirmActive,
+        locked: false,
       };
     case TimerActionKind.TOGGLE_INSPECTION:
       return {
