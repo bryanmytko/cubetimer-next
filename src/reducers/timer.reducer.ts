@@ -22,6 +22,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
       return {
         ...state,
         confirmActive: false,
+        keyLocked: false,
         locked: false,
         scramble: scrambler.generate(state.puzzleType),
       };
@@ -54,6 +55,8 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
       };
     case TimerActionKind.SET_SOLVE_SESSION_ID:
       return { ...state, solveSessionId: action.id };
+    case TimerActionKind.SET_KEY_LOCKED:
+      return { ...state, keyLocked: action.value };
     case TimerActionKind.TICK_UP:
       return { ...state, time: state.time + 60 };
     case TimerActionKind.TOGGLE_CLASSIC_MODE:
@@ -67,6 +70,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
       return {
         ...state,
         confirmActive: !state.confirmActive,
+        keyLocked: false,
         locked: false,
       };
     case TimerActionKind.TOGGLE_INSPECTION:
