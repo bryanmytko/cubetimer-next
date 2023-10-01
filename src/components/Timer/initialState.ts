@@ -9,6 +9,7 @@ export const initialState: TimerState = {
   countdown: 0,
   inspectionRunning: false,
   inspectionTime: 0,
+  keyLocked: false,
   locked: false,
   puzzleType: DEFAULT_CUBE_SIZE,
   ready: false,

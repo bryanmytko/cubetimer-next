@@ -58,7 +58,6 @@ const TimerContainer = () => {
   ]);
 
   const toggleConfirmModal = useCallback(() => {
-    setActiveKey(false);
     dispatch({ type: TimerActionKind.TOGGLE_CONFIRM_ACTIVE });
     setButtonLocked(!timer.locked);
   }, [dispatch, setButtonLocked, timer.locked]);
@@ -110,7 +109,6 @@ const TimerContainer = () => {
 
   const handleEscape = useCallback(() => {
     if (timer.confirmActive) {
-      setActiveKey(false);
       dispatch({ type: TimerActionKind.CANCEL_SOLVE });
     }
   }, [dispatch, timer.confirmActive]);
@@ -138,14 +136,14 @@ const TimerContainer = () => {
     toggleConfirmModal,
   ]);
 
-  const [activeKey, setActiveKey] = useState(false);
-
   const handleKeyup = useCallback(
     (e: KeyboardEvent | React.MouseEvent) => {
-      // @TODO can we refactor this to use the regular lock and/or move to state mgmt
-      if (activeKey) return; // Avoid race condition with mouse + keyboard
-      setActiveKey(true);
-      setTimeout(() => setActiveKey(false), TICK);
+      if (timer.keyLocked) return; // Avoid race condition with mouse + keyboard
+      dispatch({ type: TimerActionKind.SET_KEY_LOCKED, value: true });
+      setTimeout(
+        () => dispatch({ type: TimerActionKind.SET_KEY_LOCKED, value: false }),
+        TICK
+      );
 
       if (e.type === "click") return handleSpacebar();
 
@@ -163,7 +161,7 @@ const TimerContainer = () => {
           handleEnter();
           break;
         default:
-          return;
+          break;
       }
     },
     [handleEnter, handleEscape, handleSpacebar]
