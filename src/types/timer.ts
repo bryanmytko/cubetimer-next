@@ -8,6 +8,7 @@ export enum TimerActionKind {
   PUZZLE_TYPE = "PUZZLE_TYPE",
   READY = "READY",
   REMOVE_TIME = "REMOVE_TIME",
+  SET_KEY_LOCKED = "SET_KEY_LOCKED",
   SET_SOLVE_SESSION_ID = "SET_SOLVE_SESSION_ID",
   TICK_UP = "TICK_UP",
   TOGGLE_CONFIRM_ACTIVE = "TOGGLE_CONFIRM_ACTIVE",
@@ -49,6 +50,7 @@ export interface TimerState {
   countdown: number;
   inspectionRunning: boolean;
   inspectionTime: number;
+  keyLocked: boolean;
   locked: boolean;
   penalty?: number;
   puzzleType: PuzzleValueType;
@@ -78,4 +80,5 @@ export type TimerAction =
   | { type: TimerActionKind.LOCK; value: boolean }
   | { type: TimerActionKind.PUZZLE_TYPE; puzzle: string }
   | { type: TimerActionKind.REMOVE_TIME; index: number }
+  | { type: TimerActionKind.SET_KEY_LOCKED; value: boolean }
   | { type: TimerActionKind.SET_SOLVE_SESSION_ID; id: string };
