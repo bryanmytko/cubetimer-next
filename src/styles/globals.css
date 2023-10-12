@@ -8,6 +8,7 @@
   src: url("/fonts/DroidSans-Bold.ttf");
 }
 
+:root,
 html,
 body {
   background: #212121;
