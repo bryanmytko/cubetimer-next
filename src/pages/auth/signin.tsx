@@ -46,7 +46,7 @@ export default function SignIn({
                     onClick={async () =>
                       await signIn(provider.id, { callbackUrl: "/" })
                     }
-                    className="bg-white border-gray-400 border-1"
+                    className="bg-white border-gray-400 border-1 w-full"
                     size="lg"
                     startContent={<ButtonIcon url={provider.name} />}
                   >
