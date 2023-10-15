@@ -20,6 +20,7 @@ import {
   TimerState,
 } from "../../types/timer";
 import { TimerContext, TimerDispatchContext } from "./TimerContext";
+import { useTimerKeyup } from "../../hooks";
 
 const AUDIO_DING = "/assets/audio/ding.mp3";
 const TICK = 60;
@@ -136,46 +137,21 @@ const TimerContainer = () => {
     toggleConfirmModal,
   ]);
 
-  const handleKeyup = useCallback(
-    (e: KeyboardEvent | React.MouseEvent) => {
-      if (timer.keyLocked) return; // Avoid race condition with mouse + keyboard
-      dispatch({ type: TimerActionKind.SET_KEY_LOCKED, value: true });
-      setTimeout(
-        () => dispatch({ type: TimerActionKind.SET_KEY_LOCKED, value: false }),
-        TICK
-      );
-
-      if (e.type === "click") return handleSpacebar();
-
-      switch ((e as KeyboardEvent).key) {
-        case " ":
-          e.preventDefault();
-          handleSpacebar();
-          break;
-        case "Escape":
-          e.preventDefault();
-          handleEscape();
-          break;
-        case "Enter":
-          e.preventDefault();
-          handleEnter();
-          break;
-        default:
-          break;
-      }
-    },
-    [handleEnter, handleEscape, handleSpacebar]
-  );
+  const timerKeyup = useTimerKeyup(timer.keyLocked, dispatch, {
+    " ": handleSpacebar,
+    Escape: handleEscape,
+    Enter: handleEnter,
+  });
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeydown);
-    window.addEventListener("keyup", handleKeyup);
+    window.addEventListener("keyup", timerKeyup);
 
     return () => {
       window.removeEventListener("keydown", handleKeydown);
-      window.removeEventListener("keyup", handleKeyup);
+      window.removeEventListener("keyup", timerKeyup);
     };
-  }, [handleKeydown, handleKeyup]);
+  }, [handleKeydown, timerKeyup]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -229,14 +205,12 @@ const TimerContainer = () => {
   return (
     <>
       <div className={timer.classicModeEnabled ? "col-span-6" : "col-span-5"}>
-        <div>
-          <Scramble />
-          <Clock />
-          <ClockButton handleKeyup={handleKeyup} />
-          {timer.classicModeEnabled && <ClassicModeTimes />}
-          <ConfirmModal action={recordSolve} />
-          <Panel />
-        </div>
+        <Scramble />
+        <Clock />
+        <ClockButton handleKeyup={timerKeyup} />
+        {timer.classicModeEnabled && <ClassicModeTimes />}
+        <ConfirmModal action={recordSolve} />
+        <Panel />
       </div>
       {!timer.classicModeEnabled && <Times session={session} />}
     </>
