@@ -1,17 +1,11 @@
 import { useQuery } from "@apollo/client";
-import type { Solve } from "@prisma/client";
 
 import { humanReadableTime } from "../../lib/format";
 import { SOLVE_SESSIONS_FOR_USER } from "../../graphql/queries";
-import { Error, Pagination } from "./";
+import { Error } from "./";
 
 interface ClassicSolvesProps {
   userId: number;
-}
-
-interface SolveSession {
-  id: string;
-  solves?: Solve[];
 }
 
 const SESSIONS_PER_PAGE = 1;
