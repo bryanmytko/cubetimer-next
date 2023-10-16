@@ -1,11 +1,12 @@
 import { useState, MouseEvent } from "react";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { ClassicSolves, Solves } from "../../components/Statistics";
 
 const Statistics = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const userId = session?.user.id;
 
   const [activeTab, setActiveTab] = useState("1");
@@ -15,7 +16,7 @@ const Statistics = () => {
     if (target.dataset["tab"]) setActiveTab(target.dataset["tab"]);
   };
 
-  // if (!userId) return redirect("/signin");
+  if (status === "unauthenticated") router.replace("/auth/signin");
 
   return (
     <div className="container statistics-container m-auto p-12 w-11/12 text-black">
