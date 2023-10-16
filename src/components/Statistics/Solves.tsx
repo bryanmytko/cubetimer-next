@@ -3,23 +3,41 @@ import { useQuery } from "@apollo/client";
 import { SOLVES_FOR_USER } from "../../graphql/queries";
 import { humanReadableTime } from "../../lib/format";
 import { Error } from "./";
+import { LoadingTable } from "../Loading";
 
 interface SolvesProps {
   userId: number;
+}
+
+interface SolvesForUserData {
+  solves: {
+    pageInfo: any;
+    edges: any;
+  };
+}
+
+interface SolvesForUserVars {
+  userId: number;
+  first: number | null;
+  after?: any;
+  before?: any;
+  last?: any;
 }
 
 const SOLVES_PER_PAGE = 12;
 
 const Solves = (props: SolvesProps) => {
   const { userId } = props;
-  const { loading, data, error, fetchMore } = useQuery(SOLVES_FOR_USER, {
+  const { data, error, fetchMore, loading } = useQuery<
+    SolvesForUserData,
+    SolvesForUserVars
+  >(SOLVES_FOR_USER, {
     skip: !userId,
     variables: { userId, first: SOLVES_PER_PAGE },
   });
 
-  if (loading) return <p className="text-white">Loading</p>;
+  if (!data || loading) return <LoadingTable />;
   if (error) return <Error />;
-  if (!data) return <p className="text-white">No solves found.</p>;
 
   const { startCursor, endCursor, hasNextPage, hasPreviousPage } =
     data.solves.pageInfo;
