@@ -23,7 +23,8 @@ const ClassicSolves = (props: ClassicSolvesProps) => {
 
   if (loading) return <p className="text-white">Loading</p>;
   if (error) return <Error />;
-  if (!data) return <p className="text-white">No sessions found.</p>;
+  if (!data || data.solveSessionsForUser.edges.length === 0)
+    return <p className="text-white py-4">No sessions found.</p>;
 
   const { startCursor, endCursor, hasNextPage, hasPreviousPage } =
     data.solveSessionsForUser.pageInfo;
