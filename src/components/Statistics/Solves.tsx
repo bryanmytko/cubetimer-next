@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 
 import { SOLVES_FOR_USER } from "../../graphql/queries";
 import { humanReadableTime } from "../../lib/format";
-import { Error } from "./";
+import { DataTable, Error } from "./";
 import { LoadingTable } from "../Loading";
 
 interface SolvesProps {
@@ -43,21 +43,8 @@ const Solves = (props: SolvesProps) => {
     data.solves.pageInfo;
 
   return (
-    <div>
-      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-black uppercase bg-yellow-400">
-          <tr>
-            <th scope="col" className="pl-6 pr-1 py-3">
-              Time
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Scramble
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Puzzle
-            </th>
-          </tr>
-        </thead>
+    <>
+      <DataTable>
         <tbody>
           {data.solves.edges.map(({ node }: any, index: number) => {
             return (
@@ -80,7 +67,7 @@ const Solves = (props: SolvesProps) => {
             );
           })}
         </tbody>
-      </table>
+      </DataTable>
       <div className="flex justify-center">
         {hasPreviousPage ? (
           <button
@@ -130,7 +117,7 @@ const Solves = (props: SolvesProps) => {
           ""
         )}
       </div>
-    </div>
+    </>
   );
 };
 
