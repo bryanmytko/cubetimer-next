@@ -1,4 +1,5 @@
-import { useQuery } from "@apollo/client";
+import { useEffect } from "react";
+import { useLazyQuery } from "@apollo/client";
 
 import { SOLVES_FOR_USER } from "../../graphql/queries";
 import { humanReadableTime } from "../../lib/format";
@@ -28,13 +29,17 @@ const SOLVES_PER_PAGE = 12;
 
 const Solves = (props: SolvesProps) => {
   const { userId } = props;
-  const { data, error, fetchMore, loading } = useQuery<
+  const [fetchSolves, { data, error, fetchMore, loading }] = useLazyQuery<
     SolvesForUserData,
     SolvesForUserVars
   >(SOLVES_FOR_USER, {
-    skip: !userId,
+    fetchPolicy: "no-cache",
     variables: { userId, first: SOLVES_PER_PAGE },
   });
+
+  useEffect(() => {
+    fetchSolves();
+  }, [fetchSolves]);
 
   if (!data || loading) return <LoadingTable />;
   if (error) return <Error />;
