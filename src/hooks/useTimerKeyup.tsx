@@ -7,7 +7,7 @@ const TIMEOUT = 60;
 const useTimerKeyup = (
   keyLocked: boolean,
   dispatch: Dispatch<TimerAction>,
-  keyMaps: any
+  keyMaps: any,
 ) => {
   return useCallback(
     (e: KeyboardEvent | React.MouseEvent) => {
@@ -15,10 +15,10 @@ const useTimerKeyup = (
       dispatch({ type: TimerActionKind.SET_KEY_LOCKED, value: true });
       setTimeout(
         () => dispatch({ type: TimerActionKind.SET_KEY_LOCKED, value: false }),
-        TIMEOUT
+        TIMEOUT,
       );
 
-      if (e.type === "click") return keyMaps[" "];
+      if (e.type === "click") return keyMaps[" "]();
 
       switch ((e as KeyboardEvent).key) {
         case " ":
@@ -37,7 +37,7 @@ const useTimerKeyup = (
           break;
       }
     },
-    [keyLocked, dispatch, keyMaps]
+    [keyLocked, dispatch, keyMaps],
   );
 };
 

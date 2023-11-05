@@ -43,7 +43,7 @@ const TimerContainer = () => {
 
   const setButtonLocked = useCallback(
     (value: boolean) => dispatch({ type: TimerActionKind.LOCK, value }),
-    [dispatch]
+    [dispatch],
   );
 
   useEffect(() => {
@@ -95,7 +95,7 @@ const TimerContainer = () => {
       timer.scramble,
       timer.time,
       toggleConfirmModal,
-    ]
+    ],
   );
 
   const handleKeydown = useCallback(
@@ -105,7 +105,7 @@ const TimerContainer = () => {
 
       dispatch({ type: TimerActionKind.READY });
     },
-    [dispatch, timer.locked]
+    [dispatch, timer.locked],
   );
 
   const handleEscape = useCallback(() => {
@@ -195,7 +195,7 @@ const TimerContainer = () => {
     if (timer.running) {
       interval = setInterval(
         () => dispatch({ type: TimerActionKind.TICK_UP }),
-        TICK
+        TICK,
       );
     }
 
