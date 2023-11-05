@@ -1,4 +1,5 @@
 import { MouseEvent, useContext } from "react";
+import { isMobile } from "react-device-detect";
 
 import { TimerContext } from "../Timer/TimerContext";
 import { TimerState } from "../../types/timer";
@@ -10,6 +11,9 @@ interface ClockButtonProps {
 const ClockButton = (props: ClockButtonProps) => {
   const { handleKeyup } = props;
   const timer = useContext(TimerContext) as TimerState;
+  const startText = isMobile
+    ? "Tap to start!"
+    : "Press spacebar or click to start!";
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     event.currentTarget.blur();
@@ -27,9 +31,7 @@ const ClockButton = (props: ClockButtonProps) => {
   };
 
   const buttonText = () =>
-    sessionComplete()
-      ? "Session complete!"
-      : "Press spacebar or click to start!";
+    sessionComplete() ? "Session complete!" : startText;
 
   return (
     <button
