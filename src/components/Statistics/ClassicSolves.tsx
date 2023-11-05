@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 
 import { humanReadableTime } from "../../lib/format";
 import { SOLVE_SESSIONS_FOR_USER } from "../../graphql/queries";
-import { Error } from "./";
+import { DataTable, Error } from "./";
 
 interface ClassicSolvesProps {
   userId: number;
@@ -18,7 +18,7 @@ const ClassicSolves = (props: ClassicSolvesProps) => {
     {
       skip: !userId,
       variables: { userId, first: SESSIONS_PER_PAGE },
-    }
+    },
   );
 
   if (loading) return <p className="text-white">Loading</p>;
@@ -35,39 +35,23 @@ const ClassicSolves = (props: ClassicSolvesProps) => {
         if (!node.solves.length) return;
 
         return (
-          <table
-            key={index}
-            className="w-full text-sm text-left text-gray-500 dark:text-gray-400"
-          >
-            <thead className="text-xs text-black uppercase bg-yellow-400">
-              <tr>
-                <th scope="col" className="pl-6 pr-1 py-3">
-                  Time
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Scramble
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Puzzle
-                </th>
-              </tr>
-            </thead>
+          <DataTable key={index}>
             <tbody>
-              {node.solves.map((solve: any) => {
+              {node.solves.map((solve: any, index: number) => {
                 return (
                   <tr
-                    key={index}
+                    key={solve.id}
                     className={`px-6 py-3 border-b ${
                       index % 2 === 0 ? "bg-slate-200" : "bg-white"
                     }`}
                   >
-                    <td className="px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                    <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
                       {humanReadableTime(parseInt(solve.time))}
                     </td>
-                    <td className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
+                    <td className="px-2 md:px-6 py-2 text-xs md:text-medium font-medium text-gray-900">
                       {solve.scramble}
                     </td>
-                    <td className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
+                    <td className="px-2 md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
                       {solve.puzzle}
                     </td>
                   </tr>
@@ -79,7 +63,7 @@ const ClassicSolves = (props: ClassicSolvesProps) => {
                 </td>
               </tr>*/}
             </tbody>
-          </table>
+          </DataTable>
         );
       })}
       <div className="flex justify-center">

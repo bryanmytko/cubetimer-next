@@ -26,8 +26,10 @@ export const SOLVE_SESSIONS_FOR_USER = gql`
         node {
           id
           solves {
+            id
             scramble
             time
+            puzzle
           }
         }
       }

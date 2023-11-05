@@ -55,17 +55,17 @@ const Solves = (props: SolvesProps) => {
             return (
               <tr
                 key={index}
-                className={`px-6 py-3 border-b ${
+                className={`py-3 border-b ${
                   index % 2 === 0 ? "bg-slate-200" : "bg-white"
                 }`}
               >
-                <td className="px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
                   {humanReadableTime(parseInt(node.time))}
                 </td>
-                <td className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
+                <td className="px-2 md:px-6 py-2 text-xs md:text-medium font-medium text-gray-900">
                   {node.scramble}
                 </td>
-                <td className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
+                <td className="px-2 md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
                   {node.puzzle}
                 </td>
               </tr>
@@ -102,6 +102,7 @@ const Solves = (props: SolvesProps) => {
           <button
             className="px-4 py-2 my-10 text-white bg-blue-500 rounded"
             onClick={() => {
+              console.log("getting more", endCursor);
               fetchMore({
                 variables: {
                   after: endCursor,
