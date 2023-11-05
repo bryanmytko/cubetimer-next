@@ -102,7 +102,6 @@ const Solves = (props: SolvesProps) => {
           <button
             className="px-4 py-2 my-10 text-white bg-blue-500 rounded"
             onClick={() => {
-              console.log("getting more", endCursor);
               fetchMore({
                 variables: {
                   after: endCursor,
