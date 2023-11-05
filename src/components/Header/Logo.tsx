@@ -9,7 +9,7 @@ const Logo = (props: LogoProps) => {
   const { dark } = props;
 
   return (
-    <Link href="/" className="flex items-center">
+    <Link href="/" className="flex items-center mt-1 md:mt-0">
       <Image
         height="47"
         width="45"

@@ -18,7 +18,7 @@ const Clock = () => {
     >
       <span
         id="timer-screen"
-        className="font-mono font-black text-white timer text-8xl"
+        className="font-mono font-bold text-white timer text-8xl"
       >
         {inspectionRunning ? countdown : humanReadableTime(time, "0:00")}
       </span>

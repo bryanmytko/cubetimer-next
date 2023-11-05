@@ -74,7 +74,12 @@ const Nav = () => {
     }
 
     return (
-      <Button color="warning" radius="md" onClick={() => signIn()}>
+      <Button
+        color="warning"
+        radius="md"
+        className="h-8 md:h-8"
+        onClick={() => signIn()}
+      >
         Login
       </Button>
     );
@@ -82,10 +87,10 @@ const Nav = () => {
 
   return (
     <nav className="px-2">
-      <div className="container flex flex-wrap items-center justify-between mx-auto">
+      <div className="container flex sm:flex-col md:flex-row flex-wrap items-center justify-around md:justify-between mx-auto">
         <Logo />
         <div className="block w-auto" id="navbar-default">
-          <ul className="flex flex-row px-4 py-3 pt-4 space-x-6 text-sm font-medium border-0">
+          <ul className="flex flex-row px-4 pb-2 md:pb-3 pt-0 md:pt-4 space-x-6 text-sm font-medium border-0">
             {navItems.map((item, index) => {
               return (
                 <li
@@ -100,7 +105,7 @@ const Nav = () => {
                 </li>
               );
             })}
-            <li>{auth()}</li>
+            <li className="pt-1 md:mt-0">{auth()}</li>
           </ul>
         </div>
       </div>
