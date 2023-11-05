@@ -1,4 +1,4 @@
-import { MouseEvent, useContext } from "react";
+import { MouseEvent, useContext, useEffect, useState } from "react";
 import { isMobile } from "react-device-detect";
 
 import { TimerContext } from "../Timer/TimerContext";
@@ -11,27 +11,34 @@ interface ClockButtonProps {
 const ClockButton = (props: ClockButtonProps) => {
   const { handleKeyup } = props;
   const timer = useContext(TimerContext) as TimerState;
-  const startText = isMobile
-    ? "Tap to start!"
-    : "Press spacebar or click to start!";
+  const [buttonText, setButtonText] = useState("");
+  const [sessionComplete, setSessionComplete] = useState(false);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     event.currentTarget.blur();
     handleKeyup(event);
   };
 
-  const sessionComplete = () =>
-    timer.classicModeEnabled &&
-    timer.solveTimes.length >= timer.classicModeLength;
-
   const buttonColor = () => {
-    if (sessionComplete()) return "bg-green-500";
+    if (sessionComplete) return "bg-green-500";
     if (timer.ready) return "bg-red-500";
     return "bg-yellow-300";
   };
 
-  const buttonText = () =>
-    sessionComplete() ? "Session complete!" : startText;
+  useEffect(() => {
+    if (isMobile && !sessionComplete) return setButtonText("Tap to start! ");
+    if (sessionComplete) return setButtonText("Session Complete!");
+
+    setButtonText("Press spacebar or click to start!");
+  }, [sessionComplete]);
+
+  useEffect(() => {
+    if (
+      timer.classicModeEnabled &&
+      timer.solveTimes.length >= timer.classicModeLength
+    )
+      setSessionComplete(true);
+  }, [timer]);
 
   return (
     <button
@@ -40,7 +47,7 @@ const ClockButton = (props: ClockButtonProps) => {
         rounded-md w-11/12 ${buttonColor()}`}
       onClick={handleClick}
     >
-      {buttonText()}
+      {buttonText}
     </button>
   );
 };
