@@ -50,6 +50,7 @@ const Nav = () => {
               onAction={dropdownAction}
               color="primary"
               aria-label="User Actions"
+              className="font-['Arial']"
             >
               <DropdownItem key="user" textValue="user">
                 <p>Signed in as:</p>
@@ -87,7 +88,7 @@ const Nav = () => {
 
   return (
     <nav className="px-2">
-      <div className="container flex sm:flex-col md:flex-row flex-wrap items-center justify-around md:justify-between mx-auto">
+      <div className="container flex flex-col md:flex-row flex-wrap items-center justify-around md:justify-between mx-auto">
         <Logo />
         <div className="block w-auto" id="navbar-default">
           <ul className="flex flex-row px-4 pb-2 md:pb-3 pt-0 md:pt-4 space-x-6 text-sm font-medium border-0">
