@@ -33,7 +33,8 @@ const Solves = (props: SolvesProps) => {
     SolvesForUserData,
     SolvesForUserVars
   >(SOLVES_FOR_USER, {
-    fetchPolicy: "no-cache",
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "cache-first",
     variables: { userId, first: SOLVES_PER_PAGE },
   });
 
