@@ -91,7 +91,7 @@ const Nav = () => {
       <div className="container flex flex-col md:flex-row flex-wrap items-center justify-around md:justify-between mx-auto">
         <Logo />
         <div className="block w-auto" id="navbar-default">
-          <ul className="flex flex-row px-4 pb-2 md:pb-3 pt-0 md:pt-4 space-x-6 text-sm font-medium border-0">
+          <ul className="flex flex-row px-4 pb-2 md:pb-3 pt-0 md:pt-4 space-x-6 text-sm font-medium items-center">
             {navItems.map((item, index) => {
               return (
                 <li
@@ -106,7 +106,7 @@ const Nav = () => {
                 </li>
               );
             })}
-            <li className="pt-1 md:mt-0">{auth()}</li>
+            <li>{auth()}</li>
           </ul>
         </div>
       </div>
