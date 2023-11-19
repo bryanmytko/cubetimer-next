@@ -25,6 +25,7 @@
     "@pothos/plugin-relay": "^3.43.1",
     "@prisma/client": "^4.10.1",
     "@testing-library/user-event": "^14.4.3",
+    "@typeform/embed-react": "^3.8.0",
     "@types/gravatar": "^1.8.3",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
