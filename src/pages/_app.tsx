@@ -2,7 +2,6 @@ import type { AppProps, AppType } from "next/app";
 import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
 import { ApolloProvider } from "@apollo/client";
-import Script from "next/script";
 
 import "../styles/globals.css";
 import { Layout } from "../components";
@@ -24,12 +23,6 @@ const App: AppType = ({
         />
         <meta name="theme-color" content="#212121" />
       </Head>
-      <Script
-        id="adsbygoogle-init"
-        strategy="afterInteractive"
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8225396803360141"
-        crossOrigin="anonymous"
-      ></Script>
       <ApolloProvider client={apolloClient}>
         <SessionProvider session={session}>
           <Layout>
