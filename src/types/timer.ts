@@ -74,7 +74,7 @@ export type TimerAction =
         | TimerActionKind.TOGGLE_INSPECTION
         | TimerActionKind.TOGGLE_RUNNING;
     }
-  | { type: TimerActionKind.ADD_TIME; penalty: number; solveId: string }
+  | { type: TimerActionKind.ADD_TIME; penalty: number; solveId?: string }
   | { type: TimerActionKind.COUNTDOWN; value: number }
   | { type: TimerActionKind.INSPECTION_TIME; inspectionTime: number }
   | { type: TimerActionKind.LOCK; value: boolean }
