@@ -26,12 +26,12 @@ const AUDIO_DING = "/assets/audio/ding.mp3";
 const TICK = 60;
 
 const TimerContainer = () => {
-  const [saveSolve, {}] = useMutation(SAVE_SOLVE);
+  const [saveSolve, { loading: saveTimeLoading }] = useMutation(SAVE_SOLVE);
   const { data: session } = useSession();
   const [playDing] = useSound(AUDIO_DING);
-
   const timer = useContext(TimerContext) as TimerState;
   const dispatch = useContext(TimerDispatchContext) as Dispatch<TimerAction>;
+  const [submitted, setSubmitted] = useState(false);
 
   /* This is necessary due to the random nature of the initial scramble.
    * Just trying to set an initial state with a random scramble will
@@ -66,6 +66,7 @@ const TimerContainer = () => {
   const recordSolve = useCallback(
     async (options: RecordSolveOptions = { penalty: 0 }) => {
       const { penalty } = options;
+      setButtonLocked(true);
       let solveId;
 
       if (session) {
@@ -83,13 +84,16 @@ const TimerContainer = () => {
         solveId = response.data?.createSolve.id;
       }
 
-      toggleConfirmModal();
       dispatch({ type: TimerActionKind.ADD_TIME, penalty, solveId });
+      toggleConfirmModal();
+      setSubmitted(false);
+      setButtonLocked(false);
     },
     [
       dispatch,
       saveSolve,
       session,
+      setButtonLocked,
       timer.solveSessionId,
       timer.puzzleType,
       timer.scramble,
@@ -101,11 +105,11 @@ const TimerContainer = () => {
   const handleKeydown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === " ") e.preventDefault();
-      if (e.key !== " " || timer.locked) return;
+      if (e.key !== " " || timer.locked || submitted) return;
 
       dispatch({ type: TimerActionKind.READY });
     },
-    [dispatch, timer.locked],
+    [dispatch, submitted, timer.locked],
   );
 
   const handleEscape = useCallback(() => {
@@ -115,8 +119,12 @@ const TimerContainer = () => {
   }, [dispatch, timer.confirmActive]);
 
   const handleEnter = useCallback(() => {
-    if (timer.confirmActive) recordSolve();
-  }, [timer.confirmActive, recordSolve]);
+    if (submitted) return;
+    if (timer.confirmActive) {
+      setSubmitted(true);
+      recordSolve();
+    }
+  }, [timer.confirmActive, recordSolve, submitted]);
 
   const handleSpacebar = useCallback(() => {
     if (timer.locked) return handleEnter();
@@ -207,9 +215,9 @@ const TimerContainer = () => {
       <div className={timer.classicModeEnabled ? "col-span-6" : "col-span-5"}>
         <Scramble />
         <Clock />
-        <ClockButton handleKeyup={timerKeyup} />
+        {!timer.locked && <ClockButton handleKeyup={timerKeyup} />}
         {timer.classicModeEnabled && <ClassicModeTimes />}
-        <ConfirmModal action={recordSolve} />
+        <ConfirmModal action={recordSolve} loading={saveTimeLoading} />
         <Panel />
       </div>
       {!timer.classicModeEnabled && <Times session={session} />}
