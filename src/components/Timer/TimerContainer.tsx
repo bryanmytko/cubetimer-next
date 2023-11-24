@@ -215,7 +215,7 @@ const TimerContainer = () => {
       <div className={timer.classicModeEnabled ? "col-span-6" : "col-span-5"}>
         <DynamicScramble />
         <DynamicClock />
-        {!timer.locked && <DynamicClockButton handleKeyup={timerKeyup} />}
+        <DynamicClockButton handleKeyup={timerKeyup} />
         {timer.classicModeEnabled && <DynamicClassicModeTimes />}
         <DynamicConfirmModal action={recordSolve} loading={saveTimeLoading} />
         <DynamicPanel />
