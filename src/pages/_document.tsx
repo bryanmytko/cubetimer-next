@@ -9,7 +9,7 @@ const Document = () => (
       <NextScript />
       <Script
         id="adsbygoogle-init"
-        strategy="beforeInteractive"
+        strategy="afterInteractive"
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8225396803360141"
         crossOrigin="anonymous"
       ></Script>

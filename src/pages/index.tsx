@@ -1,4 +1,3 @@
-import { GoogleAnalytics } from "nextjs-google-analytics";
 import Head from "next/head";
 
 import { Timer } from "../components";
@@ -9,7 +8,6 @@ const Home = () => {
       <Head>
         <title>Cubetimer.io | Online Rubik`s Cube Timer</title>
       </Head>
-      <GoogleAnalytics strategy="lazyOnload" trackPageViews />
       <Timer />
     </div>
   );

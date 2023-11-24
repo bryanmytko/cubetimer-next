@@ -2,6 +2,7 @@ import type { AppProps, AppType } from "next/app";
 import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
 import { ApolloProvider } from "@apollo/client";
+import { GoogleAnalytics } from "nextjs-google-analytics";
 
 import "../styles/globals.css";
 import { Layout } from "../components";
@@ -23,6 +24,7 @@ const App: AppType = ({
         />
         <meta name="theme-color" content="#212121" />
       </Head>
+      <GoogleAnalytics strategy="lazyOnload" trackPageViews />
       <ApolloProvider client={apolloClient}>
         <SessionProvider session={session}>
           <Layout>
