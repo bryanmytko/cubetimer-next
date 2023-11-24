@@ -6,6 +6,7 @@ import { getProviders, signIn } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
 import { Button } from "@nextui-org/react";
 import Image from "next/image";
+import Head from "next/head";
 
 import Logo from "../../components/Header/Logo";
 import authOptions from "../api/auth/[...nextauth]";
@@ -31,6 +32,9 @@ export default function SignIn({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
+      <Head>
+        <title>Cubetimer.io | Login</title>
+      </Head>
       <div className="flex mt-20">
         <div className="mx-auto bg-gray-300 rounded-lg">
           <div className="flex justify-center py-4 mx-auto bg-yellow-400 border-black rounded-t-lg border-b-1">

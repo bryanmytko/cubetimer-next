@@ -1,6 +1,7 @@
 import { useState, MouseEvent } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Head from "next/head";
 
 import { ClassicSolves, Solves } from "../../components/Statistics";
 
@@ -20,6 +21,9 @@ const Statistics = () => {
 
   return (
     <div className="container statistics-container m-auto px-0 lg:px-12 py-6 md:py-12 w-11/12 text-black">
+      <Head>
+        <title>Cubetimer.io | Statistics</title>
+      </Head>
       <h1 className="text-2xl text-bold text-white mb-6">Statistics</h1>
       <div className="tabs">
         <ul className="tabsNav flex">

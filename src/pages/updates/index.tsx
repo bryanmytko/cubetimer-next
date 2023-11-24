@@ -1,6 +1,11 @@
+import Head from "next/head";
+
 const Updates = () => {
   return (
     <div className="bg-gray-200 m-auto p-12 mt-12 w-11/12 rounded text-black">
+      <Head>
+        <title>Cubetimer.io | Site Updates</title>
+      </Head>
       <h1 className="text-3xl font-bold m-auto mb-6">Site Updates</h1>
       <h3 className="text-xl mb-4">11/23/23</h3>
       <p>
