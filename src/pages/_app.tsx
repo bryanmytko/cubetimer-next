@@ -25,7 +25,8 @@ const App: AppType = ({
         <meta name="theme-color" content="#212121" />
       </Head>
       <Script
-        async
+        id="adsbygoogle-init"
+        strategy="afterInteractive"
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8225396803360141"
         crossOrigin="anonymous"
       ></Script>
