@@ -2,16 +2,16 @@ import { Dispatch, useCallback, useContext, useEffect, useState } from "react";
 import useSound from "use-sound";
 import { useSession } from "next-auth/react";
 import { useMutation } from "@apollo/client";
+import dynamic from "next/dynamic";
 
-import {
-  ClassicModeTimes,
-  Clock,
-  ClockButton,
-  ConfirmModal,
-  Panel,
-  Times,
-} from "./";
-import { Scramble } from "../";
+const DynamicTimes = dynamic(() => import("./Times"));
+const DynamicClassicModeTimes = dynamic(() => import("./ClassicModeTimes"));
+const DynamicClock = dynamic(() => import("./Clock"));
+const DynamicClockButton = dynamic(() => import("./ClockButton"));
+const DynamicConfirmModal = dynamic(() => import("./ConfirmModal"));
+const DynamicPanel = dynamic(() => import("./Panel"));
+const DynamicScramble = dynamic(() => import("../Scramble/Scramble"));
+
 import { SAVE_SOLVE } from "../../graphql/mutations";
 import {
   RecordSolveOptions,
@@ -213,14 +213,14 @@ const TimerContainer = () => {
   return (
     <>
       <div className={timer.classicModeEnabled ? "col-span-6" : "col-span-5"}>
-        <Scramble />
-        <Clock />
-        {!timer.locked && <ClockButton handleKeyup={timerKeyup} />}
-        {timer.classicModeEnabled && <ClassicModeTimes />}
-        <ConfirmModal action={recordSolve} loading={saveTimeLoading} />
-        <Panel />
+        <DynamicScramble />
+        <DynamicClock />
+        {!timer.locked && <DynamicClockButton handleKeyup={timerKeyup} />}
+        {timer.classicModeEnabled && <DynamicClassicModeTimes />}
+        <DynamicConfirmModal action={recordSolve} loading={saveTimeLoading} />
+        <DynamicPanel />
       </div>
-      {!timer.classicModeEnabled && <Times session={session} />}
+      {!timer.classicModeEnabled && <DynamicTimes session={session} />}
     </>
   );
 };

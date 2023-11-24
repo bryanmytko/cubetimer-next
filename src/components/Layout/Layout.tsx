@@ -1,7 +1,9 @@
 import { ReactNode } from "react";
+import dynamic from "next/dynamic";
 import { Noto_Sans_Mono, Rubik } from "next/font/google";
 
-import { Header, Footer } from "../";
+const DynamicHeader = dynamic(() => import("../Header/Header"));
+const DynamicFooter = dynamic(() => import("../Footer/Footer"));
 
 type LayoutProps = {
   children: ReactNode;
@@ -23,9 +25,9 @@ export default function Layout({ children }: LayoutProps) {
     <main
       className={`bg-neutral-900 min-h-screen font-sans ${rubik.variable} ${robotoMono.variable}`}
     >
-      <Header />
+      <DynamicHeader />
       <div className="container mx-auto">{children}</div>
-      <Footer />
+      <DynamicFooter />
     </main>
   );
 }
