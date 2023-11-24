@@ -11,7 +11,7 @@ const Footer = () => {
         <Link href="/updates">Site Updates</Link>
       </p>
       <p className="text-gray-700 text-s text-center pt-3">|</p>
-      <p className="text-gray-500 text-s text-center pt-3">
+      <p className="text-gray-500 text-s text-center pt-3 mr-6">
         <Link href="/feedback">Contact Me</Link>
       </p>
       <CoffeeButton />
