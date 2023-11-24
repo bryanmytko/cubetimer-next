@@ -1,9 +1,9 @@
-import "../styles/globals.css";
 import type { AppProps, AppType } from "next/app";
 import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
 import { ApolloProvider } from "@apollo/client";
 
+import "../styles/globals.css";
 import { Layout } from "../components";
 import apolloClient from "../lib/apollo";
 
