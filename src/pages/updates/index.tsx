@@ -6,12 +6,22 @@ const Updates = () => {
       <Head>
         <title>Cubetimer.io | Site Updates</title>
       </Head>
+
       <h1 className="text-3xl font-bold m-auto mb-6">Site Updates</h1>
+
+      <h3 className="text-xl mb-4">11/26/23</h3>
+      <p className="mb-2">
+        - Fix button text bug when toggling back to standard mode after a
+        complete session.
+      </p>
+      <div className="border-t-1 border-gray-300 w-100 h-4 mt-4"></div>
+
       <h3 className="text-xl mb-4">11/24/23</h3>
       <p className="mb-2">- Update footer for smaller screens</p>
       <p className="mb-2">- Add page titles</p>
       <p className="mb-2">- Lazy load google analytics</p>
       <div className="border-t-1 border-gray-300 w-100 h-4 mt-4"></div>
+
       <h3 className="text-xl mb-4">11/23/23</h3>
       <p className="mb-2">
         - Added a loader in the submit modal when submitting a time to achieve

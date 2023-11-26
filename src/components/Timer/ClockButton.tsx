@@ -8,10 +8,20 @@ interface ClockButtonProps {
   handleKeyup: (e: KeyboardEvent | React.MouseEvent) => void;
 }
 
+const BUTTON = {
+  mobileStart: { text: "Tap to start!", color: "bg-yellow-300" },
+  desktopStart: {
+    text: "Press spacebar or click to start!",
+    color: "bg-yellow-300",
+  },
+  ready: { text: "Ready!", color: "bg-red-500" },
+  sessionComplete: { text: "Session Complete!", color: "bg-green-500" },
+};
+
 const ClockButton = (props: ClockButtonProps) => {
   const { handleKeyup } = props;
   const timer = useContext(TimerContext) as TimerState;
-  const [buttonText, setButtonText] = useState("");
+  const [button, setButton] = useState(BUTTON.mobileStart);
   const [sessionComplete, setSessionComplete] = useState(false);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -19,18 +29,20 @@ const ClockButton = (props: ClockButtonProps) => {
     handleKeyup(event);
   };
 
-  const buttonColor = () => {
-    if (sessionComplete) return "bg-green-500";
-    if (timer.ready) return "bg-red-500";
-    return "bg-yellow-300";
-  };
+  useEffect(() => {
+    if (timer.ready) return setButton(BUTTON.ready);
+    if (isMobile && !sessionComplete) return setButton(BUTTON.mobileStart);
+    if (sessionComplete) return setButton(BUTTON.sessionComplete);
+
+    setButton(BUTTON.desktopStart);
+  }, [sessionComplete, timer.ready]);
 
   useEffect(() => {
-    if (isMobile && !sessionComplete) return setButtonText("Tap to start! ");
-    if (sessionComplete) return setButtonText("Session Complete!");
-
-    setButtonText("Press spacebar or click to start!");
-  }, [sessionComplete]);
+    if (!timer.classicModeEnabled) {
+      setButton(BUTTON.desktopStart);
+      setSessionComplete(false);
+    }
+  }, [timer.classicModeEnabled]);
 
   useEffect(() => {
     if (
@@ -44,10 +56,10 @@ const ClockButton = (props: ClockButtonProps) => {
     <button
       id="timer-btn"
       className={`timer-btn-start block mx-auto mt-6 px-10 py-5 text-3xl 
-        rounded-md w-11/12 ${buttonColor()}`}
+        rounded-md w-11/12 ${button.color}`}
       onClick={handleClick}
     >
-      {buttonText}
+      {button.text}
     </button>
   );
 };
