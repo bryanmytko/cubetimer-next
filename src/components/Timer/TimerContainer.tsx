@@ -11,6 +11,7 @@ const DynamicClockButton = dynamic(() => import("./ClockButton"));
 const DynamicConfirmModal = dynamic(() => import("./ConfirmModal"));
 const DynamicPanel = dynamic(() => import("./Panel"));
 const DynamicScramble = dynamic(() => import("../Scramble/Scramble"));
+const DynamicGan = dynamic(() => import("../Ads/Gan"));
 
 import { SAVE_SOLVE } from "../../graphql/mutations";
 import {
@@ -219,6 +220,7 @@ const TimerContainer = () => {
         {timer.classicModeEnabled && <DynamicClassicModeTimes />}
         <DynamicConfirmModal action={recordSolve} loading={saveTimeLoading} />
         <DynamicPanel />
+        <DynamicGan />
       </div>
       {!timer.classicModeEnabled && <DynamicTimes session={session} />}
     </>
