@@ -12,6 +12,9 @@ const DataTable = ({ children }: any) => {
           <th scope="col" className="px-1 md:px-6 py-3 pr-2">
             Puzzle
           </th>
+          <th scope="col" className="px-1 md:px-6 py-3 pr-2">
+            Date
+          </th>
         </tr>
       </thead>
       {children}
