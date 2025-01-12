@@ -22,4 +22,6 @@ const humanReadableTime = (t: number, initialValue?: string): string => {
   return str;
 };
 
-export { humanReadableTime };
+const formatDate = (input: string) => new Date(input).toLocaleDateString();
+
+export { humanReadableTime, formatDate };
