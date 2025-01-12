@@ -25,6 +25,8 @@ export const SOLVE_SESSIONS_FOR_USER = gql`
         cursor
         node {
           id
+          size
+          createdAt
           solves {
             id
             scramble
