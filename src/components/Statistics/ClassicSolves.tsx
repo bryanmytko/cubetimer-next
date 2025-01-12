@@ -34,6 +34,8 @@ const ClassicSolves = ({ userId }: ClassicSolvesProps) => {
         <tbody>
           {data.solveSessionsForUser.edges.map(
             ({ node }: any, index: number) => {
+              if (!node.solves.length) return;
+
               return (
                 <tr
                   key={node.id}
@@ -59,7 +61,7 @@ const ClassicSolves = ({ userId }: ClassicSolvesProps) => {
                     )}
                   </td>
                   <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
-                    {node.solves[0].puzzle}
+                    {node.solves[0]?.puzzle}
                   </td>
                 </tr>
               );
