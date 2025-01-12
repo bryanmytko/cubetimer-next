@@ -60,13 +60,13 @@ const Panel = () => {
   };
 
   return (
-    <div className="flex w-11/12 px-4 py-6 mx-auto mt-6 bg-gray-300 rounded card">
-      <div className="flex-1">
+    <div className="flex justify-between px-4 py-6 mx-auto mt-6 bg-gray-300 rounded card w-11/12">
+      <div className="flex flex-col gap-2">
         <p>Cubes Solved: {solveTimes.length}</p>
         <p>Average: {humanReadableTime(average(times))}</p>
         {runningTimes()}
       </div>
-      <div className="flex-1 text-right">
+      <div className="flex flex-col text-right gap-2">
         <p>Fastest: {humanReadableTime(fastestTime(times))}</p>
         <p>Slowest: {humanReadableTime(slowestTime(times))}</p>
         <CubeDropdown
@@ -77,13 +77,14 @@ const Panel = () => {
           dispatch={dispatch}
           inspectionRunning={inspectionRunning}
         />
-        <div>
+        <div className="flex justify-end">
           <label htmlFor="classicMode" className="mr-2">
             Classic mode:
           </label>
           <input
             id="classicMode"
             type="checkbox"
+            className="accent-cyan-600 scale-125"
             onChange={toggleClassicMode}
           />
         </div>

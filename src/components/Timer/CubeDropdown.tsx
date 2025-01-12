@@ -25,12 +25,12 @@ const CubeDropdown = (props: CubeDropdownProps) => {
   };
 
   return (
-    <>
-      <label className="mr-2">Cube Size:</label>
+    <div className="flex gap-2 justify-end items-center">
+      <label className="block">Cube Size:</label>
       <select
         defaultValue={"3x3"}
         onChange={onChange}
-        className="mt-1 p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300"
+        className="p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300"
         data-testid="select"
         disabled={inspectionRunning}
       >
@@ -39,7 +39,7 @@ const CubeDropdown = (props: CubeDropdownProps) => {
         <option value={PuzzleNameObj["4x4"]}>4x4</option>
         <option value={PuzzleNameObj["5x5"]}>5x5</option>
       </select>
-    </>
+    </div>
   );
 };
 
