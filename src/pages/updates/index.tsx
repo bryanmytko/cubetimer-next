@@ -9,6 +9,17 @@ const Updates = () => {
 
       <h1 className="text-3xl font-bold m-auto mb-6">Site Updates</h1>
 
+      <h3 className="text-xl mb-4">1/12/25</h3>
+      <p className="mb-2">- Fix stats page query for Solves, add date.</p>
+      <p className="mb-2">
+        - Add Sessions rows on stats tab (expandable to see solves soon).
+      </p>
+      <p className="mb-2">- Add a bit of polish to the homepage panel.</p>
+      <p className="mb-2">
+        - Fix a few dropdown nav bugs, remove unused links.
+      </p>
+      <div className="border-t-1 border-gray-300 w-100 h-4 mt-4"></div>
+
       <h3 className="text-xl mb-4">11/26/23</h3>
       <p className="mb-2">
         - Fix button text bug when toggling back to standard mode after a

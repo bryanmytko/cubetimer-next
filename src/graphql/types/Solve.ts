@@ -10,6 +10,9 @@ builder.prismaObject("Solve", {
     scramble: t.exposeString("scramble"),
     time: t.exposeInt("time"),
     user: t.relation("user"),
+    createdAt: t.expose("createdAt", {
+      type: "Date",
+    }),
   }),
 });
 
@@ -41,7 +44,7 @@ builder.queryField("solves", (t) =>
         orderBy: [order],
       });
     },
-  })
+  }),
 );
 
 builder.mutationField("createSolve", (t) =>
@@ -70,7 +73,7 @@ builder.mutationField("createSolve", (t) =>
         },
       });
     },
-  })
+  }),
 );
 
 builder.mutationField("deleteSolve", (t) =>
@@ -83,5 +86,5 @@ builder.mutationField("deleteSolve", (t) =>
       const { id } = args;
       return prisma.solve.delete({ where: { id: parseInt(id) } });
     },
-  })
+  }),
 );

@@ -7,6 +7,9 @@ builder.prismaObject("SolveSession", {
     size: t.exposeInt("size"),
     user: t.relation("user"),
     solves: t.relation("solves"),
+    createdAt: t.expose("createdAt", {
+      type: "Date",
+    }),
   }),
 });
 
@@ -25,7 +28,7 @@ builder.queryField("solveSessionsForUser", (t) =>
         include: { solves: true },
       });
     },
-  })
+  }),
 );
 
 builder.mutationField("createSolveSession", (t) =>
@@ -46,7 +49,7 @@ builder.mutationField("createSolveSession", (t) =>
         },
       });
     },
-  })
+  }),
 );
 
 export default builder;

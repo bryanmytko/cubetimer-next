@@ -52,16 +52,16 @@ const Nav = () => {
               aria-label="User Actions"
               className="font-['Arial']"
             >
-              <DropdownItem key="user" textValue="user">
+              <DropdownItem key="/" textValue="user">
                 <p>Signed in as:</p>
                 <p className="font-bold">{displayEmail}</p>
               </DropdownItem>
               <DropdownItem key="statistics" textValue="statistics">
                 Statistics
               </DropdownItem>
-              <DropdownItem key="profile" textValue="profile">
-                Profile
-              </DropdownItem>
+              {/* <DropdownItem key="profile" textValue="profile"> */}
+              {/*   Profile */}
+              {/* </DropdownItem> */}
               <DropdownItem key="settings" textValue="settings">
                 Settings
               </DropdownItem>

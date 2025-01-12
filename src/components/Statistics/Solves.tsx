@@ -1,46 +1,24 @@
 import { useEffect } from "react";
-import { useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import { SOLVES_FOR_USER } from "../../graphql/queries";
-import { humanReadableTime } from "../../lib/format";
+import { humanReadableTime, formatDate } from "../../lib/format";
 import { DataTable, Error } from "./";
 import { LoadingTable } from "../Loading";
 
 interface SolvesProps {
-  userId: number;
+  userId: string;
 }
 
-interface SolvesForUserData {
-  solves: {
-    pageInfo: any;
-    edges: any;
-  };
-}
+const SOLVES_PER_PAGE = 20;
 
-interface SolvesForUserVars {
-  userId: number;
-  first: number | null;
-  after?: any;
-  before?: any;
-  last?: any;
-}
-
-const SOLVES_PER_PAGE = 12;
-
-const Solves = (props: SolvesProps) => {
-  const { userId } = props;
-  const [fetchSolves, { data, error, fetchMore, loading }] = useLazyQuery<
-    SolvesForUserData,
-    SolvesForUserVars
-  >(SOLVES_FOR_USER, {
+const Solves = ({ userId }: SolvesProps) => {
+  const { loading, data, error, fetchMore } = useQuery(SOLVES_FOR_USER, {
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-first",
+    skip: !userId,
     variables: { userId, first: SOLVES_PER_PAGE },
   });
-
-  useEffect(() => {
-    fetchSolves();
-  }, [fetchSolves]);
 
   if (!data || loading) return <LoadingTable />;
   if (error) return <Error />;
@@ -57,7 +35,7 @@ const Solves = (props: SolvesProps) => {
               <tr
                 key={index}
                 className={`py-3 border-b ${
-                  index % 2 === 0 ? "bg-slate-200" : "bg-white"
+                  index % 2 === 0 ? "bg-slate-200" : "bg-slate-300"
                 }`}
               >
                 <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
@@ -68,6 +46,9 @@ const Solves = (props: SolvesProps) => {
                 </td>
                 <td className="px-2 md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
                   {node.puzzle}
+                </td>
+                <td className="px-2 md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
+                  {formatDate(node.createdAt)}
                 </td>
               </tr>
             );

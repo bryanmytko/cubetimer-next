@@ -16,12 +16,12 @@ const CubeDropdown = (props: InspectionDropdownProps) => {
   };
 
   return (
-    <div>
-      <label className="mr-2">Inspection Time:</label>
+    <div className="flex gap-2 justify-end items-center">
+      <label className="block">Inspection Time:</label>
       <select
         defaultValue={"0"}
         onChange={onChange}
-        className="mt-1 p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300"
+        className="p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300"
         data-testid="select"
         disabled={inspectionRunning}
       >

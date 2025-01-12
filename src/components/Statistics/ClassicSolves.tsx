@@ -2,17 +2,16 @@ import { useQuery } from "@apollo/client";
 
 import { humanReadableTime } from "../../lib/format";
 import { SOLVE_SESSIONS_FOR_USER } from "../../graphql/queries";
-import { DataTable, Error } from "./";
+import { Error } from "./";
+import { DataTableClassic } from "./";
 
 interface ClassicSolvesProps {
   userId: number;
 }
 
-const SESSIONS_PER_PAGE = 1;
+const SESSIONS_PER_PAGE = 20;
 
-const ClassicSolves = (props: ClassicSolvesProps) => {
-  const { userId } = props;
-
+const ClassicSolves = ({ userId }: ClassicSolvesProps) => {
   const { loading, data, error, fetchMore } = useQuery(
     SOLVE_SESSIONS_FOR_USER,
     {
@@ -31,41 +30,44 @@ const ClassicSolves = (props: ClassicSolvesProps) => {
 
   return (
     <div>
-      {data.solveSessionsForUser.edges.map(({ node }: any, index: number) => {
-        if (!node.solves.length) return;
-
-        return (
-          <DataTable key={index}>
-            <tbody>
-              {node.solves.map((solve: any, index: number) => {
-                return (
-                  <tr
-                    key={solve.id}
-                    className={`px-6 py-3 border-b ${
-                      index % 2 === 0 ? "bg-slate-200" : "bg-white"
-                    }`}
-                  >
-                    <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
-                      {humanReadableTime(parseInt(solve.time))}
-                    </td>
-                    <td className="px-2 md:px-6 py-2 text-xs md:text-medium font-medium text-gray-900">
-                      {solve.scramble}
-                    </td>
-                    <td className="px-2 md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
-                      {solve.puzzle}
-                    </td>
-                  </tr>
-                );
-              })}
-              {/*<tr className="px-6 py-3 border-b bg-red-100">
-                <td>
-                  <p>Average: TBD</p>
-                </td>
-              </tr>*/}
-            </tbody>
-          </DataTable>
-        );
-      })}
+      <DataTableClassic>
+        <tbody>
+          {data.solveSessionsForUser.edges.map(
+            ({ node }: any, index: number) => {
+              return (
+                <tr
+                  key={node.id}
+                  className={`px-6 py-3 border-b ${
+                    index % 2 === 0 ? "bg-slate-200" : "bg-white"
+                  }`}
+                >
+                  <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                    <button className="px-4 py-2 mr-4 text-white bg-blue-500 rounded">
+                      +
+                    </button>
+                  </td>
+                  <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                    {node.createdAt}
+                  </td>
+                  <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                    {humanReadableTime(
+                      node.solves.reduce(
+                        (prev: number, curr: { time: string }) =>
+                          curr.time + prev,
+                        0,
+                      ) / node.solves.length,
+                    )}
+                  </td>
+                  <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                    {node.solves[0].puzzle}
+                  </td>
+                </tr>
+              );
+            },
+          )}
+        </tbody>
+      </DataTableClassic>
+      );
       <div className="flex justify-center">
         {hasPreviousPage ? (
           <button

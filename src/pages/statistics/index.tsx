@@ -20,7 +20,7 @@ const Statistics = () => {
   if (status === "unauthenticated") router.replace("/auth/signin");
 
   return (
-    <div className="container statistics-container m-auto px-0 lg:px-12 py-6 md:py-12 w-11/12 text-black">
+    <div className="container statistics-container m-auto px-0 lg:px-0 py-6 md:py-12 w-full text-black">
       <Head>
         <title>Cubetimer.io | Statistics</title>
       </Head>
