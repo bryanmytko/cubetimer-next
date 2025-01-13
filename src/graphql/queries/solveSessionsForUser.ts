@@ -32,6 +32,7 @@ export const SOLVE_SESSIONS_FOR_USER = gql`
             scramble
             time
             puzzle
+            createdAt
           }
         }
       }

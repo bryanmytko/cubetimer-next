@@ -1,9 +1,11 @@
 import { useQuery } from "@apollo/client";
+import { useState } from "react";
 
-import { humanReadableTime } from "../../lib/format";
+import { humanReadableTime, formatDate } from "../../lib/format";
 import { SOLVE_SESSIONS_FOR_USER } from "../../graphql/queries";
 import { Error } from "./";
-import { DataTableClassic } from "./";
+import { ClassicSubDataTable, DataTableClassic } from "./";
+import { LoadingTable } from "../Loading";
 
 interface ClassicSolvesProps {
   userId: number;
@@ -12,15 +14,17 @@ interface ClassicSolvesProps {
 const SESSIONS_PER_PAGE = 20;
 
 const ClassicSolves = ({ userId }: ClassicSolvesProps) => {
+  const [openRow, setOpenRow] = useState<number | null>();
   const { loading, data, error, fetchMore } = useQuery(
     SOLVE_SESSIONS_FOR_USER,
     {
       skip: !userId,
       variables: { userId, first: SESSIONS_PER_PAGE },
+      notifyOnNetworkStatusChange: true,
     },
   );
 
-  if (loading) return <p className="text-white">Loading</p>;
+  if (loading) return <LoadingTable rows={8} />;
   if (error) return <Error />;
   if (!data || data.solveSessionsForUser.edges.length === 0)
     return <p className="text-white py-4">No sessions found.</p>;
@@ -37,33 +41,82 @@ const ClassicSolves = ({ userId }: ClassicSolvesProps) => {
               if (!node.solves.length) return;
 
               return (
-                <tr
-                  key={node.id}
-                  className={`px-6 py-3 border-b ${
-                    index % 2 === 0 ? "bg-slate-200" : "bg-white"
-                  }`}
-                >
-                  <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
-                    <button className="px-4 py-2 mr-4 text-white bg-blue-500 rounded">
-                      +
-                    </button>
-                  </td>
-                  <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
-                    {node.createdAt}
-                  </td>
-                  <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
-                    {humanReadableTime(
-                      node.solves.reduce(
-                        (prev: number, curr: { time: string }) =>
-                          curr.time + prev,
-                        0,
-                      ) / node.solves.length,
-                    )}
-                  </td>
-                  <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
-                    {node.solves[0]?.puzzle}
-                  </td>
-                </tr>
+                <>
+                  <tr
+                    key={node.id}
+                    className={`px-6 py-3 border-b cursor-pointer hover:bg-green-100 ${
+                      index % 2 === 0 ? "bg-slate-200" : "bg-white"
+                    }`}
+                    onClick={() => setOpenRow(index === openRow ? null : index)}
+                  >
+                    <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                      <button className="px-4 py-2 mr-4 text-white bg-blue-500 rounded">
+                        {openRow === index ? "-" : "+"}
+                      </button>
+                    </td>
+                    <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                      {formatDate(node.createdAt)}
+                    </td>
+                    <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                      {humanReadableTime(
+                        node.solves.reduce(
+                          (prev: number, curr: { time: string }) =>
+                            curr.time + prev,
+                          0,
+                        ) / node.solves.length,
+                      )}
+                    </td>
+                    <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                      {humanReadableTime(
+                        Math.min(
+                          ...node.solves.map((s: { time: number }) => s.time),
+                        ),
+                      )}
+                    </td>
+                    <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                      {humanReadableTime(
+                        Math.max(
+                          ...node.solves.map((s: { time: number }) => s.time),
+                        ),
+                      )}
+                    </td>
+                    <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                      {node.solves.length}
+                    </td>
+                    <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                      {node.solves[0]?.puzzle}
+                    </td>
+                  </tr>
+                  <tr
+                    className={`${openRow === index ? "table-row" : "hidden"} transition-all ease-in-out delay-150 duration-300`}
+                  >
+                    <td colSpan={7}>
+                      <ClassicSubDataTable>
+                        <tbody>
+                          {node.solves.map((node: any, index: number) => {
+                            return (
+                              <tr
+                                key={index}
+                                className={`py-3 border-b cursor-pointer hover:bg-white ${
+                                  index % 2 === 0
+                                    ? "bg-orange-50"
+                                    : "bg-orange-100"
+                                }`}
+                              >
+                                <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                                  {humanReadableTime(parseInt(node.time))}
+                                </td>
+                                <td className="px-2 md:px-6 py-2 text-xs md:text-medium font-medium text-gray-900">
+                                  {node.scramble}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </ClassicSubDataTable>
+                    </td>
+                  </tr>
+                </>
               );
             },
           )}

@@ -9,6 +9,17 @@ const Updates = () => {
 
       <h1 className="text-3xl font-bold m-auto mb-6">Site Updates</h1>
 
+      <h3 className="text-xl mb-4">1/13/25</h3>
+      <p className="mb-2">
+        - Add dedicated pages for past solves &amp; sessions.
+      </p>
+      <p className="mb-2">- Add session data including average, best, worst.</p>
+      <p className="mb-2">
+        - Past sessions can expand to display a table of that session`s solves.
+        (This is still pretty ugly, updated design maybe coming.)
+      </p>
+      <div className="border-t-1 border-gray-300 w-100 h-4 mt-4"></div>
+
       <h3 className="text-xl mb-4">1/12/25</h3>
       <p className="mb-2">- Fix stats page query for Solves, add date.</p>
       <p className="mb-2">

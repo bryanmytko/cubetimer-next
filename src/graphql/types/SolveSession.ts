@@ -26,6 +26,9 @@ builder.queryField("solveSessionsForUser", (t) =>
         ...query,
         where: { userId },
         include: { solves: true },
+        orderBy: {
+          createdAt: "desc",
+        },
       });
     },
   }),
