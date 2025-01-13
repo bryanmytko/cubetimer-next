@@ -56,12 +56,12 @@ const Nav = () => {
                 <p>Signed in as:</p>
                 <p className="font-bold">{displayEmail}</p>
               </DropdownItem>
-              <DropdownItem key="statistics" textValue="statistics">
-                Statistics
+              <DropdownItem key="solves" textValue="solves">
+                Past Solves
               </DropdownItem>
-              {/* <DropdownItem key="profile" textValue="profile"> */}
-              {/*   Profile */}
-              {/* </DropdownItem> */}
+              <DropdownItem key="sessions" textValue="sessions">
+                Past Classic Sessions
+              </DropdownItem>
               <DropdownItem key="settings" textValue="settings">
                 Settings
               </DropdownItem>
@@ -79,7 +79,7 @@ const Nav = () => {
         color="warning"
         radius="md"
         className="h-8 md:h-8"
-        onClick={() => signIn()}
+        onPress={() => signIn()}
       >
         Login
       </Button>
