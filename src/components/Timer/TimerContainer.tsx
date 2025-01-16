@@ -13,7 +13,7 @@ const DynamicPanel = dynamic(() => import("./Panel"));
 const DynamicScramble = dynamic(() => import("../Scramble/Scramble"));
 const DynamicGan = dynamic(() => import("../Ads/Gan"));
 
-import { SAVE_SOLVE } from "../../graphql/mutations";
+import { CREATE_SOLVE_SESSION, SAVE_SOLVE } from "../../graphql/mutations";
 import {
   RecordSolveOptions,
   TimerAction,
@@ -28,6 +28,8 @@ const TICK = 60;
 
 const TimerContainer = () => {
   const [saveSolve, { loading: saveTimeLoading }] = useMutation(SAVE_SOLVE);
+  const [createSolveSession, { loading: createSessionLoading }] =
+    useMutation(CREATE_SOLVE_SESSION);
   const { data: session } = useSession();
   const [playDing] = useSound(AUDIO_DING);
   const timer = useContext(TimerContext) as TimerState;
@@ -71,13 +73,25 @@ const TimerContainer = () => {
       let solveId;
 
       if (session) {
+        const userId = session.user.id;
+
+        if (timer.classicModeEnabled && !timer.solveSessionId) {
+          const response = await createSolveSession({
+            variables: { userId, size: timer.classicModeLength },
+          });
+          dispatch({
+            type: TimerActionKind.SET_SOLVE_SESSION_ID,
+            id: response.data?.createSolveSession.id,
+          });
+        }
+
         const response = await saveSolve({
           variables: {
             penalty,
             puzzle: timer.puzzleType,
             scramble: timer.scramble,
             time: timer.time,
-            userId: session.user.id,
+            userId,
             solveSessionId: timer.solveSessionId,
           },
         });
@@ -91,10 +105,12 @@ const TimerContainer = () => {
       setButtonLocked(false);
     },
     [
+      createSolveSession,
       dispatch,
       saveSolve,
       session,
       setButtonLocked,
+      timer.classicModeEnabled,
       timer.solveSessionId,
       timer.puzzleType,
       timer.scramble,

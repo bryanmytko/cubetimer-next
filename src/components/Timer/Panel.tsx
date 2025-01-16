@@ -1,6 +1,4 @@
 import { ChangeEvent, Dispatch, useContext } from "react";
-import { useMutation } from "@apollo/client";
-import { useSession } from "next-auth/react";
 
 import {
   average,
@@ -13,15 +11,12 @@ import { humanReadableTime } from "../../lib/format";
 import { TimerAction, TimerActionKind, TimerState } from "../../types/timer";
 import CubeDropdown from "./CubeDropdown";
 import InspectionDropdown from "./InspectionDropdown";
-import { CREATE_SOLVE_SESSION } from "../../graphql/mutations";
 import { TimerContext, TimerDispatchContext } from "../Timer/TimerContext";
 
 const Panel = () => {
   const timer = useContext(TimerContext) as TimerState;
   const dispatch = useContext(TimerDispatchContext) as Dispatch<TimerAction>;
   const { classicModeEnabled, inspectionRunning, solveTimes } = timer;
-  const { data: session } = useSession();
-  const [createSolveSession, {}] = useMutation(CREATE_SOLVE_SESSION);
   const times = solveTimes.map((s) => s.time + s.penalty);
 
   const runningTimes = () => {
@@ -44,18 +39,6 @@ const Panel = () => {
 
   const toggleClassicMode = async (event: ChangeEvent<HTMLInputElement>) => {
     event.target.blur();
-
-    if (!classicModeEnabled && session) {
-      const userId = session.user.id;
-      const response = await createSolveSession({
-        variables: { userId, size: timer.classicModeLength },
-      });
-      dispatch({
-        type: TimerActionKind.SET_SOLVE_SESSION_ID,
-        id: response.data?.createSolveSession.id,
-      });
-    }
-
     dispatch({ type: TimerActionKind.TOGGLE_CLASSIC_MODE });
   };
 
@@ -78,13 +61,13 @@ const Panel = () => {
           inspectionRunning={inspectionRunning}
         />
         <div className="flex justify-end">
-          <label htmlFor="classicMode" className="mr-2">
+          <label htmlFor="classicMode" className="mr-2 cursor-pointer">
             Classic mode:
           </label>
           <input
             id="classicMode"
             type="checkbox"
-            className="accent-cyan-600 scale-125"
+            className="accent-cyan-600 scale-125 cursor-pointer"
             onChange={toggleClassicMode}
           />
         </div>
