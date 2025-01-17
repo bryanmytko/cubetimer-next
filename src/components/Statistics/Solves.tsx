@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useQuery } from "@apollo/client";
 
 import { SOLVES_FOR_USER } from "../../graphql/queries";

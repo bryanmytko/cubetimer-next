@@ -22,6 +22,7 @@ const humanReadableTime = (t: number, initialValue?: string): string => {
   return str;
 };
 
-const formatDate = (input: string) => new Date(input).toLocaleDateString();
+const formatDate = (input: string) =>
+  new Date(input).toLocaleDateString("en-US", { timeZone: "UTC" });
 
 export { humanReadableTime, formatDate };

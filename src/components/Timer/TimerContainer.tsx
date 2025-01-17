@@ -66,22 +66,31 @@ const TimerContainer = () => {
     setButtonLocked(!timer.locked);
   }, [dispatch, setButtonLocked, timer.locked]);
 
-  const getSolveSession = async ({ userId }: { userId: string }) => {
-    if (timer.classicModeEnabled && !timer.solveSessionId) {
-      console.log("Creating solve session...");
-      const response = await createSolveSession({
-        variables: { userId, size: timer.classicModeLength },
-      });
-      console.log("dispatching solve session...");
-      dispatch({
-        type: TimerActionKind.SET_SOLVE_SESSION_ID,
-        id: response.data?.createSolveSession.id,
-      });
-      return response.data?.createSolveSession.id;
-    }
+  const getSolveSession = useCallback(
+    async ({ userId }: { userId: string }) => {
+      if (timer.classicModeEnabled && !timer.solveSessionId) {
+        console.log("Creating solve session...");
+        const response = await createSolveSession({
+          variables: { userId, size: timer.classicModeLength },
+        });
+        console.log("dispatching solve session...");
+        dispatch({
+          type: TimerActionKind.SET_SOLVE_SESSION_ID,
+          id: response.data?.createSolveSession.id,
+        });
+        return response.data?.createSolveSession.id;
+      }
 
-    return timer.solveSessionId;
-  };
+      return timer.solveSessionId;
+    },
+    [
+      createSolveSession,
+      dispatch,
+      timer.classicModeEnabled,
+      timer.solveSessionId,
+      timer.classicModeLength,
+    ],
+  );
 
   const recordSolve = useCallback(
     async (options: RecordSolveOptions = { penalty: 0 }) => {
@@ -115,10 +124,10 @@ const TimerContainer = () => {
     },
     [
       dispatch,
+      getSolveSession,
       saveSolve,
       session,
       setButtonLocked,
-      timer.solveSessionId,
       timer.puzzleType,
       timer.scramble,
       timer.time,

@@ -81,4 +81,4 @@ export type TimerAction =
   | { type: TimerActionKind.PUZZLE_TYPE; puzzle: string }
   | { type: TimerActionKind.REMOVE_TIME; index: number }
   | { type: TimerActionKind.SET_KEY_LOCKED; value: boolean }
-  | { type: TimerActionKind.SET_SOLVE_SESSION_ID; id: string };
+  | { type: TimerActionKind.SET_SOLVE_SESSION_ID; id: string | null };

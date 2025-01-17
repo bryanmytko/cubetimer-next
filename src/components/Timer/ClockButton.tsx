@@ -1,8 +1,8 @@
-import { MouseEvent, useContext, useEffect, useState } from "react";
+import { Dispatch, MouseEvent, useContext, useEffect, useState } from "react";
 import { isMobile } from "react-device-detect";
 
-import { TimerContext } from "../Timer/TimerContext";
-import { TimerState } from "../../types/timer";
+import { TimerContext, TimerDispatchContext } from "../Timer/TimerContext";
+import { TimerAction, TimerActionKind, TimerState } from "../../types/timer";
 
 interface ClockButtonProps {
   handleKeyup: (e: KeyboardEvent | React.MouseEvent) => void;
@@ -23,6 +23,7 @@ const ClockButton = (props: ClockButtonProps) => {
   const timer = useContext(TimerContext) as TimerState;
   const [button, setButton] = useState(BUTTON.mobileStart);
   const [sessionComplete, setSessionComplete] = useState(false);
+  const dispatch = useContext(TimerDispatchContext) as Dispatch<TimerAction>;
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     event.currentTarget.blur();
@@ -32,10 +33,13 @@ const ClockButton = (props: ClockButtonProps) => {
   useEffect(() => {
     if (timer.ready) return setButton(BUTTON.ready);
     if (isMobile && !sessionComplete) return setButton(BUTTON.mobileStart);
-    if (sessionComplete) return setButton(BUTTON.sessionComplete);
+    if (sessionComplete) {
+      dispatch({ type: TimerActionKind.SET_SOLVE_SESSION_ID, id: null });
+      return setButton(BUTTON.sessionComplete);
+    }
 
     setButton(BUTTON.desktopStart);
-  }, [sessionComplete, timer.ready]);
+  }, [dispatch, sessionComplete, timer.ready]);
 
   useEffect(() => {
     if (!timer.classicModeEnabled) {
@@ -48,8 +52,9 @@ const ClockButton = (props: ClockButtonProps) => {
     if (
       timer.classicModeEnabled &&
       timer.solveTimes.length >= timer.classicModeLength
-    )
+    ) {
       setSessionComplete(true);
+    }
   }, [timer]);
 
   return (
