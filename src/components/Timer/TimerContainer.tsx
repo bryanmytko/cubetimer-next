@@ -111,6 +111,7 @@ const TimerContainer = () => {
       session,
       setButtonLocked,
       timer.classicModeEnabled,
+      timer.classicModeLength,
       timer.solveSessionId,
       timer.puzzleType,
       timer.scramble,
@@ -234,7 +235,10 @@ const TimerContainer = () => {
         <DynamicClock />
         <DynamicClockButton handleKeyup={timerKeyup} />
         {timer.classicModeEnabled && <DynamicClassicModeTimes />}
-        <DynamicConfirmModal action={recordSolve} loading={saveTimeLoading} />
+        <DynamicConfirmModal
+          action={recordSolve}
+          loading={saveTimeLoading || createSessionLoading}
+        />
         <DynamicPanel />
         <DynamicGan />
       </div>
