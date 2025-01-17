@@ -8,6 +8,9 @@ const DataTableClassic = ({ children }: any) => {
             Date
           </th>
           <th scope="col" className="pl-2 md:pl-6 pr-2 py-3">
+            Session Average*
+          </th>
+          <th scope="col" className="pl-2 md:pl-6 pr-2 py-3">
             Average
           </th>
           <th scope="col" className="pl-2 md:pl-6 pr-2 py-3">

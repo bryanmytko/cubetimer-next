@@ -6,6 +6,12 @@ import { SOLVE_SESSIONS_FOR_USER } from "../../graphql/queries";
 import { Error } from "./";
 import { ClassicSubDataTable, DataTableClassic } from "./";
 import { LoadingTable } from "../Loading";
+import {
+  averageCurved,
+  averageOfSize,
+  fastestTime,
+  slowestTime,
+} from "../../lib/calculate";
 
 interface ClassicSolvesProps {
   userId: number;
@@ -58,24 +64,39 @@ const ClassicSolves = ({ userId }: ClassicSolvesProps) => {
                     </td>
                     <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
                       {humanReadableTime(
-                        node.solves.reduce(
-                          (prev: number, curr: { time: string }) =>
-                            curr.time + prev,
-                          0,
-                        ) / node.solves.length,
-                      )}
-                    </td>
-                    <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
-                      {humanReadableTime(
-                        Math.min(
-                          ...node.solves.map((s: { time: number }) => s.time),
+                        averageCurved(
+                          node.solves.map(
+                            (solve: { time: number }) => solve.time,
+                          ),
+                          node.solves.length,
                         ),
                       )}
                     </td>
                     <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
                       {humanReadableTime(
-                        Math.max(
-                          ...node.solves.map((s: { time: number }) => s.time),
+                        averageOfSize(
+                          node.solves.map(
+                            (solve: { time: number }) => solve.time,
+                          ),
+                          node.solves.length,
+                        ),
+                      )}
+                    </td>
+                    <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                      {humanReadableTime(
+                        fastestTime(
+                          node.solves.map(
+                            (solve: { time: number }) => solve.time,
+                          ),
+                        ),
+                      )}
+                    </td>
+                    <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
+                      {humanReadableTime(
+                        slowestTime(
+                          node.solves.map(
+                            (solve: { time: number }) => solve.time,
+                          ),
                         ),
                       )}
                     </td>
@@ -121,6 +142,9 @@ const ClassicSolves = ({ userId }: ClassicSolvesProps) => {
           )}
         </tbody>
       </DataTableClassic>
+      <p className="text-white pt-4 text-xs">
+        * Session average drops best and worst time.
+      </p>
       );
       <div className="flex justify-center">
         {hasPreviousPage ? (

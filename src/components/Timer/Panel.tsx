@@ -23,8 +23,7 @@ const Panel = () => {
     if (classicModeEnabled) {
       return (
         <p>
-          Session Average:{" "}
-          {humanReadableTime(averageCurved(times, timer.classicModeLength))}
+          {`Session Average: ${humanReadableTime(averageCurved(times, timer.classicModeLength))}`}
         </p>
       );
     } else {
