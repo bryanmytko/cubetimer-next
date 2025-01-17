@@ -66,6 +66,23 @@ const TimerContainer = () => {
     setButtonLocked(!timer.locked);
   }, [dispatch, setButtonLocked, timer.locked]);
 
+  const getSolveSession = async ({ userId }: { userId: string }) => {
+    if (timer.classicModeEnabled && !timer.solveSessionId) {
+      console.log("Creating solve session...");
+      const response = await createSolveSession({
+        variables: { userId, size: timer.classicModeLength },
+      });
+      console.log("dispatching solve session...");
+      dispatch({
+        type: TimerActionKind.SET_SOLVE_SESSION_ID,
+        id: response.data?.createSolveSession.id,
+      });
+      return response.data?.createSolveSession.id;
+    }
+
+    return timer.solveSessionId;
+  };
+
   const recordSolve = useCallback(
     async (options: RecordSolveOptions = { penalty: 0 }) => {
       const { penalty } = options;
@@ -74,17 +91,8 @@ const TimerContainer = () => {
 
       if (session) {
         const userId = session.user.id;
-
-        if (timer.classicModeEnabled && !timer.solveSessionId) {
-          const response = await createSolveSession({
-            variables: { userId, size: timer.classicModeLength },
-          });
-          dispatch({
-            type: TimerActionKind.SET_SOLVE_SESSION_ID,
-            id: response.data?.createSolveSession.id,
-          });
-        }
-
+        const solveSessionId = await getSolveSession({ userId });
+        console.log("saving solve...", solveSessionId);
         const response = await saveSolve({
           variables: {
             penalty,
@@ -92,9 +100,10 @@ const TimerContainer = () => {
             scramble: timer.scramble,
             time: timer.time,
             userId,
-            solveSessionId: timer.solveSessionId,
+            solveSessionId,
           },
         });
+        console.log("DONE ! response:", response);
 
         solveId = response.data?.createSolve.id;
       }
@@ -105,13 +114,10 @@ const TimerContainer = () => {
       setButtonLocked(false);
     },
     [
-      createSolveSession,
       dispatch,
       saveSolve,
       session,
       setButtonLocked,
-      timer.classicModeEnabled,
-      timer.classicModeLength,
       timer.solveSessionId,
       timer.puzzleType,
       timer.scramble,
