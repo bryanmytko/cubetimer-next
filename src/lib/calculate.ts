@@ -7,7 +7,7 @@ const averageOfSize = (times: number[], size: number): number =>
     : times.slice(-size).reduce((prev, cur) => prev + cur) / size;
 
 const averageCurved = (times: number[], size: number): number =>
-  times.length < size
+  times.length < size || times.length <= 2
     ? 0
     : times
         .sort((a, b) => a - b)
