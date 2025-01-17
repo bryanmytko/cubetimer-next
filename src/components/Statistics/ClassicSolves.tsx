@@ -110,7 +110,7 @@ const ClassicSolves = ({ userId }: ClassicSolvesProps) => {
                   <tr
                     className={`${openRow === index ? "table-row" : "hidden"} transition-all ease-in-out delay-150 duration-300`}
                   >
-                    <td colSpan={7}>
+                    <td colSpan={8}>
                       <ClassicSubDataTable>
                         <tbody>
                           {node.solves.map((node: any, index: number) => {
