@@ -11,8 +11,8 @@ const LoadingTable = ({ rows = 1 }: LoadingTableProps) => {
           <div className="space-y-3">
             {Array(rows)
               .fill("")
-              .map((i) => (
-                <div className="grid grid-cols-7 gap-4" key={i}>
+              .map((_, index) => (
+                <div className="grid grid-cols-7 gap-4" key={index}>
                   <div className="h-12 bg-slate-700 rounded col-span-1"></div>
                   <div className="h-12 bg-slate-700 rounded col-span-2"></div>
                   <div className="h-12 bg-slate-700 rounded col-span-2"></div>

@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { useState } from "react";
+import React, { useState } from "react";
 
 import { humanReadableTime, formatDate } from "../../lib/format";
 import { SOLVE_SESSIONS_FOR_USER } from "../../graphql/queries";
@@ -41,9 +41,8 @@ const ClassicSolves = ({ userId }: ClassicSolvesProps) => {
               if (!node.solves.length) return;
 
               return (
-                <>
+                <React.Fragment key={index}>
                   <tr
-                    key={node.id}
                     className={`px-6 py-3 border-b cursor-pointer hover:bg-green-100 ${
                       index % 2 === 0 ? "bg-slate-200" : "bg-white"
                     }`}
@@ -116,7 +115,7 @@ const ClassicSolves = ({ userId }: ClassicSolvesProps) => {
                       </ClassicSubDataTable>
                     </td>
                   </tr>
-                </>
+                </React.Fragment>
               );
             },
           )}
