@@ -57,7 +57,7 @@ export interface TimerState {
   ready: boolean;
   running: boolean;
   scramble: string;
-  solveSessionId?: string;
+  solveSessionId?: string | null;
   solveTimes: Solve[];
   time: number;
 }

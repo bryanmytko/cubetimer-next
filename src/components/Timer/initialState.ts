@@ -15,7 +15,7 @@ export const initialState: TimerState = {
   ready: false,
   running: false,
   scramble: "",
-  solveSessionId: undefined,
+  solveSessionId: null,
   solveTimes: [],
   time: 0,
 };
