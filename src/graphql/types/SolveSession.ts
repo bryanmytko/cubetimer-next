@@ -24,7 +24,12 @@ builder.queryField("solveSessionsForUser", (t) =>
       const { userId } = args;
       return prisma.solveSession.findMany({
         ...query,
-        where: { userId },
+        where: {
+          userId,
+          solves: {
+            some: {},
+          },
+        },
         include: { solves: true },
         orderBy: {
           createdAt: "desc",
@@ -50,6 +55,22 @@ builder.mutationField("createSolveSession", (t) =>
           size,
           userId,
         },
+      });
+    },
+  }),
+);
+
+builder.mutationField("deleteSolveSession", (t) =>
+  t.prismaField({
+    type: "SolveSession",
+    args: {
+      id: t.arg.string({ required: true }),
+    },
+    resolve: async (_query, _parent, args, _ctx, _info) => {
+      const { id } = args;
+
+      return prisma.solveSession.delete({
+        where: { id },
       });
     },
   }),

@@ -25,6 +25,9 @@ const DataTableClassic = ({ children }: any) => {
           <th scope="col" className="px-1 md:px-6 py-3 pr-2">
             Puzzle
           </th>
+          <th scope="col" className="px-1 md:px-6 py-3 pr-2">
+            Action
+          </th>
         </tr>
       </thead>
       {children}

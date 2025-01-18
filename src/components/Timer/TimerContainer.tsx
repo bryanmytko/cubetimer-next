@@ -69,11 +69,9 @@ const TimerContainer = () => {
   const getSolveSession = useCallback(
     async ({ userId }: { userId: string }) => {
       if (timer.classicModeEnabled && !timer.solveSessionId) {
-        console.log("Creating solve session...");
         const response = await createSolveSession({
           variables: { userId, size: timer.classicModeLength },
         });
-        console.log("dispatching solve session...");
         dispatch({
           type: TimerActionKind.SET_SOLVE_SESSION_ID,
           id: response.data?.createSolveSession.id,
@@ -101,7 +99,6 @@ const TimerContainer = () => {
       if (session) {
         const userId = session.user.id;
         const solveSessionId = await getSolveSession({ userId });
-        console.log("saving solve...", solveSessionId);
         const response = await saveSolve({
           variables: {
             penalty,
@@ -112,7 +109,6 @@ const TimerContainer = () => {
             solveSessionId,
           },
         });
-        console.log("DONE ! response:", response);
 
         solveId = response.data?.createSolve.id;
       }
