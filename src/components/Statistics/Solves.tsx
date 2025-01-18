@@ -1,9 +1,12 @@
-import { useQuery } from "@apollo/client";
+import { useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import { FaTrashCan } from "react-icons/fa6";
 
 import { SOLVES_FOR_USER } from "../../graphql/queries";
 import { humanReadableTime, formatDate } from "../../lib/format";
 import { DataTable, Error } from "./";
 import { LoadingTable } from "../Loading";
+import { DELETE_SOLVE } from "../../graphql/mutations";
 
 interface SolvesProps {
   userId: string;
@@ -13,14 +16,30 @@ const SOLVES_PER_PAGE = 20;
 
 const Solves = ({ userId }: SolvesProps) => {
   const { loading, data, error, fetchMore } = useQuery(SOLVES_FOR_USER, {
-    fetchPolicy: "network-only",
-    nextFetchPolicy: "cache-first",
     skip: !userId,
     variables: { userId, first: SOLVES_PER_PAGE },
+    notifyOnNetworkStatusChange: true,
+    onCompleted: (data): void => setSolves(data.solves.edges),
   });
 
-  if (!data || loading) return <LoadingTable />;
+  const [deleteSolve, { loading: deleting }] = useMutation(DELETE_SOLVE);
+  const [solves, setSolves] = useState([]);
+
+  if (!data || !solves || loading) return <LoadingTable />;
   if (error) return <Error />;
+
+  const removeSolve = (id: string) => {
+    confirm("Are you sure you want to delete this solve?");
+    setSolves(
+      solves.filter((solve: { node: { id: string } }) => solve.node.id !== id),
+    );
+
+    deleteSolve({
+      variables: {
+        id,
+      },
+    });
+  };
 
   const { startCursor, endCursor, hasNextPage, hasPreviousPage } =
     data.solves.pageInfo;
@@ -29,10 +48,10 @@ const Solves = ({ userId }: SolvesProps) => {
     <>
       <DataTable>
         <tbody>
-          {data.solves.edges.map(({ node }: any, index: number) => {
+          {solves.map(({ node }: any, index: number) => {
             return (
               <tr
-                key={index}
+                key={node.id}
                 className={`py-3 border-b ${
                   index % 2 === 0 ? "bg-slate-200" : "bg-slate-300"
                 }`}
@@ -48,6 +67,16 @@ const Solves = ({ userId }: SolvesProps) => {
                 </td>
                 <td className="px-2 md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
                   {formatDate(node.createdAt)}
+                </td>
+                <td className="px-2 md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
+                  <FaTrashCan
+                    className="align-self hover:text-red-700 outline-red-50 cursor-pointer ml-4 text-red-600"
+                    size={16}
+                    onClick={() => {
+                      if (deleting) return;
+                      removeSolve(node.id);
+                    }}
+                  />
                 </td>
               </tr>
             );
