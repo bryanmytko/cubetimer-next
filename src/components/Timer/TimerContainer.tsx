@@ -113,7 +113,12 @@ const TimerContainer = () => {
         solveId = response.data?.createSolve.id;
       }
 
-      dispatch({ type: TimerActionKind.ADD_TIME, penalty, solveId });
+      dispatch({
+        type: TimerActionKind.ADD_TIME,
+        penalty,
+        solveId,
+        scramble: timer.scramble,
+      });
       toggleConfirmModal();
       setSubmitted(false);
       setButtonLocked(false);

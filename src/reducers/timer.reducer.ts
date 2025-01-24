@@ -10,13 +10,19 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
         ...state,
         scramble: scrambler.generate(state.puzzleType),
         solveTimes: [
-          ...state.solveTimes,
           {
             time: state.time,
             penalty: action.penalty,
             id: action.solveId,
+            scramble: action.scramble,
           },
+          ...state.solveTimes,
         ],
+      };
+    case TimerActionKind.ADD_TIMES:
+      return {
+        ...state,
+        solveTimes: [...state.solveTimes, ...action.solves],
       };
     case TimerActionKind.CANCEL_SOLVE:
       return {

@@ -1,5 +1,6 @@
 export enum TimerActionKind {
   ADD_TIME = "ADD_TIME",
+  ADD_TIMES = "ADD_TIMES",
   CANCEL_SOLVE = "CANCEL_SOLVE",
   COUNTDOWN = "COUNTDOWN",
   INITIALIZE = "INITIALIZE",
@@ -41,6 +42,7 @@ export interface Solve {
   id: string;
   penalty: number;
   time: number;
+  scramble?: string;
 }
 
 export interface TimerState {
@@ -74,7 +76,13 @@ export type TimerAction =
         | TimerActionKind.TOGGLE_INSPECTION
         | TimerActionKind.TOGGLE_RUNNING;
     }
-  | { type: TimerActionKind.ADD_TIME; penalty: number; solveId: string }
+  | {
+      type: TimerActionKind.ADD_TIME;
+      penalty: number;
+      solveId: string;
+      scramble: string;
+    }
+  | { type: TimerActionKind.ADD_TIMES; solves: Solve[] }
   | { type: TimerActionKind.COUNTDOWN; value: number }
   | { type: TimerActionKind.INSPECTION_TIME; inspectionTime: number }
   | { type: TimerActionKind.LOCK; value: boolean }

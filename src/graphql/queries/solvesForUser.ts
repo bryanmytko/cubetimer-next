@@ -28,6 +28,7 @@ export const SOLVES_FOR_USER = gql`
           puzzle
           scramble
           time
+          penalty
           createdAt
         }
       }
