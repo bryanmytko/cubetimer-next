@@ -9,7 +9,7 @@ const Updates = () => {
 
       <h1 className="text-3xl font-bold m-auto mb-6">Site Updates</h1>
       <h3 className="text-xl mb-4">1/23/25</h3>
-      <p className="mb-2">- Add "New Scramble" button to the timer.</p>
+      <p className="mb-2">- Add `New Scramble` button to the timer.</p>
       <p className="mb-2">
         - Display previous times in the sidebar when logged in (3x3 support only
         right now).
