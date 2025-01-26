@@ -3,7 +3,7 @@
 exports[`<Logo> renders the component 1`] = `
 <div>
   <a
-    class="flex items-center"
+    class="flex items-center mt-1 md:mt-0"
     href="/"
   >
     <img

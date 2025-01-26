@@ -6,10 +6,10 @@ exports[`<Nav> renders the component 1`] = `
     class="px-2"
   >
     <div
-      class="container flex flex-wrap items-center justify-between mx-auto"
+      class="container flex flex-col md:flex-row flex-wrap items-center justify-around md:justify-between mx-auto"
     >
       <a
-        class="flex items-center"
+        class="flex items-center mt-1 md:mt-0"
         href="/"
       >
         <img
@@ -35,7 +35,7 @@ exports[`<Nav> renders the component 1`] = `
         id="navbar-default"
       >
         <ul
-          class="flex flex-row px-4 py-3 pt-4 space-x-6 text-sm font-medium border-0"
+          class="flex flex-row px-4 pb-2 md:pb-3 pt-0 md:pt-4 space-x-6 text-sm font-medium items-center"
         >
           <li
             class="text-white"
@@ -72,12 +72,15 @@ exports[`<Nav> renders the component 1`] = `
               class="grid justify-start"
             >
               <button
+                aria-expanded="false"
+                aria-haspopup="true"
                 class="inline-flex items-center justify-center gap-2 rounded-small outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 z-10 aria-expanded:scale-[0.97] aria-expanded:opacity-70 subpixel-antialiased"
+                data-slot="trigger"
                 id="react-aria-:r0:"
                 type="button"
               >
                 <span
-                  class="flex relative justify-center items-center box-border overflow-hidden align-middle z-10 outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 w-10 h-10 text-tiny bg-default text-default-foreground rounded-full"
+                  class="flex relative justify-center items-center box-border overflow-hidden align-middle z-0 outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 w-10 h-10 text-tiny bg-default text-default-foreground rounded-full"
                   tabindex="-1"
                 >
                   <img
