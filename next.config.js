@@ -1,5 +1,9 @@
 const { i18n } = require("./next-i18next.config");
 
+const moduleAlias = require("module-alias");
+
+moduleAlias.addAlias("punycode", "punycode/");
+
 /** @type {import("next").NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
