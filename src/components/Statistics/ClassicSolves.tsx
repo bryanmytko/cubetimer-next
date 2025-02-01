@@ -14,10 +14,10 @@ import {
   fastestTime,
   slowestTime,
 } from "../../lib/calculate";
-import { SolveChart } from "../Charts";
+import { SessionChart, SolveChart } from "../Charts";
 
 interface ClassicSolvesProps {
-  userId: number;
+  userId: string;
 }
 
 const SESSIONS_PER_PAGE = 20;
@@ -63,6 +63,7 @@ const ClassicSolves = ({ userId }: ClassicSolvesProps) => {
 
   return (
     <div>
+      <SessionChart userId={userId} />
       <DataTableClassic>
         <tbody>
           {solveSessions.map(({ node }: any, index: number) => {

@@ -5,7 +5,6 @@ import {
   XAxis,
   YAxis,
   ResponsiveContainer,
-  Legend,
   Tooltip,
 } from "recharts";
 import { SOLVES_FOR_USER } from "../../graphql/queries";
@@ -13,15 +12,15 @@ import { useQuery } from "@apollo/client";
 import { formatDate, humanReadableTime } from "../../lib/format";
 import { fastestTime, slowestTime } from "../../lib/calculate";
 
-const SESSIONS_PER_PAGE = 101;
+const SOLVES_PER_PAGE = 100;
 
 interface ISolveChartProps {
   userId: string;
 }
 
 const SolveChart = ({ userId }: ISolveChartProps) => {
-  const { loading, data, error, fetchMore } = useQuery(SOLVES_FOR_USER, {
-    variables: { userId, first: SESSIONS_PER_PAGE },
+  const { loading, data } = useQuery(SOLVES_FOR_USER, {
+    variables: { userId, first: SOLVES_PER_PAGE },
     notifyOnNetworkStatusChange: true,
     nextFetchPolicy: "no-cache",
   });
@@ -48,8 +47,6 @@ const SolveChart = ({ userId }: ISolveChartProps) => {
       date: formatDate(node.createdAt),
     }))
     .reverse();
-
-  console.log(slowest - 2);
 
   return (
     <ResponsiveContainer width="100%" aspect={10.0 / 3.0} className="mb-10">

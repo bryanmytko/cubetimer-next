@@ -43,6 +43,12 @@ export interface Solve {
   penalty: number;
   time: number;
   scramble?: string;
+  createdAt?: string;
+}
+
+export interface Session {
+  createdAt: string;
+  solves: Solve[];
 }
 
 export interface TimerState {
