@@ -7,6 +7,7 @@ import { humanReadableTime, formatDate } from "../../lib/format";
 import { DataTable, Error } from "./";
 import { LoadingTable } from "../Loading";
 import { DELETE_SOLVE } from "../../graphql/mutations";
+import { SolveChart } from "../Charts";
 
 interface SolvesProps {
   userId: string;
@@ -46,6 +47,7 @@ const Solves = ({ userId }: SolvesProps) => {
 
   return (
     <>
+      <SolveChart userId={userId} />
       <DataTable>
         <tbody>
           {solves.map(({ node }: any, index: number) => {

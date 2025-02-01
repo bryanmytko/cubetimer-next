@@ -14,6 +14,7 @@ import {
   fastestTime,
   slowestTime,
 } from "../../lib/calculate";
+import { SolveChart } from "../Charts";
 
 interface ClassicSolvesProps {
   userId: number;

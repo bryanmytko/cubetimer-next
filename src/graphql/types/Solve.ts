@@ -38,6 +38,7 @@ builder.queryField("solves", (t) =>
         order = { createdAt: Prisma.SortOrder.desc };
       }
 
+      console.log(query);
       return prisma.solve.findMany({
         ...query,
         where: { userId },
