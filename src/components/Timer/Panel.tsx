@@ -42,7 +42,7 @@ const Panel = () => {
   };
 
   return (
-    <div className="flex justify-between px-4 py-6 mx-auto mt-6 bg-gray-300 rounded card w-11/12">
+    <div className="flex justify-between px-4 py-6 mx-auto mt-6 bg-neutral-800 rounded card w-11/12 text-neutral-300">
       <div className="flex flex-col gap-2">
         <p>Cubes Solved: {solveTimes.length}</p>
         <p>Average: {humanReadableTime(average(times))}</p>

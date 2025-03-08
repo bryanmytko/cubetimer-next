@@ -11,7 +11,6 @@ const DynamicClockButton = dynamic(() => import("./ClockButton"));
 const DynamicConfirmModal = dynamic(() => import("./ConfirmModal"));
 const DynamicPanel = dynamic(() => import("./Panel"));
 const DynamicScramble = dynamic(() => import("../Scramble/Scramble"));
-const DynamicGan = dynamic(() => import("../Ads/Gan"));
 
 import { CREATE_SOLVE_SESSION, SAVE_SOLVE } from "../../graphql/mutations";
 import {
@@ -256,7 +255,6 @@ const TimerContainer = () => {
           loading={saveTimeLoading || createSessionLoading}
         />
         <DynamicPanel />
-        <DynamicGan />
       </div>
       {!timer.classicModeEnabled && <DynamicTimes session={session} />}
     </>

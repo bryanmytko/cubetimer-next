@@ -30,7 +30,7 @@ const CubeDropdown = (props: CubeDropdownProps) => {
       <select
         defaultValue={"3x3"}
         onChange={onChange}
-        className="p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300"
+        className="p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300 text-neutral-600"
         data-testid="select"
         disabled={inspectionRunning}
       >
