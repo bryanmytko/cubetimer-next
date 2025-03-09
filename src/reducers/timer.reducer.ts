@@ -45,7 +45,10 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
     case TimerActionKind.COUNTDOWN:
       return { ...state, countdown: action.value };
     case TimerActionKind.INITIALIZE:
-      return { ...state, scramble: scrambler.generate(state.puzzleType) };
+      return {
+        ...state,
+        scramble: action.scramble || scrambler.generate(state.puzzleType),
+      };
     case TimerActionKind.INSPECTION_TIME:
       return {
         ...state,

@@ -68,7 +68,6 @@ export type TimerAction =
   | {
       type:
         | TimerActionKind.CANCEL_SOLVE
-        | TimerActionKind.INITIALIZE
         | TimerActionKind.READY
         | TimerActionKind.TICK_UP
         | TimerActionKind.TOGGLE_CLASSIC_MODE
@@ -84,6 +83,7 @@ export type TimerAction =
     }
   | { type: TimerActionKind.ADD_TIMES; solves: Solve[] }
   | { type: TimerActionKind.COUNTDOWN; value: number }
+  | { type: TimerActionKind.INITIALIZE; scramble?: string }
   | { type: TimerActionKind.INSPECTION_TIME; inspectionTime: number }
   | { type: TimerActionKind.LOCK; value: boolean }
   | { type: TimerActionKind.PUZZLE_TYPE; puzzle: string }
