@@ -48,7 +48,7 @@ const Panel = () => {
         <p>Average: {humanReadableTime(average(times))}</p>
         {runningTimes()}
       </div>
-      <div className="flex flex-col text-right gap-2">
+      <div className="flex flex-col text-right gap-2 items-end">
         <p>Fastest: {humanReadableTime(fastestTime(times))}</p>
         <p>Slowest: {humanReadableTime(slowestTime(times))}</p>
         <CubeDropdown
@@ -59,7 +59,7 @@ const Panel = () => {
           dispatch={dispatch}
           inspectionRunning={inspectionRunning}
         />
-        <div className="flex justify-end">
+        <div className="flex justify-end mr-1">
           <label htmlFor="classicMode" className="mr-2 cursor-pointer">
             Classic mode:
           </label>
@@ -70,6 +70,11 @@ const Panel = () => {
             onChange={toggleClassicMode}
           />
         </div>
+        {classicModeEnabled && (
+          <button className="rounded-md bg-red-500 hover:bg-red-700 w-fit py-1 px-3 text-small inset-shadow-sm inset-shadow-black">
+            Reset Session
+          </button>
+        )}
       </div>
     </div>
   );

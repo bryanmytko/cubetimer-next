@@ -21,7 +21,7 @@ const Scramble = () => {
       </div>
       <div className="flex justify-center gap-4 mt-2">
         <p
-          className={`${previousScramble ? "text-neutral-300 hover:text-yellow-500 cursor-pointer" : "text-neutral-600 hover:text-neutral-600 cursor-default"}`}
+          className={`${previousScramble ? "text-neutral-300 hover:text-yellow-300 cursor-pointer" : "text-neutral-600 hover:text-neutral-600 cursor-default"}`}
           onClick={() => {
             if (!previousScramble) return;
             newScramble(previousScramble);
@@ -31,7 +31,7 @@ const Scramble = () => {
           Previous
         </p>
         <p
-          className="text-neutral-300 hover:text-yellow-500 cursor-pointer"
+          className="text-neutral-300 hover:text-yellow-300 cursor-pointer"
           onClick={() => newScramble()}
         >
           Next
