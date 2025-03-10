@@ -45,7 +45,7 @@ const Panel = () => {
     const confirm = window.confirm(
       "Are you sure you want to reset the session?",
     );
-    confirm && dispatch({ type: TimerActionKind.RESET_CLASSIC_MODE });
+    if (confirm) dispatch({ type: TimerActionKind.RESET_CLASSIC_MODE });
   };
 
   return (
