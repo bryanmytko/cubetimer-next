@@ -23,7 +23,7 @@ const Times = (props: TimesProps) => {
   const { session } = props;
   const timer = useContext(TimerContext) as TimerState;
   const dispatch = useContext(TimerDispatchContext) as Dispatch<TimerAction>;
-  const [deleteSolve, {}] = useMutation(DELETE_SOLVE);
+  const [deleteSolve] = useMutation(DELETE_SOLVE);
 
   const deleteTime = (index: number, solveId: string | undefined) => {
     dispatch({ type: TimerActionKind.REMOVE_TIME, index });
@@ -61,9 +61,6 @@ const Times = (props: TimesProps) => {
               }`}
               onClick={() => deleteTime(index, solve.id)}
             >
-              {/* <span className="tooltip rounded shadow-lg p-1 bg-gray-100 text-red-500 -mt-8"> */}
-              {/*   {solve.scramble} */}
-              {/* </span> */}
               <HumanReadableTime
                 time={solve.time}
                 penalty={solve.penalty}

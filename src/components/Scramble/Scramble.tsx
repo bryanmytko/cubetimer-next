@@ -1,5 +1,4 @@
 import { Dispatch, useContext } from "react";
-import { FaUndoAlt } from "react-icons/fa";
 
 import { TimerContext, TimerDispatchContext } from "../Timer/TimerContext";
 import { TimerAction, TimerActionKind, TimerState } from "../../types/timer";

@@ -63,7 +63,7 @@ class Scrambler {
 
     if (this.puzzle.final) {
       moves.push(
-        this.puzzle.final[this.randInt(0, this.puzzle.final.length - 1)]
+        this.puzzle.final[this.randInt(0, this.puzzle.final.length - 1)],
       );
     }
 
