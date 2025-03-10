@@ -9,7 +9,7 @@ import { LoadingTable } from "../Loading";
 import { DELETE_SOLVE } from "../../graphql/mutations";
 
 interface SolvesProps {
-  userId: string;
+  userId: string | undefined;
 }
 
 const SOLVES_PER_PAGE = 20;

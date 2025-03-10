@@ -5,7 +5,7 @@ import { TimerContext, TimerDispatchContext } from "../Timer/TimerContext";
 import { TimerAction, TimerActionKind, TimerState } from "../../types/timer";
 
 interface ClockButtonProps {
-  handleKeyup: (e: KeyboardEvent | React.MouseEvent) => void;
+  handleKeyup: (e: KeyboardEvent | MouseEvent) => void;
 }
 
 const BUTTON = {
@@ -40,6 +40,10 @@ const ClockButton = (props: ClockButtonProps) => {
 
     setButton(BUTTON.desktopStart);
   }, [dispatch, sessionComplete, timer.ready]);
+
+  useEffect(() => {
+    setSessionComplete(false);
+  }, [timer.reset]);
 
   useEffect(() => {
     if (!timer.classicModeEnabled) {

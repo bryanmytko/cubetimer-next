@@ -16,7 +16,7 @@ import {
 } from "../../lib/calculate";
 
 interface ClassicSolvesProps {
-  userId: number;
+  userId: string | undefined;
 }
 
 const SESSIONS_PER_PAGE = 20;

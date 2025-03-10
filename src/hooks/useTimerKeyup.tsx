@@ -1,4 +1,4 @@
-import { useCallback, Dispatch } from "react";
+import { useCallback, Dispatch, MouseEvent } from "react";
 
 import { TimerActionKind, TimerAction } from "../types/timer";
 
@@ -10,7 +10,7 @@ const useTimerKeyup = (
   keyMaps: any,
 ) => {
   return useCallback(
-    (e: KeyboardEvent | React.MouseEvent) => {
+    (e: KeyboardEvent | MouseEvent) => {
       if (keyLocked) return; // Avoid race condition with mouse + keyboard
       dispatch({ type: TimerActionKind.SET_KEY_LOCKED, value: true });
       setTimeout(

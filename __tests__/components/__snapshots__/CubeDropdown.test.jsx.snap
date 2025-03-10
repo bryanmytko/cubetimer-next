@@ -11,7 +11,7 @@ exports[`<CubeDropdown> renders the component 1`] = `
       Cube Size:
     </label>
     <select
-      class="p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300"
+      class="p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300 text-neutral-600"
       data-testid="select"
     >
       <option
