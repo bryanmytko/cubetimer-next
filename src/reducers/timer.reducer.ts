@@ -77,6 +77,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
         ...state,
         reset: true,
         running: false,
+        scramble: scrambler.generate(state.puzzleType),
         sessionComplete: false,
         solveTimes: [],
       };

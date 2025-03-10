@@ -13,7 +13,11 @@ import CubeDropdown from "./CubeDropdown";
 import InspectionDropdown from "./InspectionDropdown";
 import { TimerContext, TimerDispatchContext } from "../Timer/TimerContext";
 
-const Panel = () => {
+interface IPanelProps {
+  initialClassicModeEnabled: boolean;
+}
+
+const Panel = ({ initialClassicModeEnabled }: IPanelProps) => {
   const timer = useContext(TimerContext) as TimerState;
   const dispatch = useContext(TimerDispatchContext) as Dispatch<TimerAction>;
   const { classicModeEnabled, inspectionRunning, solveTimes } = timer;
@@ -75,6 +79,7 @@ const Panel = () => {
             type="checkbox"
             className="accent-cyan-600 scale-125 cursor-pointer"
             onChange={toggleClassicMode}
+            checked={initialClassicModeEnabled}
           />
         </div>
         {classicModeEnabled && (

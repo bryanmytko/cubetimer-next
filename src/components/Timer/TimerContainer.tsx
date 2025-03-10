@@ -1,7 +1,7 @@
 import { Dispatch, useCallback, useContext, useEffect, useState } from "react";
 import useSound from "use-sound";
 import { useSession } from "next-auth/react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import dynamic from "next/dynamic";
 
 const DynamicTimes = dynamic(() => import("./Times"));
@@ -21,6 +21,7 @@ import {
 } from "../../types/timer";
 import { TimerContext, TimerDispatchContext } from "./TimerContext";
 import { useTimerKeyup } from "../../hooks";
+import { SETTINGS_FOR_USER } from "../../graphql/queries/settingsForUser";
 
 const AUDIO_DING = "/assets/audio/ding.mp3";
 const TICK = 60;
@@ -29,19 +30,30 @@ const TimerContainer = () => {
   const [saveSolve, { loading: saveTimeLoading }] = useMutation(SAVE_SOLVE);
   const [createSolveSession, { loading: createSessionLoading }] =
     useMutation(CREATE_SOLVE_SESSION);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [playDing] = useSound(AUDIO_DING);
   const timer = useContext(TimerContext) as TimerState;
   const dispatch = useContext(TimerDispatchContext) as Dispatch<TimerAction>;
   const [submitted, setSubmitted] = useState(false);
+  const { data, loading } = useQuery(SETTINGS_FOR_USER, {
+    skip: !session?.user?.id,
+    variables: { userId: session?.user?.id },
+  });
 
   /* This is necessary due to the random nature of the initial scramble.
    * Just trying to set an initial state with a random scramble will
    * cause hydration errors on rerender due to mismatched text
    */
   useEffect(() => {
-    dispatch({ type: TimerActionKind.INITIALIZE });
+    dispatch({
+      type: TimerActionKind.INITIALIZE,
+    });
   }, [dispatch]);
+
+  useEffect(() => {
+    if (data?.settingsForUser?.defaultClassicMode)
+      dispatch({ type: TimerActionKind.TOGGLE_CLASSIC_MODE });
+  }, [data, dispatch]);
 
   const setButtonLocked = useCallback(
     (value: boolean) => dispatch({ type: TimerActionKind.LOCK, value }),
@@ -243,6 +255,8 @@ const TimerContainer = () => {
     return () => clearInterval(interval);
   }, [dispatch, timer.running]);
 
+  if (loading || status === "loading") return <></>;
+
   return (
     <>
       <div className={timer.classicModeEnabled ? "col-span-6" : "col-span-5"}>
@@ -254,7 +268,7 @@ const TimerContainer = () => {
           action={recordSolve}
           loading={saveTimeLoading || createSessionLoading}
         />
-        <DynamicPanel />
+        <DynamicPanel initialClassicModeEnabled={timer.classicModeEnabled} />
       </div>
       {!timer.classicModeEnabled && <DynamicTimes session={session} />}
     </>
