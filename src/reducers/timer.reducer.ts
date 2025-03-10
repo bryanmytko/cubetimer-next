@@ -66,11 +66,19 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
         scramble: scrambler.generate(action.puzzle),
       };
     case TimerActionKind.READY:
-      return state.running ? state : { ...state, ready: true };
+      return state.running ? state : { ...state, ready: true, reset: false };
     case TimerActionKind.REMOVE_TIME:
       return {
         ...state,
         solveTimes: state.solveTimes.filter((_, i) => i !== action.index),
+      };
+    case TimerActionKind.RESET_CLASSIC_MODE:
+      return {
+        ...state,
+        reset: true,
+        running: false,
+        sessionComplete: false,
+        solveTimes: [],
       };
     case TimerActionKind.SET_SOLVE_SESSION_ID:
       return { ...state, solveSessionId: action.id };

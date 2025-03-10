@@ -41,6 +41,13 @@ const Panel = () => {
     dispatch({ type: TimerActionKind.TOGGLE_CLASSIC_MODE });
   };
 
+  const resetClassicMode = () => {
+    const confirm = window.confirm(
+      "Are you sure you want to reset the session?",
+    );
+    confirm && dispatch({ type: TimerActionKind.RESET_CLASSIC_MODE });
+  };
+
   return (
     <div className="flex justify-between px-4 py-6 mx-auto mt-6 bg-neutral-800 rounded card w-11/12 text-neutral-300">
       <div className="flex flex-col gap-2">
@@ -71,7 +78,10 @@ const Panel = () => {
           />
         </div>
         {classicModeEnabled && (
-          <button className="rounded-md bg-red-500 hover:bg-red-700 w-fit py-1 px-3 text-small inset-shadow-sm inset-shadow-black">
+          <button
+            className="rounded-md bg-red-500 hover:bg-red-700 w-fit py-1 px-3 text-small inset-shadow-sm"
+            onClick={resetClassicMode}
+          >
             Reset Session
           </button>
         )}

@@ -9,6 +9,7 @@ export enum TimerActionKind {
   PUZZLE_TYPE = "PUZZLE_TYPE",
   READY = "READY",
   REMOVE_TIME = "REMOVE_TIME",
+  RESET_CLASSIC_MODE = "RESET_CLASSIC_MODE",
   SET_KEY_LOCKED = "SET_KEY_LOCKED",
   SET_SOLVE_SESSION_ID = "SET_SOLVE_SESSION_ID",
   TICK_UP = "TICK_UP",
@@ -54,6 +55,7 @@ export interface TimerState {
   inspectionTime: number;
   keyLocked: boolean;
   locked: boolean;
+  reset: boolean;
   penalty?: number;
   puzzleType: PuzzleValueType;
   ready: boolean;
@@ -69,6 +71,7 @@ export type TimerAction =
       type:
         | TimerActionKind.CANCEL_SOLVE
         | TimerActionKind.READY
+        | TimerActionKind.RESET_CLASSIC_MODE
         | TimerActionKind.TICK_UP
         | TimerActionKind.TOGGLE_CLASSIC_MODE
         | TimerActionKind.TOGGLE_CONFIRM_ACTIVE
