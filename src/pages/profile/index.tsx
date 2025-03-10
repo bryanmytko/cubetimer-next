@@ -6,10 +6,13 @@ import gravatar from "gravatar";
 const Profile = () => {
   const { data: session } = useSession();
   const displayName = session ? session.user.name : "User";
-  const photoUrl = gravatar.url(session ? session.user?.email : "", {
-    protocol: "https",
-    s: "100",
-  });
+  const photoUrl = gravatar.url(
+    session?.user?.email ? session.user.email : "",
+    {
+      protocol: "https",
+      s: "100",
+    },
+  );
 
   return (
     <div className="container profile-container">

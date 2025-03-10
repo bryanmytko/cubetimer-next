@@ -13,6 +13,7 @@ export const initialState: TimerState = {
   locked: false,
   puzzleType: DEFAULT_CUBE_SIZE,
   ready: false,
+  reset: false,
   running: false,
   scramble: "",
   solveSessionId: null,
