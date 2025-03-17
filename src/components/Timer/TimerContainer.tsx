@@ -22,6 +22,7 @@ import {
 import { TimerContext, TimerDispatchContext } from "./TimerContext";
 import { useTimerKeyup } from "../../hooks";
 import { SETTINGS_FOR_USER } from "../../graphql/queries/settingsForUser";
+import { Spinner } from "../../components/Loading";
 
 const AUDIO_DING = "/assets/audio/ding.mp3";
 const TICK = 60;
@@ -52,7 +53,7 @@ const TimerContainer = () => {
 
   useEffect(() => {
     if (data?.settingsForUser?.defaultClassicMode)
-      dispatch({ type: TimerActionKind.TOGGLE_CLASSIC_MODE });
+      dispatch({ type: TimerActionKind.TOGGLE_CLASSIC_MODE, enabled: true });
   }, [data, dispatch]);
 
   const setButtonLocked = useCallback(
@@ -105,12 +106,21 @@ const TimerContainer = () => {
     async (options: RecordSolveOptions = { penalty: 0 }) => {
       const { penalty } = options;
       setButtonLocked(true);
-      let solveId;
+
+      dispatch({
+        type: TimerActionKind.ADD_TIME,
+        penalty,
+        scramble: timer.scramble,
+      });
+      toggleConfirmModal();
+      setSubmitted(false);
+      setButtonLocked(false);
 
       if (session) {
         const userId = session.user.id;
-        const solveSessionId = await getSolveSession({ userId });
-        const response = await saveSolve({
+        const solveSessionId =
+          timer.solveSessionId || (await getSolveSession({ userId }));
+        await saveSolve({
           variables: {
             penalty,
             puzzle: timer.puzzleType,
@@ -120,19 +130,7 @@ const TimerContainer = () => {
             solveSessionId,
           },
         });
-
-        solveId = response.data?.createSolve.id;
       }
-
-      dispatch({
-        type: TimerActionKind.ADD_TIME,
-        penalty,
-        solveId,
-        scramble: timer.scramble,
-      });
-      toggleConfirmModal();
-      setSubmitted(false);
-      setButtonLocked(false);
     },
     [
       dispatch,
@@ -142,6 +140,7 @@ const TimerContainer = () => {
       setButtonLocked,
       timer.puzzleType,
       timer.scramble,
+      timer.solveSessionId,
       timer.time,
       toggleConfirmModal,
     ],
@@ -183,9 +182,9 @@ const TimerContainer = () => {
     toggleConfirmModal();
   }, [
     dispatch,
-    timer.locked,
     handleEnter,
     timer.inspectionTime,
+    timer.locked,
     timer.running,
     toggleConfirmModal,
   ]);
@@ -254,8 +253,14 @@ const TimerContainer = () => {
 
     return () => clearInterval(interval);
   }, [dispatch, timer.running]);
-
-  if (loading || status === "loading") return <></>;
+  if (loading || status === "loading")
+    return (
+      <div className="col-span-6">
+        <div className="flex items-center justify-center gap-2 w-full h-dvh mt-[-220px]">
+          <Spinner />
+        </div>
+      </div>
+    );
 
   return (
     <>
@@ -270,7 +275,8 @@ const TimerContainer = () => {
         />
         <DynamicPanel initialClassicModeEnabled={timer.classicModeEnabled} />
       </div>
-      {!timer.classicModeEnabled && <DynamicTimes session={session} />}
+      {!data?.settingsForUser?.defaultClassicMode &&
+        !timer.classicModeEnabled && <DynamicTimes session={session} />}
     </>
   );
 };

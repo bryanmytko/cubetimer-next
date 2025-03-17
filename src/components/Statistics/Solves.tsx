@@ -18,7 +18,6 @@ const Solves = ({ userId }: SolvesProps) => {
   const { loading, data, error, fetchMore } = useQuery(SOLVES_FOR_USER, {
     skip: !userId,
     variables: { userId, first: SOLVES_PER_PAGE },
-    notifyOnNetworkStatusChange: true,
     onCompleted: (data): void => setSolves(data.solves.edges),
   });
 

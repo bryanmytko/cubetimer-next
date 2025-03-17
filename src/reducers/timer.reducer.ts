@@ -15,7 +15,6 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
               {
                 time: state.time,
                 penalty: action.penalty,
-                id: action.solveId,
                 scramble: action.scramble,
               },
             ]
@@ -23,7 +22,6 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
               {
                 time: state.time,
                 penalty: action.penalty,
-                id: action.solveId,
                 scramble: action.scramble,
               },
               ...state.solveTimes,
@@ -90,7 +88,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
     case TimerActionKind.TOGGLE_CLASSIC_MODE:
       return {
         ...state,
-        classicModeEnabled: !state.classicModeEnabled,
+        classicModeEnabled: action.enabled ?? !state.classicModeEnabled,
         running: false,
         solveTimes: [],
       };
