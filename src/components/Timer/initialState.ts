@@ -3,7 +3,7 @@ import { PuzzleNameObj, TimerState } from "../../types/timer";
 const DEFAULT_CUBE_SIZE = PuzzleNameObj["3x3"];
 
 export const initialState: TimerState = {
-  classicModeEnabled: false,
+  classicModeEnabled: undefined,
   classicModeLength: 12,
   confirmActive: false,
   countdown: 0,

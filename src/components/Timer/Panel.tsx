@@ -14,7 +14,7 @@ import InspectionDropdown from "./InspectionDropdown";
 import { TimerContext, TimerDispatchContext } from "../Timer/TimerContext";
 
 interface IPanelProps {
-  initialClassicModeEnabled: boolean;
+  initialClassicModeEnabled: boolean | undefined;
 }
 
 const Panel = ({ initialClassicModeEnabled }: IPanelProps) => {
