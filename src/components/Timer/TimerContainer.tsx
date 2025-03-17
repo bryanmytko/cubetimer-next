@@ -275,8 +275,7 @@ const TimerContainer = () => {
         />
         <DynamicPanel initialClassicModeEnabled={timer.classicModeEnabled} />
       </div>
-      {!data?.settingsForUser?.defaultClassicMode &&
-        !timer.classicModeEnabled && <DynamicTimes session={session} />}
+      {timer.classicModeEnabled === false && <DynamicTimes session={session} />}
     </>
   );
 };

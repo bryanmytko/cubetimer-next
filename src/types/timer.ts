@@ -46,7 +46,7 @@ export interface Solve {
 }
 
 export interface TimerState {
-  classicModeEnabled: boolean;
+  classicModeEnabled: boolean | undefined;
   classicModeLength: number;
   confirmActive: boolean;
   countdown: number;
