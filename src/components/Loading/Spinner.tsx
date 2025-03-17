@@ -6,7 +6,7 @@ const Spinner = ({ style }: { style?: CSSProperties }) => (
       <rect
         fill="#135F75"
         stroke="#135F75"
-        stroke-width="15"
+        strokeWidth="15"
         width="30"
         height="30"
         x="25"
@@ -25,7 +25,7 @@ const Spinner = ({ style }: { style?: CSSProperties }) => (
       <rect
         fill="#135F75"
         stroke="#135F75"
-        stroke-width="15"
+        strokeWidth="15"
         width="30"
         height="30"
         x="85"
@@ -44,7 +44,7 @@ const Spinner = ({ style }: { style?: CSSProperties }) => (
       <rect
         fill="#135F75"
         stroke="#135F75"
-        stroke-width="15"
+        strokeWidth="15"
         width="30"
         height="30"
         x="145"
