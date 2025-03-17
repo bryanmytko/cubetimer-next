@@ -9,6 +9,16 @@ const Updates = () => {
 
       <h1 className="text-3xl font-bold m-auto mb-6">Site Updates</h1>
 
+      <h3 className="text-xl mb-4">3/16/25</h3>
+      <p className="mb-2">
+        - Update solve saves to be optimisitc. UI reacts instantly to create a
+        more smooth experience.
+      </p>
+      <p className="mb-2">
+        - Fixed a bug with classic mode setting being true.
+      </p>
+      <div className="border-t-1 border-gray-300 w-100 h-4 mt-4"></div>
+
       <h3 className="text-xl mb-4">3/10/25</h3>
       <p className="mb-2">- Add Previous/Next controls for scramble.</p>
       <p className="mb-2">

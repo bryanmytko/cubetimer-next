@@ -22,6 +22,7 @@ import {
 import { TimerContext, TimerDispatchContext } from "./TimerContext";
 import { useTimerKeyup } from "../../hooks";
 import { SETTINGS_FOR_USER } from "../../graphql/queries/settingsForUser";
+import { Spinner } from "../../components/Loading";
 
 const AUDIO_DING = "/assets/audio/ding.mp3";
 const TICK = 60;
@@ -252,8 +253,14 @@ const TimerContainer = () => {
 
     return () => clearInterval(interval);
   }, [dispatch, timer.running]);
-
-  if (loading || status === "loading") return <></>;
+  if (loading || status === "loading")
+    return (
+      <div className="col-span-6">
+        <div className="flex items-center justify-center gap-2 w-full h-dvh mt-[-220px]">
+          <Spinner />
+        </div>
+      </div>
+    );
 
   return (
     <>
