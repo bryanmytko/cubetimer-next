@@ -73,7 +73,6 @@ export type TimerAction =
         | TimerActionKind.READY
         | TimerActionKind.RESET_CLASSIC_MODE
         | TimerActionKind.TICK_UP
-        | TimerActionKind.TOGGLE_CLASSIC_MODE
         | TimerActionKind.TOGGLE_CONFIRM_ACTIVE
         | TimerActionKind.TOGGLE_INSPECTION
         | TimerActionKind.TOGGLE_RUNNING;
@@ -81,7 +80,6 @@ export type TimerAction =
   | {
       type: TimerActionKind.ADD_TIME;
       penalty: number;
-      solveId: string;
       scramble: string;
     }
   | { type: TimerActionKind.ADD_TIMES; solves: Solve[] }
@@ -96,4 +94,5 @@ export type TimerAction =
   | { type: TimerActionKind.PUZZLE_TYPE; puzzle: string }
   | { type: TimerActionKind.REMOVE_TIME; index: number }
   | { type: TimerActionKind.SET_KEY_LOCKED; value: boolean }
-  | { type: TimerActionKind.SET_SOLVE_SESSION_ID; id: string | null };
+  | { type: TimerActionKind.SET_SOLVE_SESSION_ID; id: string | null }
+  | { type: TimerActionKind.TOGGLE_CLASSIC_MODE; enabled?: boolean };

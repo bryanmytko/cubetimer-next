@@ -1,5 +1,5 @@
 import { Dispatch, useContext } from "react";
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { Session } from "next-auth";
 
 import { HumanReadableTime } from "./";
@@ -10,7 +10,6 @@ import {
   TimerActionKind,
 } from "../../types/timer";
 import { TimerContext, TimerDispatchContext } from "../Timer/TimerContext";
-import { DELETE_SOLVE } from "../../graphql/mutations";
 import { SOLVES_FOR_USER } from "../../graphql/queries";
 
 interface TimesProps {
@@ -23,17 +22,10 @@ const Times = (props: TimesProps) => {
   const { session } = props;
   const timer = useContext(TimerContext) as TimerState;
   const dispatch = useContext(TimerDispatchContext) as Dispatch<TimerAction>;
-  const [deleteSolve] = useMutation(DELETE_SOLVE);
-
-  const deleteTime = (index: number, solveId: string | undefined) => {
-    dispatch({ type: TimerActionKind.REMOVE_TIME, index });
-    if (session && solveId) deleteSolve({ variables: { id: solveId } });
-  };
 
   useQuery(SOLVES_FOR_USER, {
-    skip: !session || timer.puzzleType !== "3x3",
+    skip: timer.classicModeEnabled || !session || timer.puzzleType !== "3x3",
     variables: { userId: session?.user?.id, first: PAST_SOLVES },
-    notifyOnNetworkStatusChange: true,
     onCompleted: (data): void => setSolves(data.solves.edges),
   });
 
@@ -59,7 +51,6 @@ const Times = (props: TimesProps) => {
               className={`has-tooltip px-2 py-1 cursor-pointer last:snap-end ${
                 index % 2 == 0 ? "bg-neutral-800" : "bg-neutral-700"
               }`}
-              onClick={() => deleteTime(index, solve.id)}
             >
               <HumanReadableTime
                 time={solve.time}
