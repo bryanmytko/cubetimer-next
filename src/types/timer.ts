@@ -40,7 +40,6 @@ export interface RecordSolveOptions {
 }
 
 export interface Solve {
-  id: string;
   penalty: number;
   time: number;
   scramble?: string;
