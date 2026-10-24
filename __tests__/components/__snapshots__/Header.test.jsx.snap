@@ -60,16 +60,6 @@ exports[`<Header> renders the component 1`] = `
                 tutorials
               </a>
             </li>
-            <li
-              class="text-white"
-            >
-              <a
-                class="block py-2 capitalize"
-                href="/reviews"
-              >
-                reviews
-              </a>
-            </li>
             <li>
               <div
                 class="grid justify-start"
