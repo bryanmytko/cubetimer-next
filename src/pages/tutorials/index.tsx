@@ -6,7 +6,7 @@ const Tutorials = () => {
   return (
     <>
       <Head>
-        <title>Cubetimer.io | Tutorials</title>
+        <title>Cubetimer.io | Learn</title>
       </Head>
       <TutorialsHub />
     </>

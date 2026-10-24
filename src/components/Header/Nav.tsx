@@ -20,7 +20,7 @@ const Nav = () => {
 
   const navItems = [
     { url: "/", name: "timer" },
-    { url: "/tutorials", name: "tutorials" },
+    { url: "/tutorials", name: "learn" },
     // Hidden until reviews have real content; the page still exists
     // { url: "/reviews", name: "reviews" },
   ];
