@@ -24,6 +24,13 @@ type PuzzleName = {
   "3x3": string;
   "4x4": string;
   "5x5": string;
+  "6x6": string;
+  "7x7": string;
+  Pyraminx: string;
+  Megaminx: string;
+  Skewb: string;
+  "Square-1": string;
+  Clock: string;
 };
 
 export const PuzzleNameObj: PuzzleName = {
@@ -31,6 +38,13 @@ export const PuzzleNameObj: PuzzleName = {
   "3x3": "3x3",
   "4x4": "4x4",
   "5x5": "5x5",
+  "6x6": "6x6",
+  "7x7": "7x7",
+  Pyraminx: "Pyraminx",
+  Megaminx: "Megaminx",
+  Skewb: "Skewb",
+  "Square-1": "Square-1",
+  Clock: "Clock",
 };
 
 export type PuzzleValueType = PuzzleName[keyof PuzzleName];

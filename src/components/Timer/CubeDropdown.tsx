@@ -26,7 +26,7 @@ const CubeDropdown = (props: CubeDropdownProps) => {
 
   return (
     <div className="flex gap-2 justify-end items-center">
-      <label className="block">Cube Size:</label>
+      <label className="block">Puzzle:</label>
       <select
         defaultValue={"3x3"}
         onChange={onChange}
@@ -34,10 +34,11 @@ const CubeDropdown = (props: CubeDropdownProps) => {
         data-testid="select"
         disabled={inspectionRunning}
       >
-        <option value={PuzzleNameObj["2x2"]}>2x2</option>
-        <option value={PuzzleNameObj["3x3"]}>3x3</option>
-        <option value={PuzzleNameObj["4x4"]}>4x4</option>
-        <option value={PuzzleNameObj["5x5"]}>5x5</option>
+        {Object.values(PuzzleNameObj).map((puzzle) => (
+          <option key={puzzle} value={puzzle}>
+            {puzzle}
+          </option>
+        ))}
       </select>
     </div>
   );
