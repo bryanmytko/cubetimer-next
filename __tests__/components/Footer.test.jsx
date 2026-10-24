@@ -7,9 +7,12 @@ import { Footer } from "../../src/components/Footer";
 
 describe("<Footer>", () => {
   it("renders the component", () => {
+    // Pin the year so the snapshot doesn't break every January
+    const spy = jest.spyOn(Date.prototype, "getFullYear").mockReturnValue(2025);
     const { container } = render(<Footer />);
 
     expect(container).toMatchSnapshot();
+    spy.mockRestore();
   });
 
   it("displays the correct copyright date", () => {
