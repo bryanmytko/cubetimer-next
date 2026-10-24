@@ -6,7 +6,7 @@ import {
   cube6x6,
   cube7x7,
   cubePyraminx,
-  cubeMegaminx,
+  cubeSkewb,
 } from "../../src/lib/cubes";
 
 describe("cubes", () => {
@@ -68,18 +68,9 @@ describe("cubes", () => {
     it("describes the 6x6 cube", () => {
       const moves = cube6x6.moves.map((m) => m.name);
       expect(moves).toEqual([
-        "R",
-        "L",
-        "U",
-        "D",
-        "F",
-        "B",
-        "r",
-        "l",
-        "u",
-        "d",
-        "f",
-        "b",
+        ..."RLUDFB".split(""),
+        ..."rludfb".split(""),
+        ..."rludfb".split("").map((face) => `3${face}`),
       ]);
     });
   });
@@ -88,18 +79,9 @@ describe("cubes", () => {
     it("describes the 7x7 cube", () => {
       const moves = cube7x7.moves.map((m) => m.name);
       expect(moves).toEqual([
-        "R",
-        "L",
-        "U",
-        "D",
-        "F",
-        "B",
-        "r",
-        "l",
-        "u",
-        "d",
-        "f",
-        "b",
+        ..."RLUDFB".split(""),
+        ..."rludfb".split(""),
+        ..."rludfb".split("").map((face) => `3${face}`),
       ]);
     });
   });
@@ -107,17 +89,23 @@ describe("cubes", () => {
   describe("Pyraminx", () => {
     it("describes the pyraminx", () => {
       const moves = cubePyraminx.moves.map((m) => m.name);
-      expect(moves).toEqual(["U", "R", "L", "B", "u", "r", "l", "b"]);
+
+      expect(moves).toEqual(["U", "L", "R", "B"]);
+      expect(cubePyraminx.tips).toEqual(["u", "l", "r", "b"]);
+    });
+
+    it("turns each face by its own name", () => {
+      cubePyraminx.moves.forEach((m) => {
+        expect(m.turns).toEqual([m.name, `${m.name}'`]);
+      });
     });
   });
 
-  describe("Megaminx", () => {
-    it("describes the megaminx", () => {
-      const moves = cubeMegaminx.moves.map((m) => m.name);
-      const final = cubeMegaminx.final.map((m) => m.name);
+  describe("Skewb", () => {
+    it("describes the skewb", () => {
+      const moves = cubeSkewb.moves.map((m) => m.name);
 
-      expect(moves).toEqual(["R", "D"]);
-      expect(final).toEqual(["U", "U'"]);
+      expect(moves).toEqual(["U", "L", "R", "B"]);
     });
   });
 });

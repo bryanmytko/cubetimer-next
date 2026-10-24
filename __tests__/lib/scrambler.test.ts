@@ -48,4 +48,42 @@ describe("Scrambler", () => {
         ),
     ).toBeFalsy();
   });
+
+  it("generates a scramble for every puzzle", () => {
+    const scrambler = new Scrambler();
+
+    Object.values(PuzzleNameObj).forEach((puzzle) => {
+      expect(scrambler.generate(puzzle)).not.toHaveLength(0);
+    });
+  });
+
+  it("keeps using the last puzzle when none is given", () => {
+    const scrambler = new Scrambler();
+    scrambler.generate(PuzzleNameObj.Clock);
+
+    expect(scrambler.generate()).toMatch(/y2/);
+  });
+
+  it.each([
+    ["2x2", 11],
+    ["3x3", 21],
+    ["4x4", 40],
+    ["5x5", 60],
+    ["6x6", 80],
+    ["7x7", 100],
+    ["Skewb", 11],
+  ])("generates a %s scramble of %i moves", (puzzle, length) => {
+    const scrambler = new Scrambler();
+
+    expect(scrambler.generate(puzzle).split(" ")).toHaveLength(length);
+  });
+
+  it("uses three layer wide turns on 6x6 and 7x7", () => {
+    const scrambler = new Scrambler();
+    const scrambles = Array.from({ length: 20 }, () =>
+      scrambler.generate(PuzzleNameObj["7x7"]),
+    ).join(" ");
+
+    expect(scrambles).toMatch(/\b3[rludfb]/);
+  });
 });

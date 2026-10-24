@@ -8,7 +8,7 @@ exports[`<CubeDropdown> renders the component 1`] = `
     <label
       class="block"
     >
-      Cube Size:
+      Puzzle:
     </label>
     <select
       class="p-1.5 border-solid border-r-4 border-transparent rounded-md focus:outline-gray-300 text-neutral-600"
@@ -34,6 +34,41 @@ exports[`<CubeDropdown> renders the component 1`] = `
         value="5x5"
       >
         5x5
+      </option>
+      <option
+        value="6x6"
+      >
+        6x6
+      </option>
+      <option
+        value="7x7"
+      >
+        7x7
+      </option>
+      <option
+        value="Pyraminx"
+      >
+        Pyraminx
+      </option>
+      <option
+        value="Megaminx"
+      >
+        Megaminx
+      </option>
+      <option
+        value="Skewb"
+      >
+        Skewb
+      </option>
+      <option
+        value="Square-1"
+      >
+        Square-1
+      </option>
+      <option
+        value="Clock"
+      >
+        Clock
       </option>
     </select>
   </div>

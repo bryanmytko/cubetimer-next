@@ -21,7 +21,7 @@ describe("<CubeDropdown>", () => {
   it("should display the correct number of options", () => {
     render(<CubeDropdown />);
 
-    expect(screen.getAllByRole("option").length).toBe(4);
+    expect(screen.getAllByRole("option").length).toBe(11);
   });
 
   it("should allow user to change cube size", async () => {
@@ -33,5 +33,18 @@ describe("<CubeDropdown>", () => {
     );
 
     expect(screen.getByRole("option", { name: "4x4" }).selected).toBe(true);
+  });
+
+  it("should allow user to select a non-cube puzzle", async () => {
+    render(<CubeDropdown dispatch={() => {}} />);
+
+    await userEvent.selectOptions(
+      screen.getByTestId("select"),
+      screen.getByText("Square-1")
+    );
+
+    expect(screen.getByRole("option", { name: "Square-1" }).selected).toBe(
+      true
+    );
   });
 });
