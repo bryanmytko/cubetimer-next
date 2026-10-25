@@ -14,7 +14,7 @@ import { caseFor, pieceMovements } from "../../../src/lib/cube/lastLayer";
 const algByName = (name: string) => {
   const alg = threeByThree.stages
     .flatMap((stage) => stage.steps)
-    .flatMap((step) => step.algs || [])
+    .flatMap((step) => [...(step.algs || []), ...(step.followUp?.algs || [])])
     .find((a) => a.name === name);
   if (!alg) throw new Error(`No algorithm named ${name}`);
   return alg.alg;
@@ -38,6 +38,29 @@ describe("3x3 beginner method", () => {
     expect(isSolvedWhere(applyAlg(solved(3), `${insert} `.repeat(6)), () => true)).toBeTruthy();
   });
 
+  it("shows a corner case that one insert solves, with white facing right", () => {
+    const corners = threeByThree.stages[0].steps.find((step) => step.title.includes("corners"));
+    const setup = corners?.setup?.alg || "";
+    const white = track(setup, [2, -2, 2]).find((s) => s.color === "D");
+
+    expect(white?.pos).toEqual([2, 2, 2]);
+    expect(white?.normal).toEqual([1, 0, 0]);
+    expect(isSolvedWhere(applyAlg(applyAlg(solved(3), setup), algByName("Insert corner")), () => true))
+      .toBeTruthy();
+  });
+
+  it("inserts a corner with white facing front in one inverse instead of five", () => {
+    const insert = algByName("Insert corner");
+    const inverse = algByName("Insert corner (inverse)");
+    // The case five repeats would solve
+    const setup = invertAlg(`${insert} `.repeat(5).trim());
+    const white = track(setup, [2, -2, 2]).find((s) => s.color === "D");
+
+    expect(white?.pos).toEqual([2, 2, 2]);
+    expect(white?.normal).toEqual([0, 0, 1]);
+    expect(isSolvedWhere(applyAlg(applyAlg(solved(3), setup), inverse), () => true)).toBeTruthy();
+  });
+
   it.each([
     ["Insert right", [2, 0, 2], "R"],
     ["Insert left", [-2, 0, 2], "L"],
@@ -55,32 +78,39 @@ describe("3x3 beginner method", () => {
     expect(isSolvedWhere(cube, (s) => s.pos[1] === -2)).toBeTruthy();
   });
 
-  it("swaps the front and left top edges", () => {
-    const edges = pieceMovements(3, algByName("Swap edges")).filter(
-      ({ from }) => from[0] === 0 || from[2] === 0,
-    );
+  it("swaps the front right and back right corners", () => {
+    const corners = pieceMovements(3, algByName("Swap corners"))
+      .map((m) => `${m.from}>${m.to}`)
+      // Corners are the pieces with no 0 coordinate
+      .filter((m) => !m.split(">")[0].split(",").includes("0"));
 
-    expect(edges).toHaveLength(2);
-    expect(edges.map((m) => m.from.join())).toEqual(
-      expect.arrayContaining(["0,2,2", "-2,2,0"]),
-    );
+    expect(corners.sort()).toEqual(["2,2,-2>2,2,2", "2,2,2>2,2,-2"]);
   });
 
-  it("cycles corners without moving the front right one", () => {
-    const moved = pieceMovements(3, algByName("Cycle corners")).map((m) =>
-      m.from.join(),
-    );
+  it("draws step 5's picture with the corners Swap corners moves", () => {
+    const step = threeByThree.stages[0].steps.find((s) => s.title.includes("Place"))!;
+    const sig = (alg: string) =>
+      pieceMovements(3, alg).map((m) => `${m.from}>${m.to}`).sort();
 
-    expect(moved).toHaveLength(3);
-    expect(moved).not.toContain("2,2,2");
+    const corners = (alg: string) =>
+      sig(alg).filter((m) => !m.split(">")[0].split(",").includes("0"));
+    expect(corners(step.cases![0].alg)).toEqual(corners(algByName("Swap corners")));
   });
 
-  it("twists the corner in place with R' D' R D", () => {
-    const twist = algByName("Twist corner");
-    const corner = track(`${twist} ${twist}`, [2, 2, 2]);
+  it("keeps the corners in their spots with the Sune, up to a U2", () => {
+    const moved = pieceMovements(3, `${algByName("Sune")} U2`).map((m) => m.from.join());
+    // Corners are the pieces with no 0 coordinate
+    expect(moved.filter((pos) => !pos.split(",").includes("0"))).toEqual([]);
+  });
 
-    expect(corner.every((s) => same(s.pos, [2, 2, 2]))).toBeTruthy();
-    expect(corner.find((s) => s.normal[1] === 1)?.color).not.toBe("U");
+  // Looking down at the top with the front at the bottom: left, front, right
+  // is counterclockwise
+  it.each([
+    ["Ua", ["-2,2,0>0,2,2", "0,2,2>2,2,0", "2,2,0>-2,2,0"]],
+    ["Ub", ["-2,2,0>2,2,0", "0,2,2>-2,2,0", "2,2,0>0,2,2"]],
+  ])("%s cycles the front, left and right edges the way the text says", (name, expected) => {
+    const moves = pieceMovements(3, algByName(name)).map((m) => `${m.from}>${m.to}`);
+    expect(moves.sort()).toEqual([...expected].sort());
   });
 });
 

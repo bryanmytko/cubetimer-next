@@ -66,7 +66,7 @@ export const TWO_PBL: Array<PblAlg> = [
 export const twoByTwo: Tutorial = {
   slug: "2x2",
   name: "2x2",
-  tagline: "Eight corners, no centers. The fastest way into speedcubing.",
+  tagline: "All corners. Easy, but not as easy as it looks.",
   difficulty: 1,
   icon: "cube",
   n: 2,
@@ -77,8 +77,8 @@ export const twoByTwo: Tutorial = {
     { label: "Popular method", value: "Ortega, then CLL" },
   ],
   overview: [
-    "A 2x2 is just the corners of a 3x3. With no centers to guide you, any face can go first: pick a color and build that face, making sure the side colors of each corner match their neighbor.",
-    "If you can solve a 3x3, you already know a 2x2 method: solve the first layer corners, then use the 3x3 corner algorithms for the last layer.",
+    "A 2x2 is just the corners of a 3x3. With no centers to guide you, any face can go first, just pick a color and build that face, making sure the side colors of each corner match their neighbor.",
+    "If you can solve a 3x3, you already know a 2x2 method. Just solve the first layer corners, then use the 3x3 corner algorithms for the last layer.",
     "Solves are short, so planning matters more than turning speed. Good solvers plan their whole first layer, and sometimes more, during inspection.",
   ],
   notation: {
@@ -124,7 +124,7 @@ export const twoByTwo: Tutorial = {
         {
           title: "3. Swap the last corners",
           body: [
-            "Look for headlights: two matching colors on the same side of the top layer. Hold them on the left and do the T perm. If there are none, do it once from anywhere, then find the headlights.",
+            "Look for headlights (two matching colors on the same side of the top layer). Hold them on the left and do the T perm. If there are none, do it once from anywhere, then find the headlights.",
           ],
           algs: [
             { name: "T perm", alg: "R U R' U' R' F R2 U' R' U' R U R' F'" },
@@ -154,7 +154,7 @@ export const twoByTwo: Tutorial = {
         {
           title: "3. Permute both layers",
           body: [
-            "Look at both layers: each is either solved, has headlights (adjacent swap) or has no headlights (diagonal swap). One of the six PBL algorithms below fixes both at once. Turn U and D first to line up the headlights.",
+            "Look at both layers. Each is either solved, has headlights (adjacent swap) or has no headlights (diagonal swap). One of the six PBL algorithms below fixes both at once. Turn U and D first to line up the headlights.",
           ],
         },
       ],
@@ -193,7 +193,6 @@ export const twoByTwo: Tutorial = {
   tips: [
     "Inspect your whole first face, and try to predict which OLL case you'll get.",
     "Don't rotate the cube during a solve if you can help it. Most 2x2 algorithms are R, U and F only for this reason.",
-    "Do lots of solves: a 2x2 average improves fastest with volume.",
   ],
   resources: [
     { name: "J Perm: 2x2 tutorial", url: "https://jperm.net/2x2", description: "Beginner method video, then faster methods." },

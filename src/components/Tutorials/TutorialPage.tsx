@@ -4,8 +4,9 @@ import { ReactNode } from "react";
 import AlgCard from "./AlgCard";
 import Difficulty from "./Difficulty";
 import IsoCube from "./diagrams/IsoCube";
+import LastLayer from "./diagrams/LastLayer";
 import PuzzleIcon from "./diagrams/PuzzleIcon";
-import { Level, Tutorial } from "./types";
+import { CubeDiagram, Level, Tutorial } from "./types";
 
 const LEVEL_STYLES: Record<Level, string> = {
   Beginner: "bg-emerald-400/10 text-emerald-300 ring-emerald-400/30",
@@ -13,7 +14,13 @@ const LEVEL_STYLES: Record<Level, string> = {
   Advanced: "bg-fuchsia-400/10 text-fuchsia-300 ring-fuchsia-400/30",
 };
 
-const Section = ({ id, title, children }: { id: string; title: string; children: ReactNode }) => (
+interface SectionProps {
+  id: string;
+  title: ReactNode;
+  children: ReactNode;
+}
+
+const Section = ({ id, title, children }: SectionProps) => (
   <section id={id} className="scroll-mt-6">
     <h2 className="text-2xl font-bold text-neutral-100 mb-4">{title}</h2>
     {children}
@@ -26,6 +33,24 @@ const Paragraphs = ({ text }: { text: Array<string> }) => (
       <p key={p}>{p}</p>
     ))}
   </div>
+);
+
+const PLL_CASE_SIZE = 132;
+const caseSize = ({ mode, size }: { mode?: string; size?: number }) =>
+  size || (mode === "pll" ? PLL_CASE_SIZE : 84);
+
+const Figure = ({ n, diagram }: { n?: number; diagram: CubeDiagram }) => (
+  <figure className="text-center">
+    <IsoCube
+      n={n}
+      view={diagram.view}
+      show={diagram.show}
+      alg={diagram.alg}
+      size={120}
+      label={diagram.caption}
+    />
+    <figcaption className="text-xs text-neutral-400 mt-1 max-w-[140px]">{diagram.caption}</figcaption>
+  </figure>
 );
 
 const TutorialPage = ({ tutorial }: { tutorial: Tutorial }) => {
@@ -100,7 +125,19 @@ const TutorialPage = ({ tutorial }: { tutorial: Tutorial }) => {
           </Section>
 
           {tutorial.stages.map((stage) => (
-            <Section key={stage.id} id={stage.id} title={stage.title}>
+            <Section
+              key={stage.id}
+              id={stage.id}
+              title={
+                stage.link ? (
+                  <a href={stage.link} target="_blank" rel="noopener noreferrer" className="hover:text-yellow-300">
+                    {stage.title} ↗
+                  </a>
+                ) : (
+                  stage.title
+                )
+              }
+            >
               <div className="flex items-center gap-3 -mt-2 mb-4">
                 <span className={`text-xs font-bold px-2 py-0.5 rounded-full ring-1 ${LEVEL_STYLES[stage.level]}`}>
                   {stage.level}
@@ -108,45 +145,75 @@ const TutorialPage = ({ tutorial }: { tutorial: Tutorial }) => {
               </div>
               <p className="text-neutral-300 leading-relaxed">{stage.summary}</p>
 
-              <ol className="mt-6 relative border-l border-neutral-700 ml-2 space-y-8">
-                {stage.steps.map((step) => (
-                  <li key={step.title} className="pl-6 relative">
-                    <span className="absolute -left-[7px] top-1.5 h-3 w-3 rounded-full bg-yellow-300 ring-4 ring-neutral-900" />
-                    <h3 className="text-lg font-bold text-neutral-100">{step.title}</h3>
-                    <div className="mt-2 flex flex-col md:flex-row gap-5">
-                      <div className="flex-1 min-w-0">
-                        <Paragraphs text={step.body} />
-                        {step.tip && (
-                          <p className="mt-3 text-sm bg-yellow-300/5 border border-yellow-300/20 text-yellow-100/90 rounded-lg px-3 py-2">
-                            <span className="font-bold text-yellow-300">Tip: </span>
-                            {step.tip}
-                          </p>
+              {stage.steps.length > 0 && (
+                <ol className="mt-6 relative border-l border-neutral-700 ml-2 space-y-8">
+                  {stage.steps.map((step) => (
+                    <li key={step.title} className="pl-6 relative">
+                      <span className="absolute -left-[7px] top-1.5 h-3 w-3 rounded-full bg-yellow-300 ring-4 ring-neutral-900" />
+                      <h3 className="text-lg font-bold text-neutral-100">{step.title}</h3>
+                      <div className="mt-2 flex flex-col md:flex-row gap-5">
+                        <div className="flex-1 min-w-0">
+                          <Paragraphs text={step.body} />
+                          {step.tip && (
+                            <p className="mt-3 text-sm bg-yellow-300/5 border border-yellow-300/20 text-yellow-100/90 rounded-lg px-3 py-2">
+                              <span className="font-bold text-yellow-300">Tip: </span>
+                              {step.tip}
+                            </p>
+                          )}
+                        </div>
+                        {(step.setup || step.goal) && (
+                          <div className="shrink-0 self-center md:self-start flex gap-4">
+                            {step.setup && <Figure n={n} diagram={step.setup} />}
+                            {step.goal && <Figure n={n} diagram={step.goal} />}
+                          </div>
                         )}
                       </div>
-                      {step.goal && (
-                        <figure className="shrink-0 self-center md:self-start text-center">
-                          <IsoCube
-                            n={n}
-                            view={step.goal.view}
-                            show={step.goal.show}
-                            alg={step.goal.alg}
-                            size={120}
-                            label={step.goal.caption}
-                          />
-                          <figcaption className="text-xs text-neutral-400 mt-1 max-w-[140px]">{step.goal.caption}</figcaption>
-                        </figure>
+                      {step.cases && (
+                        <div className="mt-4 flex flex-wrap gap-6">
+                          {step.cases.map((c) => (
+                            <figure key={c.caption} className="text-center">
+                              <LastLayer
+                                alg={c.alg}
+                                mode={c.mode || "oll"}
+                                n={n}
+                                only={c.only}
+                                postAuf={c.postAuf}
+                                // Bigger when there are arrows to read. Drawn
+                                // smaller, arrows get thicker to stay the same
+                                size={caseSize(c)}
+                                arrowWidth={(1.2 * PLL_CASE_SIZE) / caseSize(c)}
+                                label={c.caption}
+                              />
+                              <figcaption className="text-xs text-neutral-400 mt-1 max-w-[140px]">
+                                {c.caption}
+                              </figcaption>
+                            </figure>
+                          ))}
+                        </div>
                       )}
-                    </div>
-                    {step.algs && (
-                      <div className="mt-4 grid sm:grid-cols-2 gap-3">
-                        {step.algs.map((alg) => (
-                          <AlgCard key={alg.name} item={alg} n={n} />
-                        ))}
-                      </div>
-                    )}
-                  </li>
-                ))}
-              </ol>
+                      {step.algs && (
+                        <div className="mt-4 grid sm:grid-cols-2 gap-3">
+                          {step.algs.map((alg) => (
+                            <AlgCard key={alg.name} item={alg} n={n} />
+                          ))}
+                        </div>
+                      )}
+                      {step.followUp && (
+                        <>
+                          <p className="mt-4 text-neutral-300 leading-relaxed">{step.followUp.text}</p>
+                          {step.followUp.algs && (
+                            <div className="mt-3 grid sm:grid-cols-2 gap-3">
+                              {step.followUp.algs.map((alg) => (
+                                <AlgCard key={alg.name} item={alg} n={n} />
+                              ))}
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+              )}
             </Section>
           ))}
 
@@ -202,7 +269,7 @@ const TutorialPage = ({ tutorial }: { tutorial: Tutorial }) => {
 
           <div className="bg-yellow-300/10 border border-yellow-300/30 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-neutral-200">
-              Ready to practice? The timer has {tutorial.name} scrambles built in.
+              Ready to time yourself? The timer has {tutorial.name} scrambles built in.
             </p>
             <Link href="/" className="shrink-0 bg-yellow-300 text-neutral-900 font-bold rounded-lg px-4 py-2 hover:bg-yellow-200">
               Open the timer

@@ -10,20 +10,20 @@ const OLL_PARITY_PURE = (slice: string) =>
 export const OLL_PARITY: AlgItem = {
   name: "OLL parity",
   alg: "Rw U2 x Rw U2 Rw U2 Rw' U2 Lw U2 Rw' U2 Rw U2 Rw' U2 Rw'",
-  note: "One edge looks flipped. Hold it at the front of the top layer. This messes up the rest of the top layer, so do it before OLL",
+  note: "When one single edge looks flipped. Hold it at the front of the top layer. Important: this messes up the rest of the top layer, so do it before OLL!",
   diagramAlg: OLL_PARITY_PURE("2"),
 };
 
 export const OLL_PARITY_SLICE: AlgItem = {
   name: "OLL parity (pure)",
   alg: OLL_PARITY_PURE("2"),
-  note: "Flips the front edge and touches nothing else. 2R means only the second layer from the right",
+  note: "Flips the front edge and leaves everything else as it was. (2R means only the second layer from the right)",
 };
 
 export const PLL_PARITY: AlgItem = {
   name: "PLL parity",
   alg: "2R2 U2 2R2 Uw2 2R2 Uw2",
-  note: "Swaps the front and back top edges. Finish with U2 to line the top back up",
+  note: "Swaps the front and back top edges. (Finish with U2 to line the top back up)",
 };
 
 // The front left and front right edges have their pieces mixed up
@@ -60,12 +60,12 @@ const reduction = (n: number, extra: Array<string>): Stage => ({
         "Build a bar of center pieces, then move it next to the finished part with a wide turn, put the bar in, and undo the wide turn. Use Rw and Uw moves so you don't break centers you've already done.",
         ...(n % 2 === 0
           ? [
-              "With no fixed centers, you have to place the side centers in the right order yourself: green is opposite blue, red is opposite orange, and with yellow on top and green in front, orange goes on the right.",
+              "With no fixed centers, you have to place the side centers in the right order yourself, which can be annoying. On a standard color scheme green is opposite blue (cool colors), red is opposite orange (warm colors). If yellow is on top (white on bottom) and blue is in front, then red goes on the right. You can reference a solved 3x3 if you forget, and if your color scheme is not standard none of this applies so good luck :)",
             ]
           : []),
       ],
       goal: { show: centersOnly(n), caption: "All six centers solved" },
-      tip: "Get the last two centers right before moving on: it's easy to finish with two centers swapped.",
+      tip: "Get the last two centers right before moving on. it's easy to finish with two centers swapped.",
     },
     {
       title: "2. Edges",
@@ -79,7 +79,7 @@ const reduction = (n: number, extra: Array<string>): Stage => ({
     {
       title: "3. Solve it like a 3x3",
       body: [
-        "Now use only outer turns (R, U, F…) and solve with your usual 3x3 method. Treat each center block as one center and each paired edge as one edge.",
+        "This is the fun part. Using only outer turns (R, U, F, etc.,) you can basically solve the cube like it's a regular 3x3 using whatever method you already know. Treat each center block as one center and each paired edge as one edge.",
         ...(n % 2 === 0
           ? [
               "Even cubes can end in two positions a 3x3 never can, called parity. If you see one, use the parity algorithms below.",
@@ -95,7 +95,7 @@ const reduction = (n: number, extra: Array<string>): Stage => ({
 const tips = (n: number): Array<string> => [
   "Most of your time goes into centers and edges. Practice those on their own until you can do them without stopping to look.",
   `Look for the next piece while you're placing the current one. On a ${n}x${n} there's always something to look for.`,
-  "Use the same 3x3 method you already know for the last step. Small improvements there help every solve.",
+  "Use the same 3x3 method you already know for the last step, or use steps from the beginner method if you're uncomfortable with turning the big cube sides.",
   ...(n % 2 === 0
     ? ["Learn to spot parity during OLL and PLL so you don't waste time on a case that can't be solved."]
     : []),
@@ -131,7 +131,7 @@ const bigResources = (n: number): Array<Resource> => [
 export const fourByFour: Tutorial = {
   slug: "4x4",
   name: "4x4",
-  tagline: "Your first big cube: reduction, and the famous parity.",
+  tagline: "The first 'big' cube that introduces concepts like reduction and parity.",
   difficulty: 3,
   icon: "cube",
   n: 4,
@@ -143,18 +143,18 @@ export const fourByFour: Tutorial = {
   ],
   overview: [
     "The 4x4 has no fixed centers. Each face has a 2x2 block of center pieces, and each edge is split into two pieces that can be separated.",
-    "The standard way to solve it is reduction: solve the centers, pair the edges, then finish like a 3x3. Once that's comfortable, the Yau method (solve two opposite centers and three cross edges first) is the most popular way to get faster.",
-    "Because it's an even cube, the last step can end up in positions a 3x3 can't: one edge flipped by itself (OLL parity) or two edges swapped (PLL parity). Each has one algorithm.",
+    "The standard way to solve it is reduction which means you solve the centers and pair the edges, then finish like a 3x3. Once that's comfortable, the Yau method (solve two opposite centers and three cross edges first) is the most popular way to get faster.",
+    "Because on larger cubes not every piece is unique, you can wind up with a situation a normal 3x3 can't like one edge flipped by itself (OLL parity) or two edges swapped (PLL parity). Just find the correct algorithm to fix the partiy issue.",
   ],
   notation: {
     intro: [
-      "Outer turns work like a 3x3. Big cubes add moves for inner layers: w means wide (several layers from the outside), and a number in front says how many layers or which one.",
+      "Outer turns work like a 3x3. Big cubes add moves for inner layers. w means wide (several layers from the outside), and a number in front says how many layers or which one.",
     ],
     moves: BIG_MOVES,
   },
   stages: [
     reduction(4, [
-      "The last two edges work the same way: hold them at the front left and front right and use the same algorithm.",
+      "The last two edges work the same way, hold them at the front left and front right and use the same algorithm.",
     ]),
     {
       id: "parity",
@@ -224,7 +224,7 @@ export const fourByFour: Tutorial = {
 export const fiveByFive: Tutorial = {
   slug: "5x5",
   name: "5x5",
-  tagline: "Fixed centers and no PLL parity, but a lot more pieces.",
+  tagline: "Fixed centers (since it's not an even cube) so no PLL parity, but a heck of a lot more pieces.",
   difficulty: 3,
   icon: "cube",
   n: 5,
@@ -235,20 +235,20 @@ export const fiveByFive: Tutorial = {
     { label: "Parity", value: "Last edge only" },
   ],
   overview: [
-    "The 5x5 has a fixed center piece in the middle of each face, like a 3x3, so you always know which color goes where. Each face has 9 center pieces and each edge has 3 pieces: a middle one and two outer ones.",
+    "The 5x5 has a fixed center piece in the middle of each face, like a 3x3, so you always know which color goes where. Each face has 9 center pieces and each edge has 3 pieces, consisting of a middle and two outer.",
     "Solve it by reduction, just like the 4x4. Centers take longer, and edges are paired by matching the two outer pieces to each middle piece.",
-    "The only parity on a 5x5 shows up when pairing the last two edges: the two outer pieces of one edge end up swapped.",
+    "The only parity on a 5x5 shows up when pairing the last two edges where two side pieces of one edge end up swapped.",
   ],
   notation: {
     intro: [
-      "Same as the 4x4: w means wide turns, and a number in front picks how many layers or which inner layer.",
+      "Same as the 4x4. w means wide turns, and a number in front picks how many layers or which inner layer.",
     ],
     moves: BIGGER_MOVES,
   },
   stages: [
     reduction(5, [
       "When pairing, line up both outer pieces with the middle piece. The first eight edges are easy to pair while there's free space; the last four take more care, using the same algorithm.",
-      "If the very last edge has its outer pieces swapped (they're both there, just the wrong way round), use the edge parity algorithm below.",
+      "If the very last edge has its outer pieces swapped (they're both in the right spot but flipped wrong) use the edge parity algorithm below.",
     ]),
   ],
   algSets: [
@@ -273,8 +273,8 @@ export const fiveByFive: Tutorial = {
 export const sixBySix: Tutorial = {
   slug: "6x6",
   name: "6x6",
-  tagline: "Two kinds of edge pieces and both kinds of parity.",
-  difficulty: 4,
+  tagline: "Two kinds of edge pieces and both kinds of parity. Gross.",
+  difficulty: 5,
   icon: "cube",
   n: 6,
   facts: [
@@ -284,9 +284,9 @@ export const sixBySix: Tutorial = {
     { label: "Parity", value: "OLL and PLL" },
   ],
   overview: [
-    "A 6x6 combines the challenges of the 4x4 and 5x5. Like the 4x4 it has no fixed centers, so you place them in the right color order yourself. Each edge has four pieces: two outer ones next to the corners, and two inner ones.",
+    "The 6x6 cube combines the worst aspects of the 4x4 and 5x5. Similar to the 4x4 it has no fixed centers, so you place them in the right color order yourself. Each edge has four pieces, two outer ones next to the corners, and two inner ones.",
     "Solve by reduction. Centers are 4x4 blocks, built from bars of pieces. Edges are paired in two halves, then joined up.",
-    "Both kinds of 4x4 parity can happen, separately for the outer and inner edge pieces. The algorithms are the 4x4 ones with a different inner slice.",
+    "Both kinds of 4x4 parity can happen, separate for the outer and inner edge pieces. The algorithms are the 4x4 ones with a different inner slice.",
   ],
   notation: {
     intro: [
@@ -335,7 +335,7 @@ export const sixBySix: Tutorial = {
 export const sevenBySeven: Tutorial = {
   slug: "7x7",
   name: "7x7",
-  tagline: "The biggest WCA cube. Patience is the main algorithm.",
+  tagline: "The biggest WCA cube. Patience, young grasshopper. This thing can take a long time.",
   difficulty: 5,
   icon: "cube",
   n: 7,
@@ -346,27 +346,27 @@ export const sevenBySeven: Tutorial = {
     { label: "Parity", value: "Edge pairing only" },
   ],
   overview: [
-    "The 7x7 has fixed centers like the 5x5, so there's never PLL parity. Each center is a 5x5 block and each edge has five pieces: a middle one and two pairs either side.",
-    "Solve by reduction, the same as every big cube. Centers are the biggest job: build them from bars of three or five pieces at a time.",
+    "The 7x7 has fixed centers like the 5x5, so there's never PLL parity (phew). Each center is a 5x5 block and each edge has five pieces: a middle one and two pairs either side.",
+    "Solve by reduction, the same as every big cube. Centers are the biggest job so build them from bars of three or five pieces at a time.",
     "Like the 5x5, parity only shows up when pairing the last edges, and the fix depends on which pair of pieces is swapped.",
   ],
   notation: {
     intro: [
-      "A number in front says which layer: 2R is the second layer from the right, 3R the third. With w it means that many layers together.",
+      "A number in front says which layer, e.g., 2R is the second layer from the right, 3R the third, etc.,. With w it means that many layers together.",
     ],
     moves: BIGGER_MOVES,
   },
   stages: [
     reduction(7, [
-      "Pair each edge outwards from its middle piece: first the pieces next to the middle, then the outer pieces.",
-      "If the last edge has one pair of pieces swapped, use the parity algorithm for that pair: 3R for the pieces next to the middle, 2R for the outer ones.",
+      "Pair each edge outwards from its middle piece so first the pieces next to the middle, then the outer pieces.",
+      "If the last edge has one pair of pieces swapped, use the parity algorithm for that pair, i.e., 3R for the pieces next to the middle, 2R for the outer ones.",
     ]),
   ],
   algSets: [
     {
       id: "parity",
       title: "Last edge parity",
-      description: "Swaps one pair of pieces in the front top edge. The rest of the cube stays put.",
+      description: "Swaps one pair of pieces in the front top edge. The rest of the cube stays as is.",
       diagram: "oll",
       algs: [
         { name: "Outer pieces", alg: OLL_PARITY_PURE("2") },

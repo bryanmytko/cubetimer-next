@@ -14,19 +14,41 @@ interface LastLayerProps {
   // arrows for where pieces move
   mode: "oll" | "pll";
   n?: number;
+  // Gray out the other kind of piece, and leave out its arrows, for steps
+  // that only look at edges or corners. "front-left" shows just that corner
+  only?: "edges" | "corners" | "front-left";
+  // Turn of the top after the algorithm, for PLL arrows. Defaults to the one
+  // that moves the fewest pieces
+  postAuf?: string;
+  // Arrow thickness in diagram units, to keep arrows readable when the
+  // diagram is drawn small
+  arrowWidth?: number;
   size?: number;
   label?: string;
 }
 
 const CELL = 10;
+const HALO = "#f4f4f5";
 const STRIP = 3;
 const GAP = 1;
 
+// Edges sit in the middle of a side, so one of x and z is 0
+const isEdgePos = ([x, , z]: Vec) => x === 0 || z === 0;
+
 // Top-down view of the last layer: the top face, plus the top row of each
 // side face drawn as a thin strip around it
-const LastLayer = ({ alg, mode, n = 3, size = 120, label }: LastLayerProps) => {
+const LastLayer = ({
+  alg,
+  mode,
+  n = 3,
+  only,
+  postAuf,
+  arrowWidth = 1.2,
+  size = 120,
+  label,
+}: LastLayerProps) => {
   const { top, sides, arrows } = useMemo(() => {
-    const auf = mode === "pll" ? bestPostAuf(n, alg) : "";
+    const auf = mode === "pll" ? postAuf ?? bestPostAuf(n, alg) : "";
     const full = `${alg} ${auf}`;
     const cube = caseFor(n, full);
 
@@ -39,14 +61,25 @@ const LastLayer = ({ alg, mode, n = 3, size = 120, label }: LastLayerProps) => {
         B: [...faceGrid(cube, "B")[0]].reverse(),
         L: faceGrid(cube, "L")[0],
       },
-      arrows: mode === "pll" ? pieceMovements(n, full) : [],
+      arrows: mode === "pll"
+        ? pieceMovements(n, full).filter(
+          ({ from }) => !only || (only === "edges") === isEdgePos(from),
+        )
+        : [],
     };
-  }, [alg, mode, n]);
+  }, [alg, mode, n, only, postAuf]);
 
   // Marker ids must be unique on a page full of diagrams
   const markerId = `arrow${useId().replace(/:/g, "")}`;
-  const fill = (color: Face) =>
-    mode === "oll" && color !== "U" ? MUTED : STICKER_COLORS[color];
+  const isEnd = (i: number) => i === 0 || i === n - 1;
+  // `corner` says whether the sticker belongs to a corner piece; top centers
+  // are neither, and always stay
+  const fill = (color: Face, corner: boolean, center = false, frontLeft = false) => {
+    const hidden =
+      (only === "front-left" && !frontLeft) ||
+      (!center && ((only === "edges" && corner) || (only === "corners" && !corner)));
+    return (mode === "oll" && color !== "U") || hidden ? MUTED : STICKER_COLORS[color];
+  };
 
   const origin = STRIP + GAP * 2;
   const faceSize = n * CELL;
@@ -78,11 +111,11 @@ const LastLayer = ({ alg, mode, n = 3, size = 120, label }: LastLayerProps) => {
           viewBox="0 0 10 10"
           refX="8"
           refY="5"
-          markerWidth="4"
-          markerHeight="4"
+          markerWidth="3.2"
+          markerHeight="3.2"
           orient="auto-start-reverse"
         >
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#18181b" />
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#18181b" stroke={HALO} strokeWidth={1.5} strokeLinejoin="round" />
         </marker>
       </defs>
       <rect
@@ -102,21 +135,21 @@ const LastLayer = ({ alg, mode, n = 3, size = 120, label }: LastLayerProps) => {
             width={CELL - GAP}
             height={CELL - GAP}
             rx={1}
-            fill={fill(color)}
+            fill={fill(color, isEnd(r) && isEnd(c), !isEnd(r) && !isEnd(c), r === n - 1 && c === 0)}
           />
         )),
       )}
       {sides.B.map((color, i) => (
-        <rect key={`b${i}`} x={cellX(i) + GAP / 2} y={GAP} width={CELL - GAP} height={STRIP} rx={0.8} fill={fill(color)} />
+        <rect key={`b${i}`} x={cellX(i) + GAP / 2} y={GAP} width={CELL - GAP} height={STRIP} rx={0.8} fill={fill(color, isEnd(i))} />
       ))}
       {sides.F.map((color, i) => (
-        <rect key={`f${i}`} x={cellX(i) + GAP / 2} y={total - STRIP - GAP} width={CELL - GAP} height={STRIP} rx={0.8} fill={fill(color)} />
+        <rect key={`f${i}`} x={cellX(i) + GAP / 2} y={total - STRIP - GAP} width={CELL - GAP} height={STRIP} rx={0.8} fill={fill(color, isEnd(i), false, i === 0)} />
       ))}
       {sides.L.map((color, i) => (
-        <rect key={`l${i}`} x={GAP} y={cellX(i) + GAP / 2} width={STRIP} height={CELL - GAP} rx={0.8} fill={fill(color)} />
+        <rect key={`l${i}`} x={GAP} y={cellX(i) + GAP / 2} width={STRIP} height={CELL - GAP} rx={0.8} fill={fill(color, isEnd(i), false, i === n - 1)} />
       ))}
       {sides.R.map((color, i) => (
-        <rect key={`r${i}`} x={total - STRIP - GAP} y={cellX(i) + GAP / 2} width={STRIP} height={CELL - GAP} rx={0.8} fill={fill(color)} />
+        <rect key={`r${i}`} x={total - STRIP - GAP} y={cellX(i) + GAP / 2} width={STRIP} height={CELL - GAP} rx={0.8} fill={fill(color, isEnd(i))} />
       ))}
       {arrows.map(({ from, to }, i) => {
         const k = pairKey(from, to);
@@ -130,22 +163,29 @@ const LastLayer = ({ alg, mode, n = 3, size = 120, label }: LastLayerProps) => {
         const dx = x2 - x1;
         const dy = y2 - y1;
         const len = Math.hypot(dx, dy);
-        const trim = Math.min(CELL * 0.3, len / 4);
+        const trim = Math.min(CELL * 0.3, len / 8);
         const [ux, uy] = [dx / len, dy / len];
 
+        const ends = {
+          x1: x1 + ux * trim,
+          y1: y1 + uy * trim,
+          x2: x2 - ux * trim,
+          y2: y2 - uy * trim,
+        };
+
+        // A light outline underneath keeps the arrow visible on dark stickers
         return (
-          <line
-            key={`a${i}`}
-            x1={x1 + ux * trim}
-            y1={y1 + uy * trim}
-            x2={x2 - ux * trim}
-            y2={y2 - uy * trim}
-            stroke="#18181b"
-            strokeWidth={1.2}
-            strokeLinecap="round"
-            markerEnd={`url(#${markerId})`}
-            markerStart={isSwap ? `url(#${markerId})` : undefined}
-          />
+          <g key={`a${i}`}>
+            <line {...ends} stroke={HALO} strokeWidth={arrowWidth * 2.2} strokeLinecap="round" />
+            <line
+              {...ends}
+              stroke="#18181b"
+              strokeWidth={arrowWidth}
+              strokeLinecap="round"
+              markerEnd={`url(#${markerId})`}
+              markerStart={isSwap ? `url(#${markerId})` : undefined}
+            />
+          </g>
         );
       })}
     </svg>

@@ -11,7 +11,7 @@ export const PYRAMINX_L3E: Array<AlgItem> = [
 export const pyraminx: Tutorial = {
   slug: "pyraminx",
   name: "Pyraminx",
-  tagline: "A pyramid that looks hard and isn't. Most people solve it in a day.",
+  tagline: "A pyramid that looks hard but is not",
   difficulty: 1,
   icon: "pyraminx",
   facts: [

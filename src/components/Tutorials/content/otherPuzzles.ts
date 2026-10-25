@@ -3,7 +3,7 @@ import { Tutorial } from "../types";
 export const skewb: Tutorial = {
   slug: "skewb",
   name: "Skewb",
-  tagline: "A cube that turns around its corners. Few pieces, very short solves.",
+  tagline: "A cube that turns around its corners. It doesn't have a lot of pieces so solves are pretty short.",
   difficulty: 2,
   icon: "skewb",
   facts: [
@@ -15,12 +15,12 @@ export const skewb: Tutorial = {
   overview: [
     "The Skewb looks like a cube but every cut goes diagonally through it, so each turn moves half the puzzle around a corner. It has 8 corners and 6 square centers, and nothing else.",
     "Four of the corners can only twist in place relative to each other, and the other four move around. That's why the Skewb has so few positions and why solves take only around 10 moves.",
-    "Turns feel strange at first because they twist the puzzle out of a cube shape. After a few minutes of playing it becomes natural.",
+    "Turns feel strange at first because they twist the puzzle out of a cube shape. It'll feel comfortable once you play with it a bunch.",
   ],
   notation: {
     intro: [
       "Each move turns half the puzzle a third of a turn around one corner. WCA scrambles use four moves, R, U, L and B, each around a different corner, with ' for counter-clockwise.",
-      "Tutorials don't all agree on which corner each letter means, so check the notation diagram in whichever guide you follow before learning its algorithms.",
+      "Tutorials use varying letters for the corners so check the notation diagram in whichever guide you follow before learning the algorithms.",
     ],
     moves: [
       { move: "R", description: "Turn around one corner, clockwise looking at that corner" },
@@ -31,10 +31,10 @@ export const skewb: Tutorial = {
   stages: [
     {
       id: "beginner",
-      title: "Layer by layer",
+      title: "Beginner Method",
       level: "Beginner",
       summary:
-        "Solve one face and its four corners, then solve the four top corners, then the last centers. The whole method uses one short repeated pattern.",
+        "Solve one face and its four corners, then solve the four top corners, then the last centers.",
       steps: [
         {
           title: "1. First layer",
@@ -58,33 +58,21 @@ export const skewb: Tutorial = {
     },
     {
       id: "intermediate",
-      title: "Sarah's intermediate",
+      title: "Sarah's Intermediate",
       level: "Intermediate",
+      link: "https://sarah.cubing.net/skewb/my-method#intermediate-variation",
       summary:
-        "Build the first layer, then solve the last layer corners and centers together in one algorithm from a small set. This is where most people get below 10 seconds.",
-      steps: [
-        {
-          title: "Steps",
-          body: [
-            "Plan the whole first layer in inspection: it rarely takes more than 4 or 5 moves. Then recognize the last layer case from the top corners and use its algorithm.",
-          ],
-        },
-      ],
+        "A method by Sarah Strong. Her site walks through the steps and the algorithms.",
+      steps: [],
     },
     {
       id: "advanced",
-      title: "Sarah's advanced",
+      title: "Sarah's Advanced",
       level: "Advanced",
+      link: "https://sarah.cubing.net/skewb/my-method#advanced-variation",
       summary:
-        "The fastest solvers don't finish the first layer: they leave pieces unsolved on purpose and finish with a much bigger set of algorithms. Solves are often 7 or 8 moves.",
-      steps: [
-        {
-          title: "Recognition",
-          body: [
-            "Advanced Skewb is mostly about recognizing cases from just a couple of stickers, so you can start the last step without looking around the puzzle.",
-          ],
-        },
-      ],
+        "Sarah Strong's full method. Solve one face then everything else in one move. Her site has everything you'll need.",
+      steps: [],
     },
   ],
   tips: [
@@ -93,6 +81,7 @@ export const skewb: Tutorial = {
     "Turn with your wrists rather than your fingers. Skewb moves are big.",
   ],
   resources: [
+    { name: "Sarah's Skewb method", url: "https://sarah.cubing.net/skewb/my-method", description: "Sarah Strong's guide to her beginner, intermediate and advanced variations, with algorithms." },
     { name: "Ruwix Skewb guide", url: "https://ruwix.com/twisty-puzzles/skewb-cube-puzzle-solution/", description: "Beginner solution with notation diagrams and algorithms." },
     { name: "CubeSkills", url: "https://www.cubeskills.com/tutorials", description: "Tutorials for every WCA puzzle." },
   ],
@@ -101,8 +90,8 @@ export const skewb: Tutorial = {
 export const megaminx: Tutorial = {
   slug: "megaminx",
   name: "Megaminx",
-  tagline: "Twelve faces, but if you can solve a 3x3 you can solve this.",
-  difficulty: 4,
+  tagline: "Twelve faces and it looks beefy but honestly if you can solve a 3x3 you can solve it pretty easy.",
+  difficulty: 3,
   icon: "megaminx",
   facts: [
     { label: "WCA event", value: "Megaminx" },
@@ -113,7 +102,7 @@ export const megaminx: Tutorial = {
   overview: [
     "A Megaminx is a dodecahedron with 12 five-sided faces. Each face has a fixed center, 5 edges and 5 corners. Despite the size, it works a lot like a 3x3: pieces move the same way, and most 3x3 F2L tricks carry over.",
     "The usual method is layer by layer: a star on the bottom face, the first layer, the rest of the first two layers around it (F2L), the faces around the middle (S2L), and finally the last layer.",
-    "Solves are long, a minute or more for most people, so a steady pace with no pauses matters more than fast turning.",
+    "Solves can be long!",
   ],
   notation: {
     intro: [
@@ -134,18 +123,18 @@ export const megaminx: Tutorial = {
       title: "Layer by layer",
       level: "Beginner",
       summary:
-        "Solve the Megaminx outwards from the bottom face, using 3x3 skills for almost everything. Only the last layer needs new algorithms.",
+        "Solve the Megaminx outwards from the bottom face, using 3x3 skills for almost everything. Only the last layer is different and needs new algorithms.",
       steps: [
         {
           title: "1. Star",
           body: [
-            "Pick a bottom color (often white) and place its five edges around the center so their side colors match the neighboring centers, like a 3x3 cross with five arms.",
+            "Pick a bottom color, usually white, and place its five edges around the center so their side colors match the neighboring centers, like a 3x3 cross with one extra piece.",
           ],
         },
         {
           title: "2. First layer corners",
           body: [
-            "Insert the five bottom corners, just like 3x3 corners: put a corner above its spot and repeat R U R' U' until it drops in.",
+            "Insert the five bottom corners, just like 3x3 corners. Put a corner above its spot and repeat R U R' U' until it works.",
           ],
         },
         {
@@ -159,12 +148,12 @@ export const megaminx: Tutorial = {
           body: [
             "Work around the puzzle filling in each of the five faces that border the bottom half. Do them one face at a time, finishing each face's pieces before moving on.",
           ],
-          tip: "Turn the puzzle so the face you're working on is always in front. Getting lost on a Megaminx is easy.",
+          tip: "Turn the puzzle so the face you're working on is always in front, since there is so many pieces you can get lost if you move it weird.",
         },
         {
           title: "5. Last layer",
           body: [
-            "Only the top face is left. It's done in four steps, just like a beginner 3x3: orient the edges (make a star), orient the corners, then permute the edges and corners. Each step has a few algorithms.",
+            "Only the top face is left. It's done in four steps, just like a beginner 3x3. Orient the edges (make a star), orient the corners, then permute the edges and corners. Each step has a few algorithms.",
           ],
         },
       ],
@@ -189,12 +178,12 @@ export const megaminx: Tutorial = {
       title: "Look ahead",
       level: "Advanced",
       summary:
-        "At high levels, Megaminx is all about never stopping. Fast solvers turn slower than you'd expect but always know their next piece.",
+        "At high levels, Megaminx is all about never stopping. Fast solvers turn slower than you'd expect but are always looking ahead to the next thing they're gonna do.",
       steps: [
         {
           title: "Practice",
           body: [
-            "Do slow solves where you never stop turning. Your times will drop faster than from turning quickly with pauses.",
+            "Do slow solves where you never stop turning, it's much better than trying to just turn everything as fast as you can.",
           ],
         },
       ],
@@ -203,7 +192,7 @@ export const megaminx: Tutorial = {
   tips: [
     "Pick a fixed color order for S2L and always solve in that order.",
     "Use 3x3 F2L techniques: pair corners and edges before inserting them.",
-    "A good Megaminx has lots of corner cutting. Turning a worn puzzle is much easier than a new one.",
+    "A good Megaminx has lots of corner cutting. A new cube can be a pain, much easier on a worked in one.",
   ],
   resources: [
     { name: "Ruwix Megaminx guide", url: "https://ruwix.com/twisty-puzzles/megaminx-gigaminx-teraminx-petaminx/", description: "Beginner method with last layer algorithms." },
@@ -215,7 +204,7 @@ export const megaminx: Tutorial = {
 export const squareOne: Tutorial = {
   slug: "square-1",
   name: "Square-1",
-  tagline: "A cube that changes shape. Get it back to a cube, then solve it.",
+  tagline: "A cube that changes shape. You have to first make it a cube then solve it.",
   difficulty: 4,
   icon: "square-1",
   facts: [
@@ -328,7 +317,7 @@ export const squareOne: Tutorial = {
 export const clock: Tutorial = {
   slug: "clock",
   name: "Clock",
-  tagline: "No pieces to move, just 18 dials and 4 pins.",
+  tagline: "Pieces don't move like a cube, it just has dials and pins.",
   difficulty: 3,
   icon: "clock",
   facts: [
