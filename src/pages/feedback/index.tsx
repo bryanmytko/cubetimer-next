@@ -6,7 +6,7 @@ const Feedback = () => {
   return (
     <>
       <Head>
-        <title>Cubetimer.io | Contact</title>
+        <title>Cubetimer.io | Feedback</title>
       </Head>
       <Widget
         id={formId}

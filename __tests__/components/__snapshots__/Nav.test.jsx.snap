@@ -54,17 +54,7 @@ exports[`<Nav> renders the component 1`] = `
               class="block py-2 capitalize"
               href="/tutorials"
             >
-              tutorials
-            </a>
-          </li>
-          <li
-            class="text-white"
-          >
-            <a
-              class="block py-2 capitalize"
-              href="/reviews"
-            >
-              reviews
+              learn
             </a>
           </li>
           <li>
