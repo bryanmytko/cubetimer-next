@@ -9,7 +9,8 @@ const TutorialsHub = () => (
     <header className="text-center max-w-2xl mx-auto">
       <h1 className="text-4xl md:text-5xl font-bold text-white">Learn to solve</h1>
       <p className="text-neutral-400 mt-3">
-        This section includes guides for every puzzle that the timer supports, including beginner and advanced methods.
+        This section includes guides for every puzzle that the timer supports, including
+        beginner and advanced methods.
       </p>
     </header>
 
@@ -21,11 +22,13 @@ const TutorialsHub = () => (
       <div className="text-center sm:text-left">
         <p className="text-xs uppercase tracking-wide text-yellow-300 font-bold">New to cubing?</p>
         <h2 className="text-2xl font-bold text-white mt-1">Solve a 3x3 for the first time</h2>
-        Check out this simple beginner method. Only seven steps using a handful of short algorithms (just a fancy word for a set of moves that moves pieces a certain way). Impress your friends without peeling off the stickers!
         <p className="text-neutral-300 mt-1">
+          Check out this simple beginner method. Only seven steps using a handful of short
+          algorithms (just a fancy word for a set of moves that moves pieces a certain way).
+          Impress your friends without peeling off the stickers!
         </p>
-        <span className="sm:ml-auto shrink-0 text-yellow-300 font-bold">Start →</span>
       </div>
+      <span className="sm:ml-auto shrink-0 text-yellow-300 font-bold">Start →</span>
     </Link>
 
     <h2 className="text-xl font-bold text-neutral-100 mt-12 mb-4">All puzzles</h2>
