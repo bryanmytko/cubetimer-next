@@ -18,7 +18,7 @@ const Footer = () => {
             |
           </p>
           <p className="text-gray-500 text-s text-center md:pt-3 md:mr-8">
-            <Link href="/feedback">Contact Me</Link>
+            <Link href="/feedback">Help us improve?</Link>
           </p>
         </div>
         <CoffeeButton />

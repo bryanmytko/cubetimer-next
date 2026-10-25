@@ -52,7 +52,7 @@ exports[`<Footer> renders the component 1`] = `
           <a
             href="/feedback"
           >
-            Contact Me
+            Help us improve?
           </a>
         </p>
       </div>
