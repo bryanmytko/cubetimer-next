@@ -2,28 +2,21 @@ interface LoadingTableProps {
   rows?: number;
 }
 
-const LoadingTable = ({ rows = 1 }: LoadingTableProps) => {
-  return (
-    <div className="border border-gray-800 shadow p-4 w-full mx-auto">
-      <div className="animate-pulse flex space-x-4">
-        <div className="flex-1 space-y-6 py-1">
-          <div className="h-16 bg-slate-700 rounded"></div>
-          <div className="space-y-3">
-            {Array(rows)
-              .fill("")
-              .map((_, index) => (
-                <div className="grid grid-cols-7 gap-4" key={index}>
-                  <div className="h-12 bg-slate-700 rounded col-span-1"></div>
-                  <div className="h-12 bg-slate-700 rounded col-span-2"></div>
-                  <div className="h-12 bg-slate-700 rounded col-span-2"></div>
-                  <div className="h-12 bg-slate-700 rounded col-span-2"></div>
-                </div>
-              ))}
-          </div>
+const LoadingTable = ({ rows = 1 }: LoadingTableProps) => (
+  <div aria-hidden className="animate-pulse space-y-3">
+    {Array(rows)
+      .fill("")
+      .map((_, index) => (
+        <div
+          key={index}
+          className="flex items-center gap-4 rounded-2xl border border-neutral-700/60 bg-neutral-800/60 p-5"
+        >
+          <div className="h-7 w-20 rounded bg-neutral-700" />
+          <div className="h-4 flex-1 rounded bg-neutral-700/70" />
+          <div className="h-4 w-16 rounded bg-neutral-700/70" />
         </div>
-      </div>
-    </div>
-  );
-};
+      ))}
+  </div>
+);
 
 export default LoadingTable;

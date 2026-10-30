@@ -31,6 +31,7 @@ export const SOLVE_SESSIONS_FOR_USER = gql`
             id
             scramble
             time
+            penalty
             puzzle
             createdAt
           }

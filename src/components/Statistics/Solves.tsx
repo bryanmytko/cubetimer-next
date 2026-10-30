@@ -1,136 +1,106 @@
-import { useState } from "react";
-import { useMutation, useQuery } from "@apollo/client";
-import { FaTrashCan } from "react-icons/fa6";
+import Link from "next/link";
+import { NetworkStatus, useMutation, useQuery } from "@apollo/client";
 
 import { SOLVES_FOR_USER } from "../../graphql/queries";
-import { humanReadableTime, formatDate } from "../../lib/format";
-import { DataTable, Error } from "./";
-import { LoadingTable } from "../Loading";
 import { DELETE_SOLVE } from "../../graphql/mutations";
+import { formatDayLabel } from "../../lib/format";
+import { LoadingTable } from "../Loading";
+import { Error } from "./";
+import LoadMore from "./LoadMore";
+import SolveRow, { SolveNode } from "./SolveRow";
+import UndoToast from "./UndoToast";
+import useUndoableDelete from "./useUndoableDelete";
 
 interface SolvesProps {
   userId: string | undefined;
 }
 
-const SOLVES_PER_PAGE = 20;
+// Not 20: the timer caches the same query with first: 20, and loading more
+// here would grow the list shown under the timer too
+const SOLVES_PER_PAGE = 50;
+
+const groupByDay = (solves: Array<SolveNode>) =>
+  solves.reduce<Array<{ day: string; solves: Array<SolveNode> }>>((groups, solve) => {
+    const day = formatDayLabel(solve.createdAt);
+    const last = groups[groups.length - 1];
+
+    if (last?.day === day) last.solves.push(solve);
+    else groups.push({ day, solves: [solve] });
+
+    return groups;
+  }, []);
 
 const Solves = ({ userId }: SolvesProps) => {
-  const { loading, data, error, fetchMore } = useQuery(SOLVES_FOR_USER, {
+  const { data, error, fetchMore, networkStatus } = useQuery(SOLVES_FOR_USER, {
     skip: !userId,
     variables: { userId, first: SOLVES_PER_PAGE },
-    onCompleted: (data): void => setSolves(data.solves.edges),
+    notifyOnNetworkStatusChange: true,
   });
+  const [deleteSolve] = useMutation(DELETE_SOLVE);
+  const { hidden, pending, failed, remove, undo, dismissError } = useUndoableDelete((id) =>
+    deleteSolve({ variables: { id } }),
+  );
 
-  const [deleteSolve, { loading: deleting }] = useMutation(DELETE_SOLVE);
-  const [solves, setSolves] = useState([]);
-
-  if (!data || !solves || loading) return <LoadingTable />;
   if (error) return <Error />;
+  if (!data) return <LoadingTable rows={8} />;
 
-  const removeSolve = (id: string) => {
-    confirm("Are you sure you want to delete this solve?");
-    setSolves(
-      solves.filter((solve: { node: { id: string } }) => solve.node.id !== id),
-    );
+  const solves: Array<SolveNode> = data.solves.edges
+    .map(({ node }: { node: SolveNode }) => node)
+    .filter((solve: SolveNode) => !hidden.has(solve.id));
+  const { endCursor, hasNextPage } = data.solves.pageInfo;
 
-    deleteSolve({
-      variables: {
-        id,
-      },
+  const loadMore = () =>
+    fetchMore({
+      variables: { after: endCursor },
+      updateQuery: (previous, { fetchMoreResult }) => ({
+        solves: {
+          ...fetchMoreResult.solves,
+          edges: [...previous.solves.edges, ...fetchMoreResult.solves.edges],
+        },
+      }),
     });
-  };
-
-  const { startCursor, endCursor, hasNextPage, hasPreviousPage } =
-    data.solves.pageInfo;
 
   return (
     <>
-      <DataTable>
-        <tbody>
-          {solves.map(({ node }: any, index: number) => {
-            return (
-              <tr
-                key={node.id}
-                className={`py-3 border-b ${
-                  index % 2 === 0 ? "bg-slate-200" : "bg-slate-300"
-                }`}
-              >
-                <td className="px-2 md:px-6 py-2 font-medium text-gray-800 whitespace-nowrap">
-                  {humanReadableTime(parseInt(node.time))}
-                </td>
-                <td className="px-2 md:px-6 py-2 text-xs md:text-medium font-medium text-gray-900">
-                  {node.scramble}
-                </td>
-                <td className="px-2 md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
-                  {node.puzzle}
-                </td>
-                <td className="px-2 md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
-                  {formatDate(node.createdAt)}
-                </td>
-                <td className="px-2 md:px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
-                  <FaTrashCan
-                    className="align-self hover:text-red-700 outline-red-50 cursor-pointer ml-4 text-red-600"
-                    size={16}
-                    onClick={() => {
-                      if (deleting) return;
-                      removeSolve(node.id);
-                    }}
-                  />
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </DataTable>
-      <div className="flex justify-center">
-        {hasPreviousPage ? (
-          <button
-            className="px-4 py-2 my-10 mr-4 text-white bg-blue-500 rounded"
-            onClick={() => {
-              fetchMore({
-                variables: {
-                  before: startCursor,
-                  first: null,
-                  last: SOLVES_PER_PAGE,
-                },
-                updateQuery: (_: any, { fetchMoreResult }: any) => {
-                  fetchMoreResult.solves.edges = [
-                    ...fetchMoreResult.solves.edges,
-                  ];
-                  return fetchMoreResult;
-                },
-              });
-            }}
-          >
-            &lt;
-          </button>
-        ) : (
-          ""
-        )}
-        {hasNextPage ? (
-          <button
-            className="px-4 py-2 my-10 text-white bg-blue-500 rounded"
-            onClick={() => {
-              fetchMore({
-                variables: {
-                  after: endCursor,
-                  first: SOLVES_PER_PAGE,
-                },
-                updateQuery: (_: any, { fetchMoreResult }: any) => {
-                  fetchMoreResult.solves.edges = [
-                    ...fetchMoreResult.solves.edges,
-                  ];
-                  return fetchMoreResult;
-                },
-              });
-            }}
-          >
-            &gt;
-          </button>
-        ) : (
-          ""
-        )}
-      </div>
+      {solves.length === 0 ? (
+        <div className="rounded-2xl border border-neutral-700/60 bg-neutral-800/60 p-10 text-center">
+          <p className="font-bold text-neutral-100">No solves yet</p>
+          <p className="text-sm text-neutral-400 mt-1">
+            Solves you time while signed in show up here.
+          </p>
+          <Link href="/" className="inline-block mt-4 font-bold text-yellow-300 hover:text-yellow-200">
+            Start timing →
+          </Link>
+        </div>
+      ) : (
+        groupByDay(solves).map(({ day, solves: daySolves }) => (
+          <section key={day} className="mt-8 first:mt-0">
+            <h2 className="flex items-baseline justify-between text-xs font-bold uppercase tracking-wide text-neutral-500 mb-3">
+              <span>{day}</span>
+              <span className="normal-case font-normal">
+                {daySolves.length} {daySolves.length === 1 ? "solve" : "solves"}
+              </span>
+            </h2>
+            <ul className="bg-neutral-800/60 border border-neutral-700/60 rounded-2xl divide-y divide-neutral-700/60">
+              {daySolves.map((solve) => (
+                <SolveRow key={solve.id} solve={solve} onDelete={remove} />
+              ))}
+            </ul>
+          </section>
+        ))
+      )}
+
+      {hasNextPage && (
+        <LoadMore loading={networkStatus === NetworkStatus.fetchMore} onClick={loadMore} />
+      )}
+
+      <UndoToast
+        label="Solve"
+        pending={!!pending}
+        failed={failed}
+        onUndo={undo}
+        onDismiss={dismissError}
+      />
     </>
   );
 };
