@@ -9,7 +9,7 @@ import Image from "next/image";
 import Head from "next/head";
 
 import Logo from "../../components/Header/Logo";
-import authOptions from "../api/auth/[...nextauth]";
+import authOptions from "../../lib/auth";
 
 interface ButtonIconProps {
   url: string;
@@ -68,9 +68,7 @@ export default function SignIn({
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, {
-    ...authOptions,
-  });
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   // If the user is already logged in, redirect.
   // Note: Make sure not to redirect to the same page

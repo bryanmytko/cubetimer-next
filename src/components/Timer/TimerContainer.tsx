@@ -38,7 +38,6 @@ const TimerContainer = () => {
   const [submitted, setSubmitted] = useState(false);
   const { data, loading } = useQuery(SETTINGS_FOR_USER, {
     skip: !session?.user?.id,
-    variables: { userId: session?.user?.id },
   });
 
   /* This is necessary due to the random nature of the initial scramble.
@@ -79,10 +78,10 @@ const TimerContainer = () => {
   }, [dispatch, setButtonLocked, timer.locked]);
 
   const getSolveSession = useCallback(
-    async ({ userId }: { userId: string }) => {
+    async () => {
       if (timer.classicModeEnabled && !timer.solveSessionId) {
         const response = await createSolveSession({
-          variables: { userId, size: timer.classicModeLength },
+          variables: { size: timer.classicModeLength },
         });
         dispatch({
           type: TimerActionKind.SET_SOLVE_SESSION_ID,
@@ -117,16 +116,14 @@ const TimerContainer = () => {
       setButtonLocked(false);
 
       if (session) {
-        const userId = session.user.id;
         const solveSessionId =
-          timer.solveSessionId || (await getSolveSession({ userId }));
+          timer.solveSessionId || (await getSolveSession());
         await saveSolve({
           variables: {
             penalty,
             puzzle: timer.puzzleType,
             scramble: timer.scramble,
             time: timer.time,
-            userId,
             solveSessionId,
           },
         });

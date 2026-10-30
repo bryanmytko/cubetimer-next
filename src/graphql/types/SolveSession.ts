@@ -1,4 +1,4 @@
-import { builder } from "../builder";
+import { builder, notFound, requireUser } from "../builder";
 import prisma from "../../lib/prismadb";
 
 builder.prismaObject("SolveSession", {
@@ -17,11 +17,8 @@ builder.queryField("solveSessionsForUser", (t) =>
   t.prismaConnection({
     type: "SolveSession",
     cursor: "id",
-    args: {
-      userId: t.arg.string({ required: true }),
-    },
-    resolve: async (query, _parent, args, _ctx, _info) => {
-      const { userId } = args;
+    resolve: async (query, _parent, _args, ctx, _info) => {
+      const userId = requireUser(ctx);
       return prisma.solveSession.findMany({
         ...query,
         where: {
@@ -44,10 +41,10 @@ builder.mutationField("createSolveSession", (t) =>
     type: "SolveSession",
     args: {
       size: t.arg.int({ required: true }),
-      userId: t.arg.string({ required: true }),
     },
-    resolve: async (query: any, _parent: any, args: any, _ctx: any) => {
-      const { size, userId } = args;
+    resolve: async (query, _parent, args, ctx) => {
+      const userId = requireUser(ctx);
+      const { size } = args;
 
       return prisma.solveSession.create({
         ...query,
@@ -66,8 +63,13 @@ builder.mutationField("deleteSolveSession", (t) =>
     args: {
       id: t.arg.string({ required: true }),
     },
-    resolve: async (_query, _parent, args, _ctx, _info) => {
+    resolve: async (_query, _parent, args, ctx, _info) => {
+      const userId = requireUser(ctx);
       const { id } = args;
+
+      // Someone else's session looks the same as a missing one
+      const owned = await prisma.solveSession.count({ where: { id, userId } });
+      if (!owned) throw notFound("Session");
 
       return prisma.solveSession.delete({
         where: { id },

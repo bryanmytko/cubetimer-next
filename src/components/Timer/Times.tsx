@@ -25,7 +25,7 @@ const Times = (props: TimesProps) => {
 
   useQuery(SOLVES_FOR_USER, {
     skip: timer.classicModeEnabled || !session || timer.puzzleType !== "3x3",
-    variables: { userId: session?.user?.id, first: PAST_SOLVES },
+    variables: { first: PAST_SOLVES },
     onCompleted: (data): void => setSolves(data.solves.edges),
   });
 

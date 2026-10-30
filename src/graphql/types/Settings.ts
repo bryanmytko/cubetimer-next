@@ -1,4 +1,4 @@
-import { builder } from "../builder";
+import { builder, requireUser } from "../builder";
 import prisma from "../../lib/prismadb";
 
 builder.prismaObject("Settings", {
@@ -10,9 +10,8 @@ builder.prismaObject("Settings", {
 builder.queryField("settingsForUser", (t) =>
   t.prismaField({
     type: "Settings",
-    args: { userId: t.arg.string({ required: true }) },
-    resolve: async (_query, _parent, args) => {
-      const { userId } = args;
+    resolve: async (_query, _parent, _args, ctx) => {
+      const userId = requireUser(ctx);
       return prisma.settings.upsert({
         where: { userId },
         update: {},
@@ -26,11 +25,11 @@ builder.mutationField("updateSettings", (t) =>
   t.prismaField({
     type: "Settings",
     args: {
-      userId: t.arg.string({ required: true }),
       defaultClassicMode: t.arg.boolean(),
     },
-    resolve: async (_query: any, _parent: any, args: any) => {
-      const { userId, defaultClassicMode } = args;
+    resolve: async (_query, _parent, args, ctx) => {
+      const userId = requireUser(ctx);
+      const { defaultClassicMode } = args;
 
       return prisma.settings.update({
         where: {

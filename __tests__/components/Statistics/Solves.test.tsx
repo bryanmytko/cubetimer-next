@@ -28,7 +28,7 @@ const today = new Date();
 const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
 
 const solvesQuery: MockedResponse = {
-  request: { query: SOLVES_FOR_USER, variables: { userId: USER_ID, first: 50 } },
+  request: { query: SOLVES_FOR_USER, variables: { first: 50 } },
   result: {
     data: {
       solves: {

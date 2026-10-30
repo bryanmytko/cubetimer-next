@@ -28,7 +28,7 @@ const mocks = [
   {
     request: {
       query: SOLVES_FOR_USER,
-      variables: { userId: "12345687890", first: 20 },
+      variables: { first: 20 },
     },
     result: {
       data: {

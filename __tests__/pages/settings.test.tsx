@@ -7,7 +7,6 @@ import Settings from "../../src/pages/settings";
 import { SETTINGS_FOR_USER } from "../../src/graphql/queries/settingsForUser";
 import { UPDATE_SETTINGS } from "../../src/graphql/mutations/updateSettings";
 
-const USER_ID = "12345687890";
 
 jest.mock("next/router", () => ({
   useRouter: () => ({ replace: jest.fn() }),
@@ -30,12 +29,12 @@ jest.mock("next-auth/react", () => {
 });
 
 const settingsQuery = (defaultClassicMode: boolean): MockedResponse => ({
-  request: { query: SETTINGS_FOR_USER, variables: { userId: USER_ID } },
+  request: { query: SETTINGS_FOR_USER, variables: {} },
   result: { data: { settingsForUser: { defaultClassicMode, __typename: "Settings" } } },
 });
 
 const updateMutation = (defaultClassicMode: boolean, fail = false): MockedResponse => ({
-  request: { query: UPDATE_SETTINGS, variables: { userId: USER_ID, defaultClassicMode } },
+  request: { query: UPDATE_SETTINGS, variables: { defaultClassicMode } },
   ...(fail
     ? { error: new Error("Network down") }
     : { result: { data: { updateSettings: { defaultClassicMode, __typename: "Settings" } } } }),

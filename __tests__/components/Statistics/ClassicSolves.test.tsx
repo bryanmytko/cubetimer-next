@@ -20,7 +20,7 @@ const solve = (id: string, time: number, penalty = 0) => ({
 });
 
 const sessionsQuery: MockedResponse = {
-  request: { query: SOLVE_SESSIONS_FOR_USER, variables: { userId: USER_ID, first: 10 } },
+  request: { query: SOLVE_SESSIONS_FOR_USER, variables: { first: 10 } },
   result: {
     data: {
       solveSessionsForUser: {
