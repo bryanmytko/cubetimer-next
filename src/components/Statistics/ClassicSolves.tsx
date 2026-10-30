@@ -19,7 +19,7 @@ const SESSIONS_PER_PAGE = 10;
 const ClassicSolves = ({ userId }: ClassicSolvesProps) => {
   const { data, error, fetchMore, networkStatus } = useQuery(SOLVE_SESSIONS_FOR_USER, {
     skip: !userId,
-    variables: { userId, first: SESSIONS_PER_PAGE },
+    variables: { first: SESSIONS_PER_PAGE },
     notifyOnNetworkStatusChange: true,
   });
   const [deleteSolveSession] = useMutation(DELETE_SOLVE_SESSION);

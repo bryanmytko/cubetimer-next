@@ -6,7 +6,6 @@ export const SAVE_SOLVE = gql`
     $time: Int!
     $penalty: Int
     $puzzle: String!
-    $userId: String!
     $solveSessionId: String
   ) {
     createSolve(
@@ -14,7 +13,6 @@ export const SAVE_SOLVE = gql`
       time: $time
       penalty: $penalty
       puzzle: $puzzle
-      userId: $userId
       solveSessionId: $solveSessionId
     ) {
       id

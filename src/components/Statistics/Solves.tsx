@@ -33,7 +33,7 @@ const groupByDay = (solves: Array<SolveNode>) =>
 const Solves = ({ userId }: SolvesProps) => {
   const { data, error, fetchMore, networkStatus } = useQuery(SOLVES_FOR_USER, {
     skip: !userId,
-    variables: { userId, first: SOLVES_PER_PAGE },
+    variables: { first: SOLVES_PER_PAGE },
     notifyOnNetworkStatusChange: true,
   });
   const [deleteSolve] = useMutation(DELETE_SOLVE);

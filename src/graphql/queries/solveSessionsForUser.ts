@@ -6,14 +6,12 @@ export const SOLVE_SESSIONS_FOR_USER = gql`
     $last: Int
     $before: ID
     $after: ID
-    $userId: String!
   ) {
     solveSessionsForUser(
       first: $first
       last: $last
       before: $before
       after: $after
-      userId: $userId
     ) {
       pageInfo {
         startCursor

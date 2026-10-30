@@ -56,7 +56,6 @@ const Settings = () => {
   const userId = session?.user?.id;
   const { data, error, loading } = useQuery(SETTINGS_FOR_USER, {
     skip: !userId,
-    variables: { userId },
   });
   const [saveSettings] = useMutation(UPDATE_SETTINGS);
   const [classicMode, setClassicMode] = useState(false);
@@ -83,7 +82,7 @@ const Settings = () => {
     setSaveState("saving");
 
     try {
-      await saveSettings({ variables: { userId, defaultClassicMode: enabled } });
+      await saveSettings({ variables: { defaultClassicMode: enabled } });
       setSaveState("saved");
     } catch {
       // Put the switch back so it matches what's stored
