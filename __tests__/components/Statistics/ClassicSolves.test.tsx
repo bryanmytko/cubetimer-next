@@ -98,4 +98,17 @@ describe("ClassicSolves", () => {
     expect(await navigator.clipboard.readText()).toEqual("R U R' U' 4");
     expect(screen.getByText("Copied")).toBeInTheDocument();
   });
+
+  it("copies the whole session as text", async () => {
+    const user = userEvent.setup();
+    renderSessions();
+
+    await user.click(await screen.findByRole("button", { name: "Copy results" }));
+
+    const copied = await navigator.clipboard.readText();
+    expect(copied).toMatch(/^Cubetimer\.io · 3x3 · /);
+    expect(copied).toContain("Session average: 11.66");
+    expect(copied).toContain("4.  (20.00)   R U R' U' 4");
+    expect(screen.getByRole("button", { name: "Copied" })).toBeInTheDocument();
+  });
 });

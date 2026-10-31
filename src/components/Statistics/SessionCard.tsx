@@ -6,6 +6,7 @@ import { average, averageCurved, fastestTime, slowestTime } from "../../lib/calc
 import { PenaltyChip, PuzzleChip } from "./Chips";
 import IconButton from "./IconButton";
 import { SolveNode } from "./SolveRow";
+import sessionSummary from "./sessionSummary";
 import useCopy from "./useCopy";
 
 export interface SessionNode {
@@ -139,6 +140,7 @@ const SessionCard = ({ session, onDelete }: SessionCardProps) => {
   const bestIndex = times.indexOf(best);
   const worstIndex = times.indexOf(worst);
   const panelId = `session-${session.id}`;
+  const { copied: copiedResults, copy: copyResults } = useCopy(sessionSummary(session));
 
   return (
     <li className="group rounded-2xl border border-neutral-700/60 bg-neutral-800/60 hover:border-neutral-600 transition-colors">
@@ -198,7 +200,14 @@ const SessionCard = ({ session, onDelete }: SessionCardProps) => {
             </span>
           </div>
         </button>
-        <div className="pr-3">
+        <div className="flex items-center pr-3">
+          <IconButton label={copiedResults ? "Copied" : "Copy results"} onClick={copyResults}>
+            {copiedResults ? (
+              <FaCheck size={14} className="text-yellow-300" />
+            ) : (
+              <FaRegCopy size={14} />
+            )}
+          </IconButton>
           <IconButton label="Delete session" danger onClick={() => onDelete(session.id)}>
             <FaTrashCan size={14} />
           </IconButton>
