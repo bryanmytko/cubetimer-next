@@ -6,6 +6,7 @@ import { GoogleAnalytics } from "nextjs-google-analytics";
 
 import "../styles/globals.css";
 import { Layout } from "../components";
+import { UpdatePromptProvider } from "../components/UpdatePrompt";
 import apolloClient from "../lib/apollo";
 
 const App: AppType = ({
@@ -27,9 +28,11 @@ const App: AppType = ({
       <GoogleAnalytics strategy="lazyOnload" trackPageViews />
       <ApolloProvider client={apolloClient}>
         <SessionProvider session={session}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <UpdatePromptProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </UpdatePromptProvider>
         </SessionProvider>
       </ApolloProvider>
     </>

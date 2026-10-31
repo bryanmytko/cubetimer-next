@@ -23,6 +23,7 @@ import { TimerContext, TimerDispatchContext } from "./TimerContext";
 import { useTimerKeyup } from "../../hooks";
 import { SETTINGS_FOR_USER } from "../../graphql/queries/settingsForUser";
 import { Spinner } from "../../components/Loading";
+import { useHoldUpdatePrompt } from "../UpdatePrompt";
 
 const AUDIO_DING = "/assets/audio/ding.mp3";
 const TICK = 60;
@@ -36,6 +37,18 @@ const TimerContainer = () => {
   const timer = useContext(TimerContext) as TimerState;
   const dispatch = useContext(TimerDispatchContext) as Dispatch<TimerAction>;
   const [submitted, setSubmitted] = useState(false);
+
+  // Hold the "new version" prompt until they're between solves and not
+  // partway through a classic session, since refreshing would lose it
+  useHoldUpdatePrompt(
+    timer.ready ||
+      timer.running ||
+      timer.inspectionRunning ||
+      timer.confirmActive ||
+      (!!timer.classicModeEnabled &&
+        timer.solveTimes.length > 0 &&
+        timer.solveTimes.length < timer.classicModeLength),
+  );
   const { data, loading } = useQuery(SETTINGS_FOR_USER, {
     skip: !session?.user?.id,
   });
