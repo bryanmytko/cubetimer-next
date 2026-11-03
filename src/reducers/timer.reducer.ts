@@ -79,6 +79,12 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
         sessionComplete: false,
         solveTimes: [],
       };
+    // Sets the starting mode once settings are known. Unlike the toggle it
+    // keeps any times already on the page, and a later toggle always wins.
+    case TimerActionKind.SETTLE_CLASSIC_MODE:
+      return state.classicModeEnabled === undefined
+        ? { ...state, classicModeEnabled: action.enabled }
+        : state;
     case TimerActionKind.SET_SOLVE_SESSION_ID:
       return { ...state, solveSessionId: action.id };
     case TimerActionKind.SET_KEY_LOCKED:

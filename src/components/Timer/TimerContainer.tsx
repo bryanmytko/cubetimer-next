@@ -22,7 +22,6 @@ import {
 import { TimerContext, TimerDispatchContext } from "./TimerContext";
 import { useTimerKeyup } from "../../hooks";
 import { SETTINGS_FOR_USER } from "../../graphql/queries/settingsForUser";
-import { Spinner } from "../../components/Loading";
 import { useHoldUpdatePrompt } from "../UpdatePrompt";
 
 const AUDIO_DING = "/assets/audio/ding.mp3";
@@ -37,21 +36,20 @@ const TimerContainer = () => {
   const timer = useContext(TimerContext) as TimerState;
   const dispatch = useContext(TimerDispatchContext) as Dispatch<TimerAction>;
   const [submitted, setSubmitted] = useState(false);
+  const { data, error } = useQuery(SETTINGS_FOR_USER, {
+    skip: !session?.user?.id,
+  });
+  const busy =
+    timer.ready || timer.running || timer.inspectionRunning || timer.confirmActive;
 
   // Hold the "new version" prompt until they're between solves and not
   // partway through a classic session, since refreshing would lose it
   useHoldUpdatePrompt(
-    timer.ready ||
-      timer.running ||
-      timer.inspectionRunning ||
-      timer.confirmActive ||
+    busy ||
       (!!timer.classicModeEnabled &&
         timer.solveTimes.length > 0 &&
         timer.solveTimes.length < timer.classicModeLength),
   );
-  const { data, loading } = useQuery(SETTINGS_FOR_USER, {
-    skip: !session?.user?.id,
-  });
 
   /* This is necessary due to the random nature of the initial scramble.
    * Just trying to set an initial state with a random scramble will
@@ -63,10 +61,21 @@ const TimerContainer = () => {
     });
   }, [dispatch]);
 
+  // The timer shows right away, but can't start until Classic Mode settles
+  // from their settings, so the mode never changes under them. Signed out
+  // means off, and so does a settings error.
+  const settling = timer.classicModeEnabled === undefined;
+  const settingsKnown =
+    status === "unauthenticated" || (status === "authenticated" && (!!data || !!error));
+
   useEffect(() => {
-    if (data?.settingsForUser?.defaultClassicMode)
-      dispatch({ type: TimerActionKind.TOGGLE_CLASSIC_MODE, enabled: true });
-  }, [data, dispatch]);
+    if (!settling || !settingsKnown) return;
+
+    dispatch({
+      type: TimerActionKind.SETTLE_CLASSIC_MODE,
+      enabled: !!data?.settingsForUser?.defaultClassicMode,
+    });
+  }, [data, dispatch, settingsKnown, settling]);
 
   const setButtonLocked = useCallback(
     (value: boolean) => dispatch({ type: TimerActionKind.LOCK, value }),
@@ -159,11 +168,11 @@ const TimerContainer = () => {
   const handleKeydown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === " ") e.preventDefault();
-      if (e.key !== " " || timer.locked || submitted) return;
+      if (e.key !== " " || settling || timer.locked || submitted) return;
 
       dispatch({ type: TimerActionKind.READY });
     },
-    [dispatch, submitted, timer.locked],
+    [dispatch, settling, submitted, timer.locked],
   );
 
   const handleEscape = useCallback(() => {
@@ -181,6 +190,7 @@ const TimerContainer = () => {
   }, [timer.confirmActive, recordSolve, submitted]);
 
   const handleSpacebar = useCallback(() => {
+    if (settling) return;
     if (timer.locked) return handleEnter();
 
     timer.inspectionTime && !timer.running
@@ -193,6 +203,7 @@ const TimerContainer = () => {
   }, [
     dispatch,
     handleEnter,
+    settling,
     timer.inspectionTime,
     timer.locked,
     timer.running,
@@ -263,14 +274,6 @@ const TimerContainer = () => {
 
     return () => clearInterval(interval);
   }, [dispatch, timer.running]);
-  if (loading || status === "loading")
-    return (
-      <div className="col-span-6">
-        <div className="flex items-center justify-center gap-2 w-full h-dvh mt-[-220px]">
-          <Spinner />
-        </div>
-      </div>
-    );
 
   return (
     <>

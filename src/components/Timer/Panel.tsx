@@ -79,7 +79,7 @@ const Panel = ({ initialClassicModeEnabled }: IPanelProps) => {
             type="checkbox"
             className="accent-cyan-600 scale-125 cursor-pointer"
             onChange={toggleClassicMode}
-            checked={initialClassicModeEnabled}
+            checked={!!initialClassicModeEnabled}
           />
         </div>
         {classicModeEnabled && (
