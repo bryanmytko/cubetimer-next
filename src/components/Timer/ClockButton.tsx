@@ -61,14 +61,26 @@ const ClockButton = (props: ClockButtonProps) => {
     }
   }, [timer]);
 
+  // Until Classic Mode settles from their settings the timer can't start.
+  // The label stays, hidden, so the button keeps its size.
+  const settling = timer.classicModeEnabled === undefined;
+
   return (
     <button
       id="timer-btn"
-      className={`timer-btn-start block mx-auto mt-6 px-10 py-5 text-3xl 
-        rounded-md w-11/12 ${button.color}`}
+      className={`timer-btn-start relative block mx-auto mt-6 px-10 py-5 text-3xl 
+        rounded-md w-11/12 ${button.color} ${settling ? "cursor-wait" : ""}`}
       onClick={handleClick}
+      disabled={settling}
+      aria-busy={settling}
+      aria-label={settling ? "Loading your settings" : undefined}
     >
-      {button.text}
+      <span className={settling ? "invisible" : undefined}>{button.text}</span>
+      {settling && (
+        <span className="absolute inset-0 flex items-center justify-center">
+          <span className="h-8 w-8 animate-spin rounded-full border-4 border-neutral-900/25 border-t-neutral-900" />
+        </span>
+      )}
     </button>
   );
 };

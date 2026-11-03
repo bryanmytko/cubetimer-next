@@ -10,6 +10,7 @@ export enum TimerActionKind {
   READY = "READY",
   REMOVE_TIME = "REMOVE_TIME",
   RESET_CLASSIC_MODE = "RESET_CLASSIC_MODE",
+  SETTLE_CLASSIC_MODE = "SETTLE_CLASSIC_MODE",
   SET_KEY_LOCKED = "SET_KEY_LOCKED",
   SET_SOLVE_SESSION_ID = "SET_SOLVE_SESSION_ID",
   TICK_UP = "TICK_UP",
@@ -106,6 +107,7 @@ export type TimerAction =
   | { type: TimerActionKind.LOCK; value: boolean }
   | { type: TimerActionKind.PUZZLE_TYPE; puzzle: string }
   | { type: TimerActionKind.REMOVE_TIME; index: number }
+  | { type: TimerActionKind.SETTLE_CLASSIC_MODE; enabled: boolean }
   | { type: TimerActionKind.SET_KEY_LOCKED; value: boolean }
   | { type: TimerActionKind.SET_SOLVE_SESSION_ID; id: string | null }
   | { type: TimerActionKind.TOGGLE_CLASSIC_MODE; enabled?: boolean };
