@@ -72,15 +72,24 @@ const Mode = () => {
   );
 };
 
-const renderTimer = (mocks: Array<MockedResponse> = []) =>
-  render(
-    <MockedProvider mocks={mocks}>
-      <TimerProvider>
-        <TimerContainer />
-        <Mode />
-      </TimerProvider>
-    </MockedProvider>,
-  );
+const timerTree = (mocks: Array<MockedResponse>) => (
+  <MockedProvider mocks={mocks}>
+    <TimerProvider>
+      <TimerContainer />
+      <Mode />
+    </TimerProvider>
+  </MockedProvider>
+);
+
+const renderTimer = (mocks: Array<MockedResponse> = []) => render(timerTree(mocks));
+
+const CACHE_KEY = "cubetimer:settings";
+const cache = (defaultClassicMode: boolean) =>
+  window.localStorage.setItem(CACHE_KEY, JSON.stringify({ defaultClassicMode }));
+const cached = () => JSON.parse(window.localStorage.getItem(CACHE_KEY) || "null");
+
+// Lets pending queries answer
+const settle = () => act(() => new Promise((resolve) => setTimeout(resolve, 50)));
 
 const mode = () => screen.getByTestId("mode").textContent;
 const timing = () => screen.getByTestId("timing").textContent;
@@ -98,6 +107,7 @@ describe("<TimerContainer>", () => {
     Scrambler.mockClear();
     mockGenerate.mockClear();
     jest.clearAllMocks();
+    window.localStorage.clear();
   });
 
   it("shows the timer straight away while the session is still loading", () => {
@@ -154,5 +164,91 @@ describe("<TimerContainer>", () => {
     await pressSpace();
 
     expect(timing()).toEqual("true");
+  });
+
+  describe("with settings from an earlier visit", () => {
+    it("starts in the cached mode without waiting for the server", async () => {
+      cache(true);
+      stillLoading();
+      renderTimer();
+
+      await waitFor(() => expect(mode()).toEqual("true"));
+      await pressSpace();
+
+      expect(timing()).toEqual("true");
+    });
+
+    it("switches to what the server says if the cache was out of date", async () => {
+      cache(true);
+      stillLoading();
+      const mocks = [settings(false), noSolves];
+      const { rerender } = renderTimer(mocks);
+      await waitFor(() => expect(mode()).toEqual("true"));
+
+      signedIn();
+      rerender(timerTree(mocks));
+
+      await waitFor(() => expect(mode()).toEqual("false"));
+      expect(cached()).toEqual({ defaultClassicMode: false });
+    });
+
+    it("corrects to regular mode for a visitor who signed out", async () => {
+      cache(true);
+      signedOut();
+      renderTimer();
+
+      await waitFor(() => expect(mode()).toEqual("false"));
+      expect(cached()).toEqual({ defaultClassicMode: false });
+    });
+
+    it("keeps the mode once they've started timing", async () => {
+      cache(true);
+      stillLoading();
+      const mocks = [settings(false), noSolves];
+      const { rerender } = renderTimer(mocks);
+      await waitFor(() => expect(mode()).toEqual("true"));
+      await pressSpace();
+
+      signedIn();
+      rerender(timerTree(mocks));
+      await settle();
+
+      // Stop, then reject the time, so they're between solves again
+      await pressSpace();
+      await act(async () => {
+        fireEvent.keyUp(window, { key: "Escape" });
+        await new Promise((resolve) => setTimeout(resolve, 80));
+      });
+      await settle();
+
+      expect(timing()).toEqual("false");
+      expect(mode()).toEqual("true");
+    });
+
+    it("keeps the cached mode if settings can't load", async () => {
+      cache(true);
+      signedIn();
+      renderTimer([settingsFail]);
+      await settle();
+
+      expect(mode()).toEqual("true");
+      expect(cached()).toEqual({ defaultClassicMode: true });
+    });
+  });
+
+  it("remembers the server's settings for next time", async () => {
+    signedIn();
+    renderTimer([settings(true)]);
+
+    await waitFor(() => expect(cached()).toEqual({ defaultClassicMode: true }));
+  });
+
+  it("ignores a cache it can't read", async () => {
+    window.localStorage.setItem(CACHE_KEY, "{not json");
+    stillLoading();
+    renderTimer();
+    await settle();
+
+    expect(mode()).toEqual("undefined");
   });
 });

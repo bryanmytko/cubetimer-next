@@ -34,4 +34,54 @@ describe("SETTLE_CLASSIC_MODE", () => {
 
     expect(state.classicModeEnabled).toBe(true);
   });
+
+  it("lets the server correct a provisional mode from the cache", () => {
+    const guessed = TimerReducer(initialState, {
+      type: TimerActionKind.SETTLE_CLASSIC_MODE,
+      enabled: true,
+      provisional: true,
+    });
+    const state = TimerReducer(guessed, {
+      type: TimerActionKind.SETTLE_CLASSIC_MODE,
+      enabled: false,
+    });
+
+    expect(state.classicModeEnabled).toBe(false);
+    expect(state.classicModeProvisional).toBe(false);
+  });
+
+  it("clears the times when a correction changes the mode", () => {
+    const solveTimes = [{ time: 12000, penalty: 0 }];
+    const state = TimerReducer(
+      { ...initialState, classicModeEnabled: false, classicModeProvisional: true, solveTimes },
+      { type: TimerActionKind.SETTLE_CLASSIC_MODE, enabled: true },
+    );
+
+    expect(state.solveTimes).toEqual([]);
+  });
+
+  it("keeps the times when the server agrees with the cache", () => {
+    const solveTimes = [{ time: 12000, penalty: 0 }];
+    const state = TimerReducer(
+      { ...initialState, classicModeEnabled: false, classicModeProvisional: true, solveTimes },
+      { type: TimerActionKind.SETTLE_CLASSIC_MODE, enabled: false },
+    );
+
+    expect(state.solveTimes).toEqual(solveTimes);
+  });
+
+  it("won't let the server undo a toggle made over a cached mode", () => {
+    const guessed = TimerReducer(initialState, {
+      type: TimerActionKind.SETTLE_CLASSIC_MODE,
+      enabled: false,
+      provisional: true,
+    });
+    const picked = TimerReducer(guessed, { type: TimerActionKind.TOGGLE_CLASSIC_MODE });
+    const state = TimerReducer(picked, {
+      type: TimerActionKind.SETTLE_CLASSIC_MODE,
+      enabled: false,
+    });
+
+    expect(state.classicModeEnabled).toBe(true);
+  });
 });
