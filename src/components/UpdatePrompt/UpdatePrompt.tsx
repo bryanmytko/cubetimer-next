@@ -1,6 +1,8 @@
 import { ReactNode, createContext, useCallback, useContext, useEffect, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
 
+import { track } from "../../lib/analytics";
+
 export const CHECK_EVERY_MS = 10 * 60 * 1000;
 // Don't check again on every tab switch
 const MIN_GAP_MS = 60 * 1000;
@@ -78,7 +80,10 @@ const UpdatePromptProvider = ({ children }: { children: ReactNode }) => {
             <p className="text-neutral-200">A new version of Cubetimer is available.</p>
             <button
               type="button"
-              onClick={() => window.location.reload()}
+              onClick={() => {
+                track("update_refresh", {});
+                window.location.reload();
+              }}
               className="shrink-0 rounded-lg bg-yellow-300 px-3 py-1.5 font-bold text-neutral-900 hover:bg-yellow-200"
             >
               Refresh

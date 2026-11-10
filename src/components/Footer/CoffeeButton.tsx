@@ -1,5 +1,7 @@
 import { Button, Link } from "@nextui-org/react";
 
+import { track } from "../../lib/analytics";
+
 const CoffeeButton = () => {
   return (
     <div className="md:w-100 text-center">
@@ -8,6 +10,7 @@ const CoffeeButton = () => {
         size="lg"
         color="success"
         href="https://www.buymeacoffee.com/cubetimer"
+        onPress={() => track("coffee_click", {})}
         startContent={
           <svg
             className="h-8"

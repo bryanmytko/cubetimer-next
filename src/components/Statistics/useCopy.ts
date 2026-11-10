@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
-// Copies text and reports `copied` for a moment so the UI can confirm it
-const useCopy = (text: string) => {
+// Copies text and reports `copied` for a moment so the UI can confirm it.
+// `onCopied` runs only when the copy worked.
+const useCopy = (text: string, onCopied?: () => void) => {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -14,6 +15,7 @@ const useCopy = (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
+      onCopied?.();
     } catch {
       // Clipboard can be blocked; the text is still selectable
     }

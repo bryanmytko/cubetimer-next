@@ -16,6 +16,8 @@ const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/auth/signin",
+    // First sign-in only, so analytics can count the sign-up
+    newUser: "/auth/welcome",
   },
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
