@@ -8,6 +8,7 @@ import IconButton from "./IconButton";
 import { SolveNode } from "./SolveRow";
 import sessionSummary from "./sessionSummary";
 import useCopy from "./useCopy";
+import { track } from "../../lib/analytics";
 
 export interface SessionNode {
   id: string;
@@ -140,7 +141,9 @@ const SessionCard = ({ session, onDelete }: SessionCardProps) => {
   const bestIndex = times.indexOf(best);
   const worstIndex = times.indexOf(worst);
   const panelId = `session-${session.id}`;
-  const { copied: copiedResults, copy: copyResults } = useCopy(sessionSummary(session));
+  const { copied: copiedResults, copy: copyResults } = useCopy(sessionSummary(session), () =>
+    track("share", { method: "copy", content_type: "session_results" }),
+  );
 
   return (
     <li className="group rounded-2xl border border-neutral-700/60 bg-neutral-800/60 hover:border-neutral-600 transition-colors">

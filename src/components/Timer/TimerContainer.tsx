@@ -23,6 +23,7 @@ import { TimerContext, TimerDispatchContext } from "./TimerContext";
 import { useTimerKeyup } from "../../hooks";
 import { SETTINGS_FOR_USER } from "../../graphql/queries/settingsForUser";
 import { useHoldUpdatePrompt } from "../UpdatePrompt";
+import { track } from "../../lib/analytics";
 import { readCachedSettings, writeCachedSettings } from "../../lib/settingsCache";
 
 const AUDIO_DING = "/assets/audio/ding.mp3";
@@ -47,9 +48,9 @@ const TimerContainer = () => {
   // partway through a classic session, since refreshing would lose it
   useHoldUpdatePrompt(
     busy ||
-      (!!timer.classicModeEnabled &&
-        timer.solveTimes.length > 0 &&
-        timer.solveTimes.length < timer.classicModeLength),
+    (!!timer.classicModeEnabled &&
+      timer.solveTimes.length > 0 &&
+      timer.solveTimes.length < timer.classicModeLength),
   );
 
   /* This is necessary due to the random nature of the initial scramble.
@@ -121,7 +122,7 @@ const TimerContainer = () => {
 
   useEffect(() => {
     timer.classicModeEnabled &&
-    timer.solveTimes.length >= timer.classicModeLength
+      timer.solveTimes.length >= timer.classicModeLength
       ? setButtonLocked(true)
       : setButtonLocked(false);
   }, [
@@ -170,6 +171,19 @@ const TimerContainer = () => {
         penalty,
         scramble: timer.scramble,
       });
+      track("solve_completed", {
+        puzzle: timer.puzzleType,
+        penalty: penalty ? "+2" : "none",
+        inspection: timer.inspectionTime > 0,
+        classic_mode: !!timer.classicModeEnabled,
+        signed_in: !!session,
+      });
+      if (timer.classicModeEnabled && timer.solveTimes.length + 1 === timer.classicModeLength) {
+        track("classic_session_completed", {
+          puzzle: timer.puzzleType,
+          size: timer.classicModeLength,
+        });
+      }
       toggleConfirmModal();
       setSubmitted(false);
       setButtonLocked(false);
@@ -194,9 +208,13 @@ const TimerContainer = () => {
       saveSolve,
       session,
       setButtonLocked,
+      timer.classicModeEnabled,
+      timer.classicModeLength,
+      timer.inspectionTime,
       timer.puzzleType,
       timer.scramble,
       timer.solveSessionId,
+      timer.solveTimes.length,
       timer.time,
       toggleConfirmModal,
     ],

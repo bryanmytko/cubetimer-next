@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { track } from "../../lib/analytics";
 import LastLayer from "./diagrams/LastLayer";
 import { AlgItem, DiagramKind } from "./types";
 
@@ -16,6 +17,7 @@ const CopyButton = ({ text }: { text: string }) => {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
+      track("share", { method: "copy", content_type: "alg", item_id: text });
       setTimeout(() => setCopied(false), 1500);
     } catch {
       // Clipboard can be blocked; the algorithm is still selectable
