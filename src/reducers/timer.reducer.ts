@@ -79,12 +79,22 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
         sessionComplete: false,
         solveTimes: [],
       };
-    // Sets the starting mode once settings are known. Unlike the toggle it
-    // keeps any times already on the page, and a later toggle always wins.
-    case TimerActionKind.SETTLE_CLASSIC_MODE:
-      return state.classicModeEnabled === undefined
-        ? { ...state, classicModeEnabled: action.enabled }
-        : state;
+    // Sets the mode from settings: first a provisional guess from the
+    // browser's cache, then what the server says. Only an undecided or
+    // provisional mode changes, so a toggle always wins. A change clears the
+    // times like a toggle does, since they belong to the other mode.
+    case TimerActionKind.SETTLE_CLASSIC_MODE: {
+      const { classicModeEnabled, classicModeProvisional, solveTimes } = state;
+      if (classicModeEnabled !== undefined && !classicModeProvisional) return state;
+
+      const changed = classicModeEnabled !== undefined && classicModeEnabled !== action.enabled;
+      return {
+        ...state,
+        classicModeEnabled: action.enabled,
+        classicModeProvisional: !!action.provisional,
+        solveTimes: changed ? [] : solveTimes,
+      };
+    }
     case TimerActionKind.SET_SOLVE_SESSION_ID:
       return { ...state, solveSessionId: action.id };
     case TimerActionKind.SET_KEY_LOCKED:
@@ -95,6 +105,7 @@ const TimerReducer = (state: TimerState, action: TimerAction) => {
       return {
         ...state,
         classicModeEnabled: action.enabled ?? !state.classicModeEnabled,
+        classicModeProvisional: false,
         running: false,
         solveTimes: [],
       };

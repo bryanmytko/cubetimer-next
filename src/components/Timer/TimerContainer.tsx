@@ -1,4 +1,4 @@
-import { Dispatch, useCallback, useContext, useEffect, useState } from "react";
+import { Dispatch, useCallback, useContext, useEffect, useRef, useState } from "react";
 import useSound from "use-sound";
 import { useSession } from "next-auth/react";
 import { useMutation, useQuery } from "@apollo/client";
@@ -23,6 +23,7 @@ import { TimerContext, TimerDispatchContext } from "./TimerContext";
 import { useTimerKeyup } from "../../hooks";
 import { SETTINGS_FOR_USER } from "../../graphql/queries/settingsForUser";
 import { useHoldUpdatePrompt } from "../UpdatePrompt";
+import { readCachedSettings, writeCachedSettings } from "../../lib/settingsCache";
 
 const AUDIO_DING = "/assets/audio/ding.mp3";
 const TICK = 60;
@@ -61,21 +62,57 @@ const TimerContainer = () => {
     });
   }, [dispatch]);
 
-  // The timer shows right away, but can't start until Classic Mode settles
-  // from their settings, so the mode never changes under them. Signed out
-  // means off, and so does a settings error.
+  // The timer can't start until Classic Mode settles, so the mode never
+  // changes under them. The settings this browser saw last time settle it
+  // straight away, then the server's copy confirms or corrects it in the
+  // background, unless they've started timing by then. Signed out means
+  // off, and a settings error keeps whatever we have.
   const settling = timer.classicModeEnabled === undefined;
   const settingsKnown =
     status === "unauthenticated" || (status === "authenticated" && (!!data || !!error));
+  const hasStarted = useRef(false);
+  const confirmed = useRef(false);
 
   useEffect(() => {
-    if (!settling || !settingsKnown) return;
+    if (busy) hasStarted.current = true;
+  }, [busy]);
+
+  useEffect(() => {
+    const cached = readCachedSettings();
+    if (!cached) return;
 
     dispatch({
       type: TimerActionKind.SETTLE_CLASSIC_MODE,
-      enabled: !!data?.settingsForUser?.defaultClassicMode,
+      enabled: cached.defaultClassicMode,
+      provisional: true,
     });
-  }, [data, dispatch, settingsKnown, settling]);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (confirmed.current || !settingsKnown || busy) return;
+    confirmed.current = true;
+
+    const signedIn = status === "authenticated";
+    const fresh = signedIn
+      ? error ? undefined : !!data?.settingsForUser?.defaultClassicMode
+      : false;
+
+    if (fresh !== undefined) writeCachedSettings({ defaultClassicMode: fresh });
+    if (hasStarted.current) return;
+
+    dispatch({
+      type: TimerActionKind.SETTLE_CLASSIC_MODE,
+      enabled: fresh ?? timer.classicModeEnabled ?? false,
+    });
+  }, [
+    busy,
+    data,
+    dispatch,
+    error,
+    settingsKnown,
+    status,
+    timer.classicModeEnabled,
+  ]);
 
   const setButtonLocked = useCallback(
     (value: boolean) => dispatch({ type: TimerActionKind.LOCK, value }),

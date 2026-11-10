@@ -8,6 +8,7 @@ import { useMutation, useQuery } from "@apollo/client";
 
 import { SETTINGS_FOR_USER } from "../../graphql/queries/settingsForUser";
 import { UPDATE_SETTINGS } from "../../graphql/mutations/updateSettings";
+import { writeCachedSettings } from "../../lib/settingsCache";
 
 type SaveState = "idle" | "saving" | "saved" | "error";
 
@@ -83,6 +84,8 @@ const Settings = () => {
 
     try {
       await saveSettings({ variables: { defaultClassicMode: enabled } });
+      // So the timer starts in the new mode next time without waiting
+      writeCachedSettings({ defaultClassicMode: enabled });
       setSaveState("saved");
     } catch {
       // Put the switch back so it matches what's stored
