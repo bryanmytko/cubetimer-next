@@ -61,6 +61,11 @@ model Solve {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Solve lists filter by user and sort newest first; sessions load their
+  // solves by solveSessionId
+  @@index([userId, createdAt])
+  @@index([solveSessionId])
 }
 
 model SolveSession {
@@ -72,6 +77,8 @@ model SolveSession {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId, createdAt])
 }
 
 model Test {
